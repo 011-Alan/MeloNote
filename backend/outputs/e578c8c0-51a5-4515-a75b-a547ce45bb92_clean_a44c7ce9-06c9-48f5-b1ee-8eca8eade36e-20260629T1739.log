@@ -1,0 +1,23 @@
+2026-06-29 17:39:20,198 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]                 Book.java:560  | 1 sheet in C:\ReactNative\music-app\MeloNote\backend\temp\e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e.jpeg
+2026-06-29 17:39:20,609 INFO []                 Book.java:2565 | Stored /book.xml
+2026-06-29 17:39:20,610 INFO []                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e.omr
+2026-06-29 17:39:20,621 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-06-29 17:39:20,625 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       StepMonitoring.java:98   | LOAD
+2026-06-29 17:39:21,049 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]            SheetStub.java:1278 | Loaded image #1 2800x3426 from C:\ReactNative\music-app\MeloNote\backend\temp\e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e.jpeg
+2026-06-29 17:39:21,056 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       StepMonitoring.java:98   | BINARY
+2026-06-29 17:39:22,215 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       StepMonitoring.java:98   | SCALE
+2026-06-29 17:39:22,275 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]         ScaleBuilder.java:255  | Beam  guessed height: 14 -- mid of [7..22]
+2026-06-29 17:39:22,277 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]         ScaleBuilder.java:271  | Beam measured height: 21 -- 0.93 of [7..22] range at 28% of needed quorum
+2026-06-29 17:39:22,278 WARN [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]         ScaleBuilder.java:300  | No reliable beam height found, guessed value: 14
+2026-06-29 17:39:22,280 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]         ScaleBuilder.java:401  | Normalized black jitter: 12.50 %
+2026-06-29 17:39:22,281 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]            ScaleStep.java:65   | Scale{ interline(23,24,26) line(4,6,7) beam(14 extra)}
+2026-06-29 17:39:22,282 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       StepMonitoring.java:98   | GRID
+2026-06-29 17:39:23,814 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       LinesRetriever.java:1500 | Global slope: 0.00352
+2026-06-29 17:39:23,916 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]    ClustersRetriever.java:326  | Retrieved raw line clusters: 7 of sizes [5] with interline(23,24,26)
+2026-06-29 17:39:25,339 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]            PeakGraph.java:310  | Systems: #1[1] #2[2] #3[3] #4[4] #5[5] #6[6] #7[7]
+2026-06-29 17:39:27,422 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]        SystemManager.java:779  | 1 part along 7 systems
+2026-06-29 17:39:27,424 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]                 Book.java:543  | Created scores: [{Score 1}]
+2026-06-29 17:39:27,433 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       StepMonitoring.java:98   | HEADERS
+2026-06-29 17:39:31,601 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       StepMonitoring.java:98   | STEM_SEEDS
+2026-06-29 17:39:31,814 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]        StemSeedsStep.java:86   | stem(6 max:7)
+2026-06-29 17:39:32,148 INFO [e578c8c0-51a5-4515-a75b-a547ce45bb92_clean_a44c7ce9-06c9-48f5-b1ee-8eca8eade36e]       StepMonitoring.java:98   | BEAMS

@@ -1,0 +1,91 @@
+{
+  "project_id": "054afac5-abce-40df-a583-ddfb24f40af0",
+  "original_filename": "recording-12d087be-673e-4857-a1da-419dbdaeb107.m4a",
+  "time_signature": "4/4",
+  "notes": [
+    {
+      "pitch": "Bb0",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 0
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    }
+  ],
+  "treble_notes": [],
+  "bass_notes": [
+    {
+      "pitch": "Bb0",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 0
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    }
+  ],
+  "detected_tempo": 120.0,
+  "tempo": 120.0,
+  "tempo_confidence": "LOW",
+  "duration_preserved": true,
+  "musicxml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n<score-partwise version=\"4.0\">\n  <work><work-title>Transcribed Score</work-title></work>\n  <part-list>\n    <score-part id=\"P1\"><part-name>Piano</part-name></score-part>\n  </part-list>\n  <part id=\"P1\">\n    <measure number=\"1\">\n      <attributes>\n        <divisions>4</divisions>\n        <key><fifths>-3</fifths><mode>minor</mode></key>\n        <time><beats>4</beats><beat-type>4</beat-type></time>\n        <staves>2</staves>\n        <clef number=\"1\"><sign>G</sign><line>2</line></clef>\n        <clef number=\"2\"><sign>F</sign><line>4</line></clef>\n      </attributes>\n      <direction placement=\"above\">\n        <direction-type>\n          <metronome><beat-unit>quarter</beat-unit><per-minute>120</per-minute></metronome>\n        </direction-type>\n        <sound tempo=\"120\"/>\n      </direction>\n      <note>\n        <rest measure=\"yes\"/>\n        <duration>16</duration>\n        <voice>1</voice>\n        <type>whole</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note id=\"n0\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>0</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>12</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n    </measure>\n  </part>\n</score-partwise>",
+  "quality_scores": {
+    "pitch_accuracy": 42.9,
+    "rhythm_accuracy": 0.0,
+    "tempo_accuracy": 80.0,
+    "chroma_similarity": 54.3,
+    "overall_score": 44.4,
+    "best_tempo": 120,
+    "best_gap_threshold": 0.35,
+    "best_grid_resolution": 0.25,
+    "pitchAccuracy": 42.9,
+    "rhythmAccuracy": 0.0,
+    "tempoAccuracy": 80.0,
+    "chromaSimilarity": 54.3,
+    "overallScore": 44.4,
+    "bestTempo": 120,
+    "bestGapThreshold": 0.35,
+    "bestGridResolution": 0.25
+  },
+  "raw_notes": [
+    [
+      0.0012820139527320862,
+      0.0812820139527321,
+      22,
+      0.6062992125984252,
+      null
+    ]
+  ],
+  "best_grid_resolution": 0.25,
+  "activated_modules": {
+    "spleeter": false,
+    "hpss": true,
+    "torchcrepe": false,
+    "pyin": false,
+    "basic_pitch_ensemble": false,
+    "butterworth_filter": true,
+    "spectral_gating": true
+  },
+  "activation_reasons": {
+    "butterworth_filter": "Always active as baseline preprocessing",
+    "spleeter": "Bypassed (not requested or vocals not detected)",
+    "hpss": "Active (Spleeter unavailable. HPSS fell back to extract harmonic component)",
+    "spectral_gating": "Active (Noise floor -30.2 dB > threshold -55.0 dB)",
+    "basic_pitch_ensemble": "Bypassed (Basic Pitch ensembled but no new notes matched)",
+    "torchcrepe": "Bypassed (unrefined similarity 0.7352 was highest)",
+    "pyin": "Bypassed (unrefined similarity 0.7352 was highest)"
+  }
+}

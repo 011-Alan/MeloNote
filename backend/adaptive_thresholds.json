@@ -1,0 +1,6 @@
+{
+  "zcr_threshold": 0.08,
+  "flatness_threshold": 0.015,
+  "centroid_threshold": 2250.0,
+  "noise_floor_threshold": -55.0
+}

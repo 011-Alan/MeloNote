@@ -1,0 +1,3262 @@
+<!DOCTYPE html><html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+        color: #18181b;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        width: 100%;
+        overflow-x: hidden;
+      }
+      .selected-bar *:not(.bar-click-bg) {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+        color: #8b5cf6 !important;
+      }
+
+      .player-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: #ffffff;
+        box-sizing: border-box;
+      }
+
+      .player-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 0 4px;
+        box-sizing: border-box;
+      }
+
+      .tempo-control {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .tempo-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tempo-control label {
+        font-size: 14px;
+        color: #71717a;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .detected-tempo-text {
+        font-size: 13px;
+        color: #71717a;
+        font-weight: 500;
+      }
+
+      .orig-tempo-btn {
+        background: #f4f4f5;
+        color: #18181b;
+        border: 1px solid #e4e4e7;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .tempo-control input[type="range"] {
+        width: 100%;
+        height: 6px;
+        background: #e4e4e7;
+        border-radius: 3px;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .tempo-control input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid #ff9500;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+
+      .tempo-control input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+      }
+
+      .tempo-control input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid #ff9500;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+
+      .tempo-control input[type="range"]::-moz-range-thumb:hover {
+        transform: scale(1.15);
+      }
+
+      .player-btn {
+        background: #f4f4f5;
+        color: #18181b;
+        border: 1px solid #e4e4e7;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0;
+      }
+
+      .player-btn:hover {
+        background: #ff9500;
+        border-color: #ff9500;
+        color: #ffffff;
+        transform: scale(1.05);
+      }
+
+      .player-btn:active {
+        transform: scale(0.95);
+      }
+
+      .play-btn {
+        background: #ff9500;
+        border-color: #ff9500;
+        color: #ffffff;
+        width: 46px;
+        height: 46px;
+        box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3);
+      }
+
+      .play-btn:hover {
+        background: #ffa82e;
+        border-color: #ffa82e;
+        color: #ffffff;
+        transform: scale(1.08);
+      }
+
+      #score-wrap {
+        width: 100%;
+        max-width: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 1px solid #e4e4e7;
+      }
+
+      #score {
+        min-height: 380px;
+        width: 200px;
+      }
+
+      .player-footer {
+        display: none !important;
+      }
+
+      .timeline-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+      }
+
+      .controls-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+      }
+
+      .progress-bar-container {
+        flex: 1;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .progress-bar-bg {
+        width: 100%;
+        height: 6px;
+        background: #e4e4e7;
+        border-radius: 3px;
+        position: relative;
+      }
+
+      .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: #ff9500;
+        border-radius: 3px;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .progress-bar-knob {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid #ff9500;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        left: 0%;
+        cursor: pointer;
+      }
+
+      .time-text {
+        font-size: 14px;
+        font-family: monospace;
+        color: #71717a;
+        white-space: nowrap;
+        min-width: 80px;
+        text-align: right;
+        font-weight: 600;
+      }
+
+      #error {
+        display: none;
+        margin: 24px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid #d4d4d8;
+        background: #fafafa;
+        color: #991b1b;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Note highlight styling */
+      @keyframes note-jump {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      .active-note {
+        animation: note-jump 0.35s ease-out;
+        transform-origin: center;
+      }
+
+      .active-note,
+      .active-note * {
+        fill: #ff9500 !important;
+        stroke: #ff9500 !important;
+        transition: fill 0.2s, stroke 0.2s;
+      }
+
+      /* Violet selections and handles */
+      .selected-staff,
+      .selected-staff * {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+      }
+      #score svg {
+        overflow: visible !important;
+      }
+      .selected-bar .bar-click-bg {
+        fill: rgba(139, 92, 246, 0.05) !important;
+        fill-opacity: 1 !important;
+        stroke: #8b5cf6 !important;
+        stroke-width: 35px !important;
+        filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.4)) !important;
+      }
+      .selected-bar line,
+      .selected-bar path,
+      .selected-bar rect:not(.bar-click-bg),
+      .selected-bar polygon,
+      .selected-bar ellipse {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+        filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.8)) !important;
+      }
+      .selected-note,
+      .selected-note * {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+      }
+      .staff-handle circle {
+        fill: #a1a1aa;
+        stroke: #71717a;
+        stroke-width: 15px;
+        transition: fill 0.2s, stroke 0.2s;
+      }
+      .staff-handle:hover circle,
+      .selected-handle circle {
+        fill: #8b5cf6 !important;
+        stroke: #7c3aed !important;
+      }
+
+      /* Custom styling for measure numbering */
+      .measureLabel text,
+      .measureLabel,
+      .mNum text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        font-size: 300px !important;
+        font-style: italic !important;
+        font-weight: normal !important;
+        fill: #000000 !important;
+      }
+
+      /* Time signature shown only once at the beginning of the score */
+      .subsequent-music-system .meterSig {
+        display: none !important;
+      }
+
+      /* In single staff mode, hide clefs on subsequent staves/systems */
+      body.no-bass-staff .subsequent-music-system .clef {
+        display: none !important;
+      }
+
+      /* Move tempo marking slightly upward */
+      g.tempo {
+        transform: translateY(-450px) !important;
+      }
+    </style>
+  <script src="https://cdn.jsdelivr.net/npm/verovio@4.1.0/dist/verovio-toolkit-wasm.js"></script><script src="https://unpkg.com/verovio@4.1.0/dist/verovio-toolkit-wasm.js"></script></head>
+  <body class="no-bass-staff">
+    <div class="player-container">
+      <div class="player-header">
+        <div class="tempo-control">
+          <div class="tempo-row">
+            <label for="tempo-range">Tempo: <span id="tempo-val">93</span> BPM</label>
+            <span id="detected-tempo-text" class="detected-tempo-text">Detected: 93 BPM</span>
+            <button id="btn-use-original" class="orig-tempo-btn" onclick="window.useOriginalTempo(true)">Use Original</button>
+          </div>
+          <input type="range" id="tempo-range" min="30" max="300" value="120" oninput="window.setTempo(Number(this.value), true)">
+        </div>
+      </div>
+
+      <div id="score-wrap">
+        <div id="score-scale-wrapper" style="position: relative; overflow: visible; width: 1144px; height: 321px;">
+          <div id="score"><svg width="1144px" height="321px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mei="http://www.music-encoding.org/ns/mei" overflow="visible" style="width: auto; height: auto;">
+   <desc>Engraved by Verovio 4.1.0-c482e35</desc>
+   <defs>
+      <symbol id="E050-1elw8bv" viewBox="0 0 1000 1000" overflow="inherit">
+         <path transform="scale(1,-1)" d="M441 -245c-23 -4 -48 -6 -76 -6c-59 0 -102 7 -130 20c-88 42 -150 93 -187 154c-26 44 -43 103 -48 176c0 6 -1 13 -1 19c0 54 15 111 45 170c29 57 65 106 110 148s96 85 153 127c-3 16 -8 46 -13 92c-4 43 -5 73 -5 89c0 117 16 172 69 257c34 54 64 82 89 82 c21 0 43 -30 69 -92s39 -115 41 -159v-15c0 -109 -21 -162 -67 -241c-13 -20 -63 -90 -98 -118c-13 -9 -25 -19 -37 -29l31 -181c8 1 18 2 28 2c58 0 102 -12 133 -35c59 -43 92 -104 98 -184c1 -7 1 -15 1 -22c0 -123 -87 -209 -181 -248c8 -57 17 -110 25 -162 c5 -31 6 -58 6 -80c0 -30 -5 -53 -14 -70c-35 -64 -88 -99 -158 -103c-5 0 -11 -1 -16 -1c-37 0 -72 10 -108 27c-50 24 -77 59 -80 105v11c0 29 7 55 20 76c18 28 45 42 79 44h6c49 0 93 -42 97 -87v-9c0 -51 -34 -86 -105 -106c17 -24 51 -36 102 -36c62 0 116 43 140 85 c9 16 13 41 13 74c0 20 -1 42 -5 67c-8 53 -18 106 -26 159zM461 939c-95 0 -135 -175 -135 -286c0 -24 2 -48 5 -71c50 39 92 82 127 128c40 53 60 100 60 140v8c-4 53 -22 81 -55 81h-2zM406 119l54 -326c73 25 110 78 110 161c0 7 0 15 -1 23c-7 95 -57 142 -151 142h-12 zM382 117c-72 -2 -128 -47 -128 -120v-7c2 -46 43 -99 75 -115c-3 -2 -7 -5 -10 -10c-70 33 -116 88 -123 172v11c0 68 44 126 88 159c23 17 49 29 78 36l-29 170c-21 -13 -52 -37 -92 -73c-50 -44 -86 -84 -109 -119c-45 -69 -67 -130 -67 -182v-13c5 -68 35 -127 93 -176 s125 -73 203 -73c25 0 50 3 75 9c-19 111 -36 221 -54 331z"></path>
+      </symbol>
+      <symbol id="E084-1elw8bv" viewBox="0 0 1000 1000" overflow="inherit">
+         <path transform="scale(1,-1)" d="M20 -78c84 97 114 180 134 329h170c-13 -32 -82 -132 -99 -151l-84 -97c-33 -36 -59 -63 -80 -81h162v102l127 123v-225h57v-39h-57v-34c0 -43 19 -65 57 -65v-34h-244v36c48 0 60 26 60 70v27h-203v39z"></path>
+      </symbol>
+      <symbol id="E4E3-1elw8bv" viewBox="0 0 1000 1000" overflow="inherit">
+         <path transform="scale(1,-1)" d="M0 -115v105c0 9 1 10 10 10h280c9 0 10 -1 10 -10v-105c0 -9 -1 -10 -10 -10h-280c-9 0 -10 1 -10 10z"></path>
+      </symbol>
+   </defs>
+   <style type="text/css">g.page-margin{font-family:Times,serif;} g.ending, g.fing, g.reh, g.tempo{font-weight:bold;} g.dir, g.dynam, g.mNum{font-style:italic;} g.label{font-weight:normal;}</style>
+   <svg class="definition-scale" color="black" viewBox="0 0 25420 7120">
+      <g class="page-margin" transform="translate(500, 500)">
+         <g id="mx0t5jx" class="mdiv pageMilestone"></g>
+         <g id="s12hfh39" class="score pageMilestone"></g>
+         <g id="sks3ok5" class="system music-system first-music-system">
+            
+            <g id="s17pyxhe" class="section systemMilestone"></g>
+            <g id="m5eo3xf" class="measure" n="1">
+               <g id="sgrichl" class="staff" n="1" data-bar-id="staff1_m1" data-staff-number="1" data-measure-number="1" style="cursor: pointer;">
+                  <path d="M0 1263 L6953 1263" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 1443 L6953 1443" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 1623 L6953 1623" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 1803 L6953 1803" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 1983 L6953 1983" stroke="currentColor" stroke-width="13"></path>
+                  <g id="ctmraso" class="clef">
+                     <use xlink:href="#E050-1elw8bv" x="117" y="1803" height="720px" width="720px"></use>
+                  </g>
+                  <g id="kwpoif5" class="keySig"></g>
+                  <g id="m1r3a8ak" class="meterSig">
+                     <use xlink:href="#E084-1elw8bv" x="748" y="1443" height="720px" width="720px"></use>
+                     <use xlink:href="#E084-1elw8bv" x="748" y="1803" height="720px" width="720px"></use>
+                  </g>
+                  <g id="lkpg76j" class="layer">
+                     <g id="r1vln0ov" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="1310" y="1443" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               <g class="staff-handle" data-staff-num="1" style="cursor: pointer;"><line x1="-550" y1="0" x2="-100" y2="0" stroke="#a1a1aa" stroke-width="10" stroke-dasharray="25,25"></line><circle cx="-550" cy="0" r="75"></circle></g></g>
+               <g id="s1dkg45m" class="staff" n="2" data-bar-id="staff2_m1" data-staff-number="2" data-measure-number="1" style="cursor: pointer;">
+                  <path d="M0 3063 L6953 3063" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 3243 L6953 3243" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 3423 L6953 3423" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 3603 L6953 3603" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 3783 L6953 3783" stroke="currentColor" stroke-width="13"></path>
+                  <g id="c1y4008j" class="clef">
+                     <use xlink:href="#E050-1elw8bv" x="117" y="3603" height="720px" width="720px"></use>
+                  </g>
+                  <g id="k8h0yst" class="keySig"></g>
+                  <g id="lb9irux" class="layer">
+                     <g id="r259t2y" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="1310" y="3243" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               <g class="staff-handle" data-staff-num="2" style="cursor: pointer;"><line x1="-550" y1="0" x2="-100" y2="0" stroke="#a1a1aa" stroke-width="10" stroke-dasharray="25,25"></line><circle cx="-550" cy="0" r="75"></circle></g></g>
+               <g id="s5ic3fc" class="staff" n="3" data-bar-id="staff3_m1" data-staff-number="3" data-measure-number="1" style="cursor: pointer;">
+                  <path d="M0 4863 L6953 4863" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 5043 L6953 5043" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 5223 L6953 5223" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 5403 L6953 5403" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M0 5583 L6953 5583" stroke="currentColor" stroke-width="13"></path>
+                  <g id="cwzmchi" class="clef">
+                     <use xlink:href="#E050-1elw8bv" x="117" y="5403" height="720px" width="720px"></use>
+                  </g>
+                  <g id="kok5uxt" class="keySig"></g>
+                  <g id="lc42g77" class="layer">
+                     <g id="r15n7vhw" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="1310" y="5043" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               <g class="staff-handle" data-staff-num="3" style="cursor: pointer;"><line x1="-550" y1="0" x2="-100" y2="0" stroke="#a1a1aa" stroke-width="10" stroke-dasharray="25,25"></line><circle cx="-550" cy="0" r="75"></circle></g></g>
+               <g id="bpv72rg" class="barLine">
+                  <path d="M6940 1263 L6940 1983" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M6940 3063 L6940 3783" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M6940 4863 L6940 5583" stroke="currentColor" stroke-width="27"></path>
+               </g>
+            <g class="measureLabel mNum part-0"><text x="0" y="-180">1</text></g><g class="measureLabel mNum part-1"><text x="0" y="-180">5</text></g><g class="measureLabel mNum part-2"><text x="0" y="-180">9</text></g></g>
+            <g id="m1dhpfzq" class="measure" n="2">
+               <g id="s1cavv9r" class="staff" n="1" data-bar-id="staff1_m2" data-staff-number="1" data-measure-number="2" style="cursor: pointer;">
+                  <path d="M6953 1263 L12776 1263" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 1443 L12776 1443" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 1623 L12776 1623" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 1803 L12776 1803" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 1983 L12776 1983" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l6vj862" class="layer">
+                     <g id="r44x7hp" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="7133" y="1443" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="sxpg7y5" class="staff" n="2" data-bar-id="staff2_m2" data-staff-number="2" data-measure-number="2" style="cursor: pointer;">
+                  <path d="M6953 3063 L12776 3063" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 3243 L12776 3243" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 3423 L12776 3423" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 3603 L12776 3603" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 3783 L12776 3783" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l1x5r1pt" class="layer">
+                     <g id="r1va35w" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="7133" y="3243" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="sp5c04h" class="staff" n="3" data-bar-id="staff3_m2" data-staff-number="3" data-measure-number="2" style="cursor: pointer;">
+                  <path d="M6953 4863 L12776 4863" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 5043 L12776 5043" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 5223 L12776 5223" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 5403 L12776 5403" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M6953 5583 L12776 5583" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l1la9zkw" class="layer">
+                     <g id="r1ilx1vx" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="7133" y="5043" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="b1a82enc" class="barLine">
+                  <path d="M12763 1263 L12763 1983" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M12763 3063 L12763 3783" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M12763 4863 L12763 5583" stroke="currentColor" stroke-width="27"></path>
+               </g>
+            </g>
+            <g id="mqfovk1" class="measure" n="3">
+               <g id="sxp9fsj" class="staff" n="1" data-bar-id="staff1_m3" data-staff-number="1" data-measure-number="3" style="cursor: pointer;">
+                  <path d="M12776 1263 L18599 1263" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 1443 L18599 1443" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 1623 L18599 1623" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 1803 L18599 1803" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 1983 L18599 1983" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l1o3bwco" class="layer">
+                     <g id="r19kj3i1" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="12956" y="1443" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="s1kavrdu" class="staff" n="2" data-bar-id="staff2_m3" data-staff-number="2" data-measure-number="3" style="cursor: pointer;">
+                  <path d="M12776 3063 L18599 3063" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 3243 L18599 3243" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 3423 L18599 3423" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 3603 L18599 3603" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 3783 L18599 3783" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l1kygveo" class="layer">
+                     <g id="rk8y5" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="12956" y="3243" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="s17zdaft" class="staff" n="3" data-bar-id="staff3_m3" data-staff-number="3" data-measure-number="3" style="cursor: pointer;">
+                  <path d="M12776 4863 L18599 4863" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 5043 L18599 5043" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 5223 L18599 5223" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 5403 L18599 5403" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M12776 5583 L18599 5583" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l1wz62it" class="layer">
+                     <g id="rayiyk5" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="12956" y="5043" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="bpfvlbm" class="barLine">
+                  <path d="M18586 1263 L18586 1983" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M18586 3063 L18586 3783" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M18586 4863 L18586 5583" stroke="currentColor" stroke-width="27"></path>
+               </g>
+            </g>
+            <g id="m17qvkk0" class="measure" n="4">
+               <g id="sw0dvtf" class="staff" n="1" data-bar-id="staff1_m4" data-staff-number="1" data-measure-number="4" style="cursor: pointer;">
+                  <path d="M18599 1263 L24422 1263" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 1443 L24422 1443" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 1623 L24422 1623" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 1803 L24422 1803" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 1983 L24422 1983" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l1w2qboj" class="layer">
+                     <g id="ryilxd6" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="18779" y="1443" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="s1qsbauy" class="staff" n="2" data-bar-id="staff2_m4" data-staff-number="2" data-measure-number="4" style="cursor: pointer;">
+                  <path d="M18599 3063 L24422 3063" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 3243 L24422 3243" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 3423 L24422 3423" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 3603 L24422 3603" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 3783 L24422 3783" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l12ydhy2" class="layer">
+                     <g id="r144p2cg" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="18779" y="3243" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="syex1tu" class="staff" n="3" data-bar-id="staff3_m4" data-staff-number="3" data-measure-number="4" style="cursor: pointer;">
+                  <path d="M18599 4863 L24422 4863" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 5043 L24422 5043" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 5223 L24422 5223" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 5403 L24422 5403" stroke="currentColor" stroke-width="13"></path>
+                  <path d="M18599 5583 L24422 5583" stroke="currentColor" stroke-width="13"></path>
+                  <g id="l11yb0e2" class="layer">
+                     <g id="rxhn6ob" class="rest">
+                        <use xlink:href="#E4E3-1elw8bv" x="18779" y="5043" height="720px" width="720px"></use>
+                        <g class="ledgerLines"></g>
+                     </g>
+                  </g>
+               </g>
+               <g id="b16uqpdj" class="barLine">
+                  <path d="M24409 1263 L24409 1983" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M24409 3063 L24409 3783" stroke="currentColor" stroke-width="27"></path>
+                  <path d="M24409 4863 L24409 5583" stroke="currentColor" stroke-width="27"></path>
+               </g>
+            </g>
+            <g id="s1jadgma" class="systemMilestoneEnd s17pyxhe"></g>
+         </g>
+         <g id="p1qj4fdf" class="pageMilestoneEnd s12hfh39"></g>
+         <g id="pfopips" class="pageMilestoneEnd mx0t5jx"></g>
+         <g id="p60ntre" class="pgHead autogenerated">
+            <text font-size="0px">
+               <tspan id="r1dnfiek" class="rend" x="191500" y="411" text-anchor="middle">
+                  <title class="labelAttr">title</title>
+                  <tspan id="r100lqg5" class="rend">
+                     <tspan id="t1mezinp" class="text">
+                        <tspan font-size="607px">Test Score</tspan>
+                     </tspan>
+                  </tspan>
+               </tspan>
+            </text>
+         </g>
+      </g>
+   </svg>
+</svg>
+</div>
+        </div>
+      </div>
+
+      <div class="player-footer">
+        <div class="timeline-row">
+          <div class="progress-bar-container" onclick="window.onProgressBarClick(event)">
+            <div class="progress-bar-bg">
+              <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+              <div id="progress-bar-knob" class="progress-bar-knob" style="left: 0%;"></div>
+            </div>
+          </div>
+          <div id="time-text" class="time-text">0:00 / 0:00</div>
+        </div>
+
+        <div class="controls-row">
+          <button id="btn-restart" class="player-btn" onclick="window.restartPlayback()" title="Restart from beginning">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
+            </svg>
+          </button>
+          <button id="btn-play" class="player-btn play-btn" onclick="window.togglePlay()" title="Play/Pause">
+            <!-- Play Icon -->
+            <svg id="play-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+            <!-- Pause Icon -->
+            <svg id="pause-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="display: none;">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="error"></div>
+    <div id="debug-info" style="margin: 12px; padding: 12px; border-radius: 12px; background: rgb(254, 242, 242); color: rgb(153, 27, 27); font-family: monospace; font-size: 11px; white-space: pre-wrap; word-break: break-all; overflow-y: auto; max-height: 200px; display: block; border: 2px solid rgb(239, 68, 68);"><h4>Playback Timing Debug Schedule</h4><table border="1" style="border-collapse: collapse; font-family: monospace; font-size: 10px; width: 100%;"><tbody><tr><th>Pitch</th><th>Measure</th><th>Voice</th><th>Staff</th><th>StartBeat</th><th>EndBeat</th></tr><tr><td><b>rest</b></td><td>1</td><td>1</td><td>1</td><td>0.000</td><td>4.000</td></tr><tr><td><b>rest</b></td><td>2</td><td>1</td><td>1</td><td>4.000</td><td>8.000</td></tr><tr><td><b>rest</b></td><td>3</td><td>1</td><td>1</td><td>8.000</td><td>12.000</td></tr><tr><td><b>rest</b></td><td>4</td><td>1</td><td>1</td><td>12.000</td><td>16.000</td></tr><tr><td><b>rest</b></td><td>1</td><td>1</td><td>2</td><td>8.000</td><td>12.000</td></tr><tr><td><b>rest</b></td><td>2</td><td>1</td><td>2</td><td>12.000</td><td>16.000</td></tr><tr><td><b>rest</b></td><td>3</td><td>1</td><td>2</td><td>16.000</td><td>20.000</td></tr><tr><td><b>rest</b></td><td>4</td><td>1</td><td>2</td><td>20.000</td><td>24.000</td></tr><tr><td><b>rest</b></td><td>1</td><td>1</td><td>3</td><td>16.000</td><td>20.000</td></tr><tr><td><b>rest</b></td><td>2</td><td>1</td><td>3</td><td>20.000</td><td>24.000</td></tr><tr><td><b>rest</b></td><td>3</td><td>1</td><td>3</td><td>24.000</td><td>28.000</td></tr><tr><td><b>rest</b></td><td>4</td><td>1</td><td>3</td><td>28.000</td><td>32.000</td></tr></tbody></table></div>
+
+    <!-- Verovio WebAssembly script will be loaded dynamically with fallback URLs -->
+    <script>
+      console.log("HTML LOADED");
+      window.ReactNativeWebView?.postMessage("HTML LOADED");
+      window.parent?.postMessage("HTML LOADED", "*");
+
+      window.onerror = function(message, source, lineno, colno, error) {
+        const debugDiv = document.getElementById('debug-info');
+        if (debugDiv) {
+          debugDiv.style.display = 'block';
+          debugDiv.textContent += '\n\n=== UNHANDLED ERROR ===\n' + message + ' at ' + source + ':' + lineno + ':' + colno + '\n' + (error ? error.stack : '') + '\n';
+        }
+        
+        // Fullscreen error display (TEST 5)
+        const errOverlay = document.createElement('div');
+        errOverlay.style.position = 'fixed';
+        errOverlay.style.top = '0';
+        errOverlay.style.left = '0';
+        errOverlay.style.width = '100%';
+        errOverlay.style.height = '100%';
+        errOverlay.style.backgroundColor = '#fee2e2';
+        errOverlay.style.color = '#991b1b';
+        errOverlay.style.padding = '24px';
+        errOverlay.style.boxSizing = 'border-box';
+        errOverlay.style.zIndex = '999999';
+        errOverlay.style.overflow = 'auto';
+        errOverlay.innerHTML = "<h1>UNHANDLED ERROR</h1><pre>" + message + " at " + source + ":" + lineno + ":" + colno + "\n" + (error ? error.stack : '') + "</pre>";
+        document.body.appendChild(errOverlay);
+        
+        return false;
+      };
+
+      // TEST 6: typeof verovio status logging
+      function updateVerovioStatus() {
+        const statusDiv = document.getElementById('verovio-status-overlay');
+        const statusStr = "typeof verovio: " + (typeof verovio);
+        if (statusDiv && statusDiv.textContent !== statusStr) {
+          statusDiv.textContent = statusStr;
+        }
+        console.log(statusStr);
+      }
+      setInterval(updateVerovioStatus, 500);
+
+      const sourceNotes = [{"accidental":"b","clef":"bass","display":"Bb1","letter":"b","octave":1,"midi":34,"duration":"8","absoluteIndex":0,"pitch":"Bb1,Bb2,F3,F4,D5","beats":0.5},{"accidental":"b","clef":"bass","display":"Bb2","letter":"b","octave":2,"midi":46,"duration":"8","absoluteIndex":1,"pitch":"Bb2,F3","beats":0.5},{"accidental":"","clef":"treble","display":"rest","letter":"r","octave":0,"midi":0,"duration":"16r","absoluteIndex":2,"pitch":"rest","beats":0.25}];
+      let timeSignature = "2/4";
+      let originalTempo = 93;
+      let musicxmlBase64 = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzY29yZS1wYXJ0d2lzZSBQVUJMSUMKICAgICItLy9SZWNvcmRhcmUvL0RURCBNdXNpY1hNTCA0LjAgUGFydHdpc2UvL0VOIgogICAgImh0dHA6Ly93d3cubXVzaWN4bWwub3JnL2R0ZHMvcGFydHdpc2UuZHRkIj4KPHNjb3JlLXBhcnR3aXNlIHZlcnNpb249IjQuMCI+CiAgPHdvcms+CiAgICA8d29yay10aXRsZT5UZXN0IFNjb3JlPC93b3JrLXRpdGxlPgogIDwvd29yaz4KICA8cGFydC1saXN0PgogICAgCiAgICA8c2NvcmUtcGFydCBpZD0iUDEiPgogICAgICA8cGFydC1uYW1lPk11c2ljIDE8L3BhcnQtbmFtZT4KICAgIDwvc2NvcmUtcGFydD4KICAgIDxzY29yZS1wYXJ0IGlkPSJQMiI+CiAgICAgIDxwYXJ0LW5hbWU+TXVzaWMgMjwvcGFydC1uYW1lPgogICAgPC9zY29yZS1wYXJ0PgogICAgPHNjb3JlLXBhcnQgaWQ9IlAzIj4KICAgICAgPHBhcnQtbmFtZT5NdXNpYyAzPC9wYXJ0LW5hbWU+CiAgICA8L3Njb3JlLXBhcnQ+CiAgPC9wYXJ0LWxpc3Q+CiAgCiAgICAgIDxwYXJ0IGlkPSJQMSI+CiAgICAgICAgCiAgICAgICAgPG1lYXN1cmUgbnVtYmVyPSIxIj4KICAgICAgICAgIAogICAgICAgICAgPGF0dHJpYnV0ZXM+CiAgICAgICAgICAgIDxkaXZpc2lvbnM+MjU2PC9kaXZpc2lvbnM+CiAgICAgICAgICAgIDxrZXk+CiAgICAgICAgICAgICAgPGZpZnRocz4wPC9maWZ0aHM+CiAgICAgICAgICAgICAgPG1vZGU+bWFqb3I8L21vZGU+CiAgICAgICAgICAgIDwva2V5PgogICAgICAgICAgICA8dGltZT4KICAgICAgICAgICAgICA8YmVhdHM+NDwvYmVhdHM+CiAgICAgICAgICAgICAgPGJlYXQtdHlwZT40PC9iZWF0LXR5cGU+CiAgICAgICAgICAgIDwvdGltZT4KICAgICAgICAgICAgPHN0YXZlcz4xPC9zdGF2ZXM+CiAgICAgICAgICAgIDxjbGVmIG51bWJlcj0iMSI+CiAgICAgICAgICAgICAgPHNpZ24+Rzwvc2lnbj4KICAgICAgICAgICAgICA8bGluZT4yPC9saW5lPgogICAgICAgICAgICA8L2NsZWY+CiAgICAgICAgICA8L2F0dHJpYnV0ZXM+CiAgICAgICAgICA8bm90ZT4KICAgICAgICAgICAgPHJlc3QvPgogICAgICAgICAgICA8ZHVyYXRpb24+MTAyNDwvZHVyYXRpb24+CiAgICAgICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgICAgIDxzdGFmZj4xPC9zdGFmZj4KICAgICAgICAgIDwvbm90ZT4KICAgICAgICA8L21lYXN1cmU+CiAgICAgICAgPG1lYXN1cmUgbnVtYmVyPSIyIj4KICAgICAgICAgIAogICAgICAgICAgPG5vdGU+CiAgICAgICAgICAgIDxyZXN0Lz4KICAgICAgICAgICAgPGR1cmF0aW9uPjEwMjQ8L2R1cmF0aW9uPgogICAgICAgICAgICA8dm9pY2U+MTwvdm9pY2U+CiAgICAgICAgICAgIDx0eXBlPndob2xlPC90eXBlPgogICAgICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgICA8L25vdGU+CiAgICAgICAgPC9tZWFzdXJlPgogICAgICAgIDxtZWFzdXJlIG51bWJlcj0iMyI+CiAgICAgICAgICAKICAgICAgICAgIDxub3RlPgogICAgICAgICAgICA8cmVzdC8+CiAgICAgICAgICAgIDxkdXJhdGlvbj4xMDI0PC9kdXJhdGlvbj4KICAgICAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICAgICAgPHN0YWZmPjE8L3N0YWZmPgogICAgICAgICAgPC9ub3RlPgogICAgICAgIDwvbWVhc3VyZT4KICAgICAgICA8bWVhc3VyZSBudW1iZXI9IjQiPgogICAgICAgICAgCiAgICAgICAgICA8bm90ZT4KICAgICAgICAgICAgPHJlc3QvPgogICAgICAgICAgICA8ZHVyYXRpb24+MTAyNDwvZHVyYXRpb24+CiAgICAgICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgICAgIDxzdGFmZj4xPC9zdGFmZj4KICAgICAgICAgIDwvbm90ZT4KICAgICAgICA8L21lYXN1cmU+CiAgICAgIDwvcGFydD4KICAgICAgPHBhcnQgaWQ9IlAyIj4KICAgICAgICAKICAgICAgICA8bWVhc3VyZSBudW1iZXI9IjEiPgogICAgICAgICAgCiAgICAgICAgICA8YXR0cmlidXRlcz4KICAgICAgICAgICAgPGRpdmlzaW9ucz4yNTY8L2RpdmlzaW9ucz4KICAgICAgICAgICAgPGtleT4KICAgICAgICAgICAgICA8ZmlmdGhzPjA8L2ZpZnRocz4KICAgICAgICAgICAgICA8bW9kZT5tYWpvcjwvbW9kZT4KICAgICAgICAgICAgPC9rZXk+CiAgICAgICAgICAgIDx0aW1lPgogICAgICAgICAgICAgIDxiZWF0cz40PC9iZWF0cz4KICAgICAgICAgICAgICA8YmVhdC10eXBlPjQ8L2JlYXQtdHlwZT4KICAgICAgICAgICAgPC90aW1lPgogICAgICAgICAgICA8c3RhdmVzPjE8L3N0YXZlcz4KICAgICAgICAgICAgPGNsZWYgbnVtYmVyPSIxIj4KICAgICAgICAgICAgICA8c2lnbj5HPC9zaWduPgogICAgICAgICAgICAgIDxsaW5lPjI8L2xpbmU+CiAgICAgICAgICAgIDwvY2xlZj4KICAgICAgICAgIDwvYXR0cmlidXRlcz4KICAgICAgICAgIDxub3RlPgogICAgICAgICAgICA8cmVzdC8+CiAgICAgICAgICAgIDxkdXJhdGlvbj4xMDI0PC9kdXJhdGlvbj4KICAgICAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICAgICAgPHN0YWZmPjE8L3N0YWZmPgogICAgICAgICAgPC9ub3RlPgogICAgICAgIDwvbWVhc3VyZT4KICAgICAgICA8bWVhc3VyZSBudW1iZXI9IjIiPgogICAgICAgICAgCiAgICAgICAgICA8bm90ZT4KICAgICAgICAgICAgPHJlc3QvPgogICAgICAgICAgICA8ZHVyYXRpb24+MTAyNDwvZHVyYXRpb24+CiAgICAgICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgICAgIDxzdGFmZj4xPC9zdGFmZj4KICAgICAgICAgIDwvbm90ZT4KICAgICAgICA8L21lYXN1cmU+CiAgICAgICAgPG1lYXN1cmUgbnVtYmVyPSIzIj4KICAgICAgICAgIAogICAgICAgICAgPG5vdGU+CiAgICAgICAgICAgIDxyZXN0Lz4KICAgICAgICAgICAgPGR1cmF0aW9uPjEwMjQ8L2R1cmF0aW9uPgogICAgICAgICAgICA8dm9pY2U+MTwvdm9pY2U+CiAgICAgICAgICAgIDx0eXBlPndob2xlPC90eXBlPgogICAgICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgICA8L25vdGU+CiAgICAgICAgPC9tZWFzdXJlPgogICAgICAgIDxtZWFzdXJlIG51bWJlcj0iNCI+CiAgICAgICAgICAKICAgICAgICAgIDxub3RlPgogICAgICAgICAgICA8cmVzdC8+CiAgICAgICAgICAgIDxkdXJhdGlvbj4xMDI0PC9kdXJhdGlvbj4KICAgICAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICAgICAgPHN0YWZmPjE8L3N0YWZmPgogICAgICAgICAgPC9ub3RlPgogICAgICAgIDwvbWVhc3VyZT4KICAgICAgPC9wYXJ0PgogICAgICA8cGFydCBpZD0iUDMiPgogICAgICAgIAogICAgICAgIDxtZWFzdXJlIG51bWJlcj0iMSI+CiAgICAgICAgICAKICAgICAgICAgIDxhdHRyaWJ1dGVzPgogICAgICAgICAgICA8ZGl2aXNpb25zPjI1NjwvZGl2aXNpb25zPgogICAgICAgICAgICA8a2V5PgogICAgICAgICAgICAgIDxmaWZ0aHM+MDwvZmlmdGhzPgogICAgICAgICAgICAgIDxtb2RlPm1ham9yPC9tb2RlPgogICAgICAgICAgICA8L2tleT4KICAgICAgICAgICAgPHRpbWU+CiAgICAgICAgICAgICAgPGJlYXRzPjQ8L2JlYXRzPgogICAgICAgICAgICAgIDxiZWF0LXR5cGU+NDwvYmVhdC10eXBlPgogICAgICAgICAgICA8L3RpbWU+CiAgICAgICAgICAgIDxzdGF2ZXM+MTwvc3RhdmVzPgogICAgICAgICAgICA8Y2xlZiBudW1iZXI9IjEiPgogICAgICAgICAgICAgIDxzaWduPkc8L3NpZ24+CiAgICAgICAgICAgICAgPGxpbmU+MjwvbGluZT4KICAgICAgICAgICAgPC9jbGVmPgogICAgICAgICAgPC9hdHRyaWJ1dGVzPgogICAgICAgICAgPG5vdGU+CiAgICAgICAgICAgIDxyZXN0Lz4KICAgICAgICAgICAgPGR1cmF0aW9uPjEwMjQ8L2R1cmF0aW9uPgogICAgICAgICAgICA8dm9pY2U+MTwvdm9pY2U+CiAgICAgICAgICAgIDx0eXBlPndob2xlPC90eXBlPgogICAgICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgICA8L25vdGU+CiAgICAgICAgPC9tZWFzdXJlPgogICAgICAgIDxtZWFzdXJlIG51bWJlcj0iMiI+CiAgICAgICAgICAKICAgICAgICAgIDxub3RlPgogICAgICAgICAgICA8cmVzdC8+CiAgICAgICAgICAgIDxkdXJhdGlvbj4xMDI0PC9kdXJhdGlvbj4KICAgICAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICAgICAgPHN0YWZmPjE8L3N0YWZmPgogICAgICAgICAgPC9ub3RlPgogICAgICAgIDwvbWVhc3VyZT4KICAgICAgICA8bWVhc3VyZSBudW1iZXI9IjMiPgogICAgICAgICAgCiAgICAgICAgICA8bm90ZT4KICAgICAgICAgICAgPHJlc3QvPgogICAgICAgICAgICA8ZHVyYXRpb24+MTAyNDwvZHVyYXRpb24+CiAgICAgICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgICAgIDxzdGFmZj4xPC9zdGFmZj4KICAgICAgICAgIDwvbm90ZT4KICAgICAgICA8L21lYXN1cmU+CiAgICAgICAgPG1lYXN1cmUgbnVtYmVyPSI0Ij4KICAgICAgICAgIAogICAgICAgICAgPG5vdGU+CiAgICAgICAgICAgIDxyZXN0Lz4KICAgICAgICAgICAgPGR1cmF0aW9uPjEwMjQ8L2R1cmF0aW9uPgogICAgICAgICAgICA8dm9pY2U+MTwvdm9pY2U+CiAgICAgICAgICAgIDx0eXBlPndob2xlPC90eXBlPgogICAgICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgICA8L25vdGU+CiAgICAgICAgPC9tZWFzdXJlPgogICAgICA8L3BhcnQ+Cjwvc2NvcmUtcGFydHdpc2U+";
+      let selectedNoteId = "";
+
+      // TEST 7: Decoded XML length logging and display
+      try {
+        const decodedXML = atob(musicxmlBase64);
+        console.log("Decoded XML length:", decodedXML.length);
+        const xmlLenDiv = document.getElementById('xml-length-display');
+        if (xmlLenDiv) {
+          xmlLenDiv.textContent = "Decoded XML Length: " + decodedXML.length + " chars";
+        }
+      } catch (e) {
+        console.error("XML Decode error:", e);
+        const xmlLenDiv = document.getElementById('xml-length-display');
+        if (xmlLenDiv) {
+          xmlLenDiv.textContent = "Decoded XML Length: Error - " + e.message;
+        }
+      }
+
+      function getBeatsPerMeasure(timeSig) {
+        const parts = timeSig.split('/');
+        const num = parseInt(parts[0]) || 4;
+        const den = parseInt(parts[1]) || 4;
+        return (num / den) * 4.0;
+      }
+
+      function getNoteBeats(n) {
+        if (!n) return 1.0;
+        if (n.beats !== undefined) return n.beats;
+        const dur = n.duration;
+        if (dur.startsWith('w')) return 4.0;
+        if (dur.startsWith('h')) return dur.indexOf('d') !== -1 ? 3.0 : 2.0;
+        if (dur.startsWith('q')) return dur.indexOf('d') !== -1 ? 1.5 : 1.0;
+        if (dur.startsWith('8')) return dur.indexOf('d') !== -1 ? 0.75 : 0.5;
+        if (dur.startsWith('16')) return 0.25;
+        return 1.0;
+      }
+
+      function parseMusicXMLPlayback(xmlString) {
+        function getKeySignatureAlterations(fifths) {
+          const sharps = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
+          const flats = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
+          const alters = {};
+          if (fifths > 0) {
+            for (let i = 0; i < Math.min(fifths, 7); i++) {
+              alters[sharps[i]] = 1;
+            }
+          } else if (fifths < 0) {
+            for (let i = 0; i < Math.min(Math.abs(fifths), 7); i++) {
+              alters[flats[i]] = -1;
+            }
+          }
+          return alters;
+        }
+
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+        const events = [];
+        
+        const parts = xmlDoc.getElementsByTagName("part");
+        for (let p = 0; p < parts.length; p++) {
+          const part = parts[p];
+          const measures = part.getElementsByTagName("measure");
+          let measureStartBeat = 0.0;
+          let divisions = 4;
+          let beatsPerMeasure = 4.0;
+          let activeAlterations = {};
+          
+          for (let m = 0; m < measures.length; m++) {
+            const measure = measures[m];
+            let currentBeat = 0.0;
+            let lastNoteStartBeat = 0.0;
+            let measureOverrides = {};
+            
+            // Check divisions
+            const divElements = measure.getElementsByTagName("divisions");
+            if (divElements.length > 0) {
+              divisions = parseInt(divElements[0].textContent) || 4;
+            }
+            
+            // Check time signature
+            const timeElements = measure.getElementsByTagName("time");
+            if (timeElements.length > 0) {
+              const beats = parseInt(timeElements[0].getElementsByTagName("beats")[0].textContent) || 4;
+              const beatType = parseInt(timeElements[0].getElementsByTagName("beat-type")[0].textContent) || 4;
+              beatsPerMeasure = (beats / beatType) * 4.0;
+            }
+
+            // Check key signature
+            const keyElements = measure.getElementsByTagName("key");
+            if (keyElements.length > 0) {
+              const fifthsElement = keyElements[0].getElementsByTagName("fifths")[0];
+              if (fifthsElement) {
+                const fifths = parseInt(fifthsElement.textContent) || 0;
+                activeAlterations = getKeySignatureAlterations(fifths);
+              }
+            }
+            
+            const children = measure.children;
+            for (let c = 0; c < children.length; c++) {
+              const child = children[c];
+              const tagName = child.tagName.toLowerCase();
+              
+              if (tagName === "note") {
+                const durationElement = child.getElementsByTagName("duration")[0];
+                const durVal = durationElement ? parseInt(durationElement.textContent) : 0;
+                const durBeats = durVal / divisions;
+                
+                const isChord = child.getElementsByTagName("chord").length > 0;
+                const isRest = child.getElementsByTagName("rest").length > 0;
+                const staffElement = child.getElementsByTagName("staff")[0];
+                const staffNum = staffElement ? parseInt(staffElement.textContent) : 1;
+                // Track voice for per-voice timing isolation
+                const voiceElement = child.getElementsByTagName("voice")[0];
+                const voiceNum = voiceElement ? parseInt(voiceElement.textContent) : 1;
+                
+                const idAttr = child.getAttribute("id");
+                const absIdx = idAttr ? parseInt(idAttr.replace("n", "")) : -1;
+                
+                let pitchStr = "rest";
+                if (!isRest) {
+                  const pitchElement = child.getElementsByTagName("pitch")[0];
+                  if (pitchElement) {
+                    const step = pitchElement.getElementsByTagName("step")[0].textContent;
+                    const octave = pitchElement.getElementsByTagName("octave")[0].textContent;
+                    
+                    // Look for explicit accidental tag inside note
+                    const accidentalElement = child.getElementsByTagName("accidental")[0];
+                    const explicitAcc = accidentalElement ? accidentalElement.textContent : null;
+                    
+                    let resolvedAcc = "";
+                    if (explicitAcc === "sharp") {
+                      resolvedAcc = "#";
+                      measureOverrides[step + octave] = "#";
+                    } else if (explicitAcc === "flat") {
+                      resolvedAcc = "b";
+                      measureOverrides[step + octave] = "b";
+                    } else if (explicitAcc === "natural") {
+                      resolvedAcc = "n";
+                      measureOverrides[step + octave] = "n";
+                    } else {
+                      // Check measure overrides
+                      if (measureOverrides[step + octave] !== undefined) {
+                        resolvedAcc = measureOverrides[step + octave];
+                      } else {
+                        // Check key signature
+                        const keyAlter = activeAlterations[step];
+                        if (keyAlter === 1) {
+                          resolvedAcc = "#";
+                        } else if (keyAlter === -1) {
+                          resolvedAcc = "b";
+                        } else {
+                          resolvedAcc = "";
+                        }
+                      }
+                    }
+                    
+                    const pitchAcc = resolvedAcc === "n" ? "" : resolvedAcc;
+                    pitchStr = step + pitchAcc + octave;
+                  }
+                }
+                
+                // Check if this note is a tie stop (continuation of a tied note)
+                let isTieStop = false;
+                const tieElements = child.getElementsByTagName("tie");
+                for (let t = 0; t < tieElements.length; t++) {
+                  if (tieElements[t].getAttribute("type") === "stop") {
+                    isTieStop = true;
+                    break;
+                  }
+                }
+                
+                let startBeat;
+                if (isChord) {
+                  startBeat = lastNoteStartBeat;
+                } else {
+                  startBeat = measureStartBeat + currentBeat;
+                  lastNoteStartBeat = startBeat;
+                  currentBeat += durBeats;
+                }
+                
+                if (!isRest && pitchStr !== "rest") {
+                  if (isTieStop) {
+                    let merged = false;
+                    for (let idx = events.length - 1; idx >= 0; idx--) {
+                      const prevEvent = events[idx];
+                      if (prevEvent.pitch === pitchStr && 
+                          prevEvent.staff === staffNum && 
+                          prevEvent.partIndex === p &&
+                          prevEvent.voice === voiceNum && 
+                          Math.abs(prevEvent.startBeat + prevEvent.durationBeats - startBeat) < 0.01) {
+                        prevEvent.durationBeats = Math.round((prevEvent.durationBeats + durBeats) * 1000) / 1000;
+                        merged = true;
+                        break;
+                      }
+                    }
+                    if (!merged) {
+                      events.push({
+                        startBeat: Math.round(startBeat * 1000) / 1000,
+                        durationBeats: Math.round(durBeats * 1000) / 1000,
+                        pitch: pitchStr,
+                        absoluteIndex: absIdx,
+                        staff: staffNum,
+                        partIndex: p,
+                        voice: voiceNum,
+                        measure: m + 1
+                      });
+                    }
+                  } else {
+                    events.push({
+                      startBeat: Math.round(startBeat * 1000) / 1000,
+                      durationBeats: Math.round(durBeats * 1000) / 1000,
+                      pitch: pitchStr,
+                      absoluteIndex: absIdx,
+                      staff: staffNum,
+                      partIndex: p,
+                      voice: voiceNum,
+                      measure: m + 1
+                    });
+                  }
+                } else {
+                  // It is a rest note! Push to events
+                  events.push({
+                    startBeat: Math.round(startBeat * 1000) / 1000,
+                    durationBeats: Math.round(durBeats * 1000) / 1000,
+                    pitch: "rest",
+                    absoluteIndex: absIdx,
+                    staff: staffNum,
+                    partIndex: p,
+                    voice: voiceNum,
+                    measure: m + 1
+                  });
+                }
+              } else if (tagName === "backup") {
+                const durationElement = child.getElementsByTagName("duration")[0];
+                const durVal = durationElement ? parseInt(durationElement.textContent) : 0;
+                currentBeat = Math.max(0.0, currentBeat - durVal / divisions);
+              } else if (tagName === "forward") {
+                const durationElement = child.getElementsByTagName("duration")[0];
+                const durVal = durationElement ? parseInt(durationElement.textContent) : 0;
+                currentBeat += durVal / divisions;
+              }
+            }
+            if (currentBeat === 0.0) {
+              events.push({
+                startBeat: Math.round(measureStartBeat * 1000) / 1000,
+                durationBeats: Math.round(beatsPerMeasure * 1000) / 1000,
+                pitch: "rest",
+                absoluteIndex: -1,
+                staff: 1,
+                partIndex: p,
+                voice: 1,
+                measure: m + 1
+              });
+              currentBeat = beatsPerMeasure;
+            }
+            measureStartBeat += beatsPerMeasure;
+          }
+        }
+        return events;
+      }
+      
+      function buildPlaybackSchedule(events) {
+        if (events.length === 0) return [];
+        
+        // Sort events by startBeat so we can look ahead reliably
+        const sorted = [...events].sort((a, b) => a.startBeat - b.startBeat || a.staff - b.staff);
+        
+        // Compute effectiveDuration for each note:
+        // Cap at the time until the next note in the same staff starts.
+        // This prevents one note's oscillator from bleeding into the next
+        // note's time slot in the same staff, which causes audible overlap
+        // even though the scheduler timer has already moved on.
+        sorted.forEach((ev, i) => {
+          let nextSameStaffBeat = Infinity;
+          for (let j = i + 1; j < sorted.length; j++) {
+            if (sorted[j].staff === ev.staff && sorted[j].startBeat > ev.startBeat + 0.001) {
+              nextSameStaffBeat = sorted[j].startBeat;
+              break;
+            }
+          }
+          const gap = nextSameStaffBeat === Infinity ? ev.durationBeats : (nextSameStaffBeat - ev.startBeat);
+          // effectiveDuration: the actual beat count this note should sound for.
+          // Capped at the gap to next same-staff note so oscillators don't bleed.
+          ev.effectiveDuration = Math.min(ev.durationBeats, gap);
+        });
+        
+        const uniqueStartBeats = Array.from(new Set(sorted.map(e => e.startBeat))).sort((a, b) => a - b);
+        const schedule = [];
+        let T = 0.0;
+        
+        for (let i = 0; i < uniqueStartBeats.length; i++) {
+          const targetBeat = uniqueStartBeats[i];
+          
+          if (targetBeat > T + 0.01) {
+            const gap = targetBeat - T;
+            schedule.push({
+              pitch: "rest",
+              beats: gap,
+              constituentNotes: []
+            });
+            T = targetBeat;
+          }
+          
+          const notesStarting = sorted.filter(e => Math.abs(e.startBeat - targetBeat) < 0.005);
+          
+          let tickDuration;
+          if (i < uniqueStartBeats.length - 1) {
+            tickDuration = uniqueStartBeats[i + 1] - targetBeat;
+          } else {
+            // For the last tick, use the longest individual note duration
+            tickDuration = Math.max(...notesStarting.map(n => n.effectiveDuration));
+          }
+          
+          schedule.push({
+            pitch: notesStarting.map(n => n.pitch).join(','),
+            beats: tickDuration,
+            // pitch_beats uses effectiveDuration so each note's oscillator
+            // is limited to its own time slot and never bleeds into the next
+            pitch_beats: notesStarting.map(n => n.effectiveDuration),
+            constituentNotes: notesStarting.map(n => ({
+              pitch: n.pitch,
+              absoluteIndex: n.absoluteIndex,
+              duration: n.effectiveDuration
+            }))
+          });
+          
+          T += tickDuration;
+        }
+        return schedule;
+      }
+
+      function printPlaybackDebugTable(events, activeTempo, beatsPerMeas) {
+        console.log("=== PLAYBACK SCHEDULE DEBUG OUTPUT ===");
+        console.log("Pitch    | Measure | Voice | Staff | StartBeat | EndBeat");
+        console.log("-".repeat(60));
+        
+        const table = [];
+        events.forEach(e => {
+          const endBeat = e.startBeat + e.durationBeats;
+          
+          console.log(
+            e.pitch.padEnd(8) + " | " + 
+            String(e.measure).padEnd(7) + " | " + 
+            String(e.voice).padEnd(5) + " | " + 
+            String(e.staff).padEnd(5) + " | " + 
+            e.startBeat.toFixed(3).padEnd(9) + " | " + 
+            endBeat.toFixed(3)
+          );
+          
+          table.push({
+            pitch: e.pitch,
+            measure: e.measure,
+            voice: e.voice,
+            staff: e.staff,
+            startBeat: e.startBeat.toFixed(3),
+            endBeat: endBeat.toFixed(3)
+          });
+        });
+        
+        const debugDiv = document.getElementById("debug-info");
+        if (debugDiv) {
+          debugDiv.style.display = "block";
+          let html = "<h4>Playback Timing Debug Schedule</h4>";
+          html += "<table border='1' style='border-collapse: collapse; font-family: monospace; font-size: 10px; width: 100%;'>";
+          html += "<tr><th>Pitch</th><th>Measure</th><th>Voice</th><th>Staff</th><th>StartBeat</th><th>EndBeat</th></tr>";
+          table.forEach(r => {
+            html += '<tr><td><b>' + r.pitch + '</b></td><td>' + r.measure + '</td><td>' + r.voice + '</td><td>' + r.staff + '</td><td>' + r.startBeat + '</td><td>' + r.endBeat + '</td></tr>';
+          });
+          html += "</table>";
+          debugDiv.innerHTML = html;
+        }
+      }
+
+      function rebuildPlaybackSchedule() {
+        playbackNotes = [];
+        noteEvents = [];
+        if (musicxmlBase64) {
+          try {
+            const decodedXml = atob(musicxmlBase64);
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(decodedXml, "text/xml");
+            const clefs = xmlDoc.getElementsByTagName("clef");
+            let hasBassStaff = false;
+            for (let i = 0; i < clefs.length; i++) {
+              const sign = clefs[i].getElementsByTagName("sign")[0]?.textContent;
+              if (sign === "F") {
+                hasBassStaff = true;
+                break;
+              }
+            }
+
+            // Extract the number of staves in each part to map local staff to absolute staff index
+            const parts = xmlDoc.getElementsByTagName("part");
+            const partStavesCounts = [];
+            for (let p = 0; p < parts.length; p++) {
+              const measure1 = parts[p].getElementsByTagName("measure")[0];
+              const stavesElem = measure1 ? measure1.getElementsByTagName("staves")[0] : null;
+              const count = stavesElem ? parseInt(stavesElem.textContent) : 1;
+              partStavesCounts.push(count);
+            }
+
+            const events = parseMusicXMLPlayback(decodedXml);
+            
+            let maxMeasure = 0;
+            events.forEach(ev => {
+              if (ev.measure > maxMeasure) {
+                maxMeasure = ev.measure;
+              }
+            });
+            const beatsPerMeasure = getBeatsPerMeasure(timeSignature);
+            const totalBeats = maxMeasure * beatsPerMeasure;
+
+            const adjustedEvents = events.map(ev => {
+              const partIdx = ev.partIndex || 0;
+              const localStaff = ev.staff || 1;
+              
+              // Calculate absolute staff index S (1-indexed)
+              let absStaff = 0;
+              for (let p = 0; p < partIdx; p++) {
+                absStaff += partStavesCounts[p] || 1;
+              }
+              absStaff += localStaff;
+
+              // Compute playback offset: parts play sequentially (Pairs play sequentially, staves inside a Part play simultaneously)
+              const offset = partIdx * totalBeats;
+              
+              return {
+                ...ev,
+                staff: absStaff,
+                startBeat: ev.startBeat + offset
+              };
+            });
+
+            noteEvents = adjustedEvents;
+            printPlaybackDebugTable(adjustedEvents, originalTempo, beatsPerMeasure);
+            playbackNotes = buildPlaybackSchedule(adjustedEvents);
+            console.log("REBUILT PLAYBACK SCHEDULE:", playbackNotes.length, "notes. hasBassStaff:", hasBassStaff, "totalBeats:", totalBeats);
+          } catch (e) {
+            console.error("Error parsing MusicXML for playback:", e);
+          }
+        }
+
+        if (playbackNotes.length === 0) {
+          // Fallback to legacy formatting if XML parsing fails
+          let arr = [];
+          if (Array.isArray(sourceNotes)) {
+            arr = sourceNotes;
+          } else if (sourceNotes && Array.isArray(sourceNotes.notes)) {
+            arr = sourceNotes.notes;
+          }
+          playbackNotes = arr.map(n => ({
+            pitch: n.pitch,
+            beats: typeof getNoteBeats === 'function' ? getNoteBeats(n) : 1.0,
+            constituentNotes: n.pitch !== 'rest' ? n.pitch.split(',').map(p => ({
+              pitch: p,
+              absoluteIndex: n.absoluteIndex,
+              duration: typeof getNoteBeats === 'function' ? getNoteBeats(n) : 1.0
+            })) : []
+          }));
+        }
+      }
+
+      // Initialize playback schedule
+      let playbackNotes = [];
+      let noteEvents = [];
+      rebuildPlaybackSchedule();
+
+      // Playback state variables
+      let currentNoteIndex = 0;
+      let isPlaying = false;
+      let tempo = Math.round(originalTempo);
+      let noteStartTimestamp = 0;
+      let elapsedInCurrentNote = 0.0;
+      let timerId = null;
+      let audioCtx = null;
+      let activeOscillators = [];
+      let activeHighlightTimeouts = [];
+      let schedulerStartTime = 0;
+      let expectedElapsedTime = 0.0;
+
+      function clearAllHighlights() {
+        const prev = document.querySelectorAll('.active-note');
+        prev.forEach(el => el.classList.remove('active-note'));
+        activeHighlightTimeouts.forEach(tId => clearTimeout(tId));
+        activeHighlightTimeouts = [];
+      }
+
+      window.highlightCurrentNote = function(nominalTime) {
+        // 1. Clear previous highlights
+        const prev = document.querySelectorAll('.active-note');
+        prev.forEach(el => el.classList.remove('active-note'));
+        
+        if (noteEvents.length === 0) return;
+        
+        // 2. Find active note events at nominalTime
+        const activeEvents = noteEvents.filter(ev => {
+          const startTimeSec = ev.startBeat * (60.0 / originalTempo);
+          const endTimeSec = (ev.startBeat + ev.durationBeats) * (60.0 / originalTempo);
+          // Epsilon of 10ms for boundary
+          return nominalTime >= startTimeSec - 0.01 && nominalTime < endTimeSec - 0.01;
+        });
+        
+        // 3. Highlight them
+        activeEvents.forEach(ev => {
+          if (ev.pitch === 'rest') return;
+          const absIdx = ev.absoluteIndex;
+          if (absIdx >= 0) {
+            const query = '[id="n' + absIdx + '"]';
+            const elements = document.querySelectorAll(query);
+            elements.forEach(el => {
+              el.classList.add('active-note');
+              el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            });
+          }
+        });
+      };
+
+      function midiToFreq(midi) {
+        return 440 * Math.pow(2, (midi - 69) / 12);
+      }
+
+      function initAudio() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      }
+
+      function stopAllOscillators() {
+        activeOscillators.forEach(osc => {
+          try {
+            osc.stop();
+          } catch (e) {}
+        });
+        activeOscillators = [];
+      }
+
+      function playSingleNoteSound(freq, durationSec) {
+        initAudio();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.type = 'triangle'; // Piano-like warm tone
+        
+        const now = audioCtx.currentTime;
+        const scheduleTime = now + 0.02; // 20ms look-ahead buffer
+        
+        osc.frequency.setValueAtTime(freq, scheduleTime);
+
+        gainNode.gain.setValueAtTime(0, scheduleTime);
+        
+        // Dynamic ADSR Envelope to prevent out-of-order scheduling errors for short notes
+        const attack = Math.min(0.05, durationSec * 0.1);
+        const decay = Math.min(0.1, durationSec * 0.2);
+        const release = Math.min(0.05, durationSec * 0.1);
+        const sustainStart = attack + decay;
+        const sustainEnd = Math.max(sustainStart, durationSec - release);
+
+        gainNode.gain.linearRampToValueAtTime(0.2, scheduleTime + attack); // Attack
+        gainNode.gain.exponentialRampToValueAtTime(0.1, scheduleTime + sustainStart); // Decay
+        gainNode.gain.setValueAtTime(0.1, scheduleTime + sustainEnd); // Sustain
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, scheduleTime + durationSec); // Release
+
+        osc.start(scheduleTime);
+        osc.stop(scheduleTime + durationSec);
+
+        activeOscillators.push(osc);
+
+        setTimeout(() => {
+          const idx = activeOscillators.indexOf(osc);
+          if (idx > -1) {
+            activeOscillators.splice(idx, 1);
+          }
+        }, durationSec * 1000 + 100);
+      }
+
+      function playNextTick() {
+        if (!isPlaying) return;
+
+        if (currentNoteIndex >= playbackNotes.length) {
+          isPlaying = false;
+          currentNoteIndex = 0;
+          elapsedInCurrentNote = 0.0;
+          stopAllOscillators();
+          clearAllHighlights();
+          updatePlayButtonUI();
+          updateProgressUI(0);
+          return;
+        }
+
+        const note = playbackNotes[currentNoteIndex];
+        const fullDurationSec = getDurationInSec(note);
+        const durationSec = fullDurationSec - elapsedInCurrentNote;
+
+        if (note && note.pitch !== 'rest' && durationSec > 0) {
+          const pitches = note.pitch.split(',');
+          const pitchBeats = note.pitch_beats || [];
+          pitches.forEach((p, pIdx) => {
+            const parsed = parseNoteString(p);
+            if (parsed) {
+              const b = (pitchBeats[pIdx] !== undefined) ? pitchBeats[pIdx] : getNoteDurationInBeats(note);
+              const fullPitchDurSec = b * (60.0 / tempo);
+              // Respect elapsed time inside note when starting/scrubbing, otherwise play full pitch duration
+              const pitchDurSec = Math.max(0.0, fullPitchDurSec - elapsedInCurrentNote);
+              playSingleNoteSound(midiToFreq(parsed.midi), pitchDurSec * 0.85);
+            }
+          });
+        }
+
+        highlightNoteForDur(note, currentNoteIndex, fullDurationSec);
+        noteStartTimestamp = Date.now() - (elapsedInCurrentNote * 1000);
+
+        expectedElapsedTime += durationSec;
+        
+        const elapsedMs = Date.now() - schedulerStartTime;
+        const expectedMs = expectedElapsedTime * 1000;
+        const driftMs = elapsedMs - (expectedMs - durationSec * 1000);
+        
+        const nextDelayMs = Math.max(0, durationSec * 1000 - driftMs);
+
+        timerId = setTimeout(() => {
+          currentNoteIndex++;
+          elapsedInCurrentNote = 0.0;
+          playNextTick();
+        }, nextDelayMs);
+      }
+
+      function getNoteDurationInBeats(note) {
+        if (!note) return 1.0;
+        if (note.beats !== undefined) return note.beats;
+        const dur = note.duration;
+        if (dur.startsWith('w')) return 4.0;
+        if (dur.startsWith('h')) return dur.indexOf('d') !== -1 ? 3.0 : 2.0;
+        if (dur.startsWith('q')) return dur.indexOf('d') !== -1 ? 1.5 : 1.0;
+        if (dur.startsWith('8')) return dur.indexOf('d') !== -1 ? 0.75 : 0.5;
+        if (dur.startsWith('16')) return 0.25;
+        return 1.0;
+      }
+
+      function getDurationInSec(note) {
+        return getNoteDurationInBeats(note) * (60.0 / tempo);
+      }
+
+      function getTotalDuration() {
+        let totalBeats = 0.0;
+        playbackNotes.forEach(note => {
+          totalBeats += getNoteDurationInBeats(note);
+        });
+        return totalBeats * (60.0 / tempo);
+      }
+
+      function getCurrentPlaybackTime() {
+        let elapsedBeforeCurrent = 0.0;
+        for (let i = 0; i < currentNoteIndex; i++) {
+          elapsedBeforeCurrent += getDurationInSec(playbackNotes[i]);
+        }
+        if (!isPlaying) {
+          return elapsedBeforeCurrent + elapsedInCurrentNote;
+        }
+        const elapsedInNote = (Date.now() - noteStartTimestamp) / 1000;
+        const currentDur = getDurationInSec(playbackNotes[currentNoteIndex]);
+        return elapsedBeforeCurrent + Math.min(currentDur, elapsedInNote);
+      }
+
+      function formatTime(sec) {
+        if (isNaN(sec) || sec < 0) sec = 0;
+        const mins = Math.floor(sec / 60);
+        const secs = Math.floor(sec % 60);
+        return mins + ':' + (secs < 10 ? '0' : '') + secs;
+      }
+
+      function highlightNoteForDur(note, index, defaultDurSec) {
+        // Rely on window.highlightCurrentNote(nominalTime) called by updateProgressUI on every frame.
+      }
+
+      let lastMessageTime = 0;
+      function updateProgressUI(currentTime) {
+        const total = getTotalDuration();
+        const progressPercent = total > 0 ? (currentTime / total) * 100 : 0;
+        
+        const fill = document.getElementById('progress-bar-fill');
+        const knob = document.getElementById('progress-bar-knob');
+        const timeText = document.getElementById('time-display');
+        
+        if (fill) fill.style.width = progressPercent + '%';
+        if (knob) knob.style.left = progressPercent + '%';
+        if (timeText) timeText.textContent = formatTime(currentTime) + ' / ' + formatTime(total);
+
+        // Update highlight based on nominalTime
+        const speed = tempo / originalTempo;
+        const nominalTime = currentTime * speed;
+        window.highlightCurrentNote(nominalTime);
+
+        const now = Date.now();
+        if (now - lastMessageTime > 33 || !isPlaying) {
+          lastMessageTime = now;
+          sendResponse({
+            type: 'PLAYBACK_PROGRESS',
+            currentTime: currentTime,
+            duration: total,
+            isPlaying: isPlaying
+          });
+        }
+      }
+
+      function runProgressAnimation() {
+        if (!isPlaying) return;
+        updateProgressUI(getCurrentPlaybackTime());
+        requestAnimationFrame(runProgressAnimation);
+      }
+
+      window.togglePlay = function() {
+        initAudio();
+        if (isPlaying) {
+          pausePlayback();
+        } else {
+          startPlayback();
+        }
+      };
+
+      function startPlayback() {
+        if (isPlaying) return;
+        initAudio();
+        isPlaying = true;
+        updatePlayButtonUI();
+        
+        if (currentNoteIndex >= playbackNotes.length) {
+          currentNoteIndex = 0;
+        }
+        
+        schedulerStartTime = Date.now();
+        expectedElapsedTime = 0.0;
+        
+        runProgressAnimation();
+        playNextTick();
+
+        sendResponse({
+          type: 'PLAYBACK_STATE',
+          isPlaying: true,
+          currentTime: getCurrentPlaybackTime(),
+          duration: getTotalDuration()
+        });
+      }
+
+      function pausePlayback() {
+        if (!isPlaying) return;
+        const elapsedInNote = (Date.now() - noteStartTimestamp) / 1000;
+        const currentDur = getDurationInSec(playbackNotes[currentNoteIndex]);
+        elapsedInCurrentNote = Math.min(currentDur, elapsedInNote);
+
+        isPlaying = false;
+        updatePlayButtonUI();
+        stopAllOscillators();
+        
+        // Clear timer timeouts
+        if (timerId) {
+          clearTimeout(timerId);
+          timerId = null;
+        }
+
+        // Force one final progress UI update to highlight the paused note
+        updateProgressUI(getCurrentPlaybackTime());
+
+        sendResponse({
+          type: 'PLAYBACK_STATE',
+          isPlaying: false,
+          currentTime: getCurrentPlaybackTime(),
+          duration: getTotalDuration()
+        });
+      }
+
+      window.restartPlayback = function() {
+        const wasPlaying = isPlaying;
+
+        pausePlayback();
+
+        currentNoteIndex = 0;
+        elapsedInCurrentNote = 0.0;
+        expectedElapsedTime = 0.0;
+        schedulerStartTime = 0;
+
+        clearAllHighlights();
+        updateProgressUI(0);
+
+        if (wasPlaying || true) {
+          startPlayback();
+        }
+      };
+
+      window.onProgressBarClick = function(event) {
+        if (playbackNotes.length === 0) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+        
+        const totalDur = getTotalDuration();
+        const targetTime = ratio * totalDur;
+        
+        window.seekToTime(targetTime);
+      };
+
+      window.seekToTime = function(targetTime) {
+        if (playbackNotes.length === 0) return;
+        
+        const totalDur = getTotalDuration();
+        const clampedTime = Math.max(0, Math.min(totalDur, targetTime));
+        
+        let accumulatedTime = 0.0;
+        let targetIndex = 0;
+        let elapsedInNote = 0.0;
+        for (let i = 0; i < playbackNotes.length; i++) {
+          const noteDur = getDurationInSec(playbackNotes[i]);
+          if (accumulatedTime + noteDur > clampedTime) {
+            targetIndex = i;
+            elapsedInNote = clampedTime - accumulatedTime;
+            break;
+          }
+          accumulatedTime += noteDur;
+          targetIndex = i;
+        }
+        
+        const wasPlaying = isPlaying;
+        pausePlayback();
+        
+        currentNoteIndex = targetIndex;
+        elapsedInCurrentNote = elapsedInNote;
+        clearAllHighlights();
+        
+        const note = playbackNotes[currentNoteIndex];
+        if (note) {
+          const durationSec = getDurationInSec(note);
+          highlightNoteForDur(note, currentNoteIndex, durationSec);
+        }
+        
+        updateProgressUI(clampedTime);
+        
+        if (wasPlaying) {
+          startPlayback();
+        }
+      };
+
+      window.setTempo = function(newTempo, isUserInitiated) {
+        const wasPlaying = isPlaying;
+        if (isPlaying) {
+          pausePlayback();
+        }
+        const oldTempo = tempo;
+        tempo = newTempo;
+        const label = document.getElementById('tempo-val');
+        if (label) label.textContent = Math.round(newTempo);
+        
+        try {
+          let xml = atob(musicxmlBase64);
+xml = xml.replace(
+  /<per-minute>[0-9.]+<\/per-minute>/g, '<per-minute>' + Math.round(newTempo) + '</per-minute>');          xml = xml.replace(/tempo="[0-9.]+"/g, 'tempo="' + Math.round(newTempo) + '"');
+          musicxmlBase64 = btoa(xml);
+          renderScore();
+        } catch (e) {
+          console.error("Failed to update tempo in MusicXML SVG:", e);
+        }
+
+        if (isUserInitiated) {
+          // Reset playback position to 0 on tempo change
+          currentNoteIndex = 0;
+          elapsedInCurrentNote = 0.0;
+          expectedElapsedTime = 0.0;
+          schedulerStartTime = 0;
+          clearAllHighlights();
+          updateProgressUI(0);
+
+          sendResponse({
+            type: 'TEMPO_CHANGE',
+            tempo: newTempo,
+            rate: newTempo / originalTempo
+          });
+        } else {
+          // Programmatic tempo sync: scale elapsedInCurrentNote if playing/paused
+          if (oldTempo > 0 && newTempo > 0) {
+            elapsedInCurrentNote = elapsedInCurrentNote * (oldTempo / newTempo);
+          }
+          if (wasPlaying) {
+            startPlayback();
+          }
+        }
+      };
+
+      window.useOriginalTempo = function(isUserInitiated) {
+        window.setTempo(originalTempo, isUserInitiated);
+        const slider = document.getElementById('tempo-range');
+        if (slider) slider.value = Math.round(originalTempo);
+      };
+
+      function updatePlayButtonUI() {
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        if (isPlaying) {
+          if (playIcon) playIcon.style.display = 'none';
+          if (pauseIcon) pauseIcon.style.display = 'block';
+        } else {
+          if (playIcon) playIcon.style.display = 'block';
+          if (pauseIcon) pauseIcon.style.display = 'none';
+        }
+      }
+
+      function parseNoteString(noteStr) {
+        const normalized = noteStr.trim();
+        const match = normalized.match(/^([A-Ga-g])([#bn]?)(-\d+|\d+)?$/);
+        if (!match) return null;
+        const letter = match[1].toLowerCase();
+        const accidental = match[2] || '';
+        const octave = match[3] !== undefined ? Number(match[3]) : 4;
+        
+        const offsets = { c:0, 'c#':1, db:1, d:2, 'd#':3, eb:3, e:4, f:5, 'f#':6, gb:6, g:7, 'g#':8, ab:8, a:9, 'a#':10, bb:10, b:11 };
+        const lookupAcc = accidental === 'n' ? '' : accidental;
+        const keyName = match[1].toLowerCase() + lookupAcc;
+        const offset = offsets[keyName] || 0;
+        const midi = (octave + 1) * 12 + offset;
+        
+        return { letter, accidental, octave, midi };
+      }
+
+      function showError(message) {
+        const error = document.getElementById('error');
+        const score = document.getElementById('score');
+        score.innerHTML = '';
+        error.style.display = 'block';
+        error.innerHTML = '<h3 style="margin-top: 0; color: #dc2626;">Sheet Rendering Failed</h3><p>Reason:<br/><code style="background: #fee2e2; padding: 2px 4px; borderRadius: 4px;">' + message + '</code></p>';
+      }
+
+      let vrvToolkit = null;
+      let verovioLoaded = false;
+
+      function ensureSelectionMetadata(root) {
+        if (!root) return;
+        const measures = root.querySelectorAll('.measure');
+        measures.forEach((measureEl, mIdx) => {
+          if (!measureEl.getAttribute('n')) {
+            measureEl.setAttribute('n', String(mIdx + 1));
+          }
+          const staves = measureEl.querySelectorAll('.staff');
+          staves.forEach((staffEl, sIdx) => {
+            if (!staffEl.getAttribute('n')) {
+              staffEl.setAttribute('n', String(sIdx + 1));
+            }
+          });
+        });
+
+        // Helper to get exact top and bottom Y coordinates of staff lines
+        function getStaffLinesYRange(staffEl) {
+          const directPaths = Array.from(staffEl.childNodes).filter(node => node.nodeName.toLowerCase() === 'path');
+          const allPaths = Array.from(staffEl.querySelectorAll('path'));
+          console.log("DEBUG STAFF: childNodes count=" + staffEl.childNodes.length + " directPaths count=" + directPaths.length + " querySelectorAllPaths count=" + allPaths.length);
+          
+          const pathsToUse = allPaths.length > 0 ? allPaths : directPaths;
+          let minY = Infinity;
+          let maxY = -Infinity;
+          pathsToUse.forEach(p => {
+            const d = p.getAttribute('d') || '';
+            const match = d.match(/^M\s*([-\d.]+)[, ]\s*([-\d.]+)\s+L\s*([-\d.]+)[, ]\s*([-\d.]+)\s*$/i);
+            if (match) {
+              const y1 = parseFloat(match[2]);
+              const y2 = parseFloat(match[4]);
+              if (y1 === y2) {
+                if (y1 < minY) minY = y1;
+                if (y1 > maxY) maxY = y2;
+              }
+            }
+          });
+          return { minY, maxY };
+        }
+
+        // Get part staves counts and measures count from MusicXML
+        let partStavesCounts = [];
+        let measuresPerPart = 0;
+        try {
+          const xmlText = atob(musicxmlBase64);
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+          const xmlParts = xmlDoc.getElementsByTagName("part");
+          for (let i = 0; i < xmlParts.length; i++) {
+            const part = xmlParts[i];
+            const measure1 = part.getElementsByTagName("measure")[0];
+            const stavesElem = measure1 ? measure1.getElementsByTagName("staves")[0] : null;
+            const count = stavesElem ? parseInt(stavesElem.textContent) : 1;
+            partStavesCounts.push(count);
+          }
+          const totalMeasures = xmlDoc.getElementsByTagName("measure").length;
+          measuresPerPart = xmlParts.length > 0 ? (totalMeasures / xmlParts.length) : 0;
+        } catch (e) {
+          console.error("Error parsing MusicXML for staff counts:", e);
+        }
+
+        const systems = root.querySelectorAll('.system');
+        console.log("System count:", systems.length);
+        console.log("Measure count:", measures.length);
+
+        systems.forEach((systemEl, sysIdx) => {
+          // Find staves in the first measure of this system
+          const systemMeasures = systemEl.querySelectorAll('.measure');
+          if (systemMeasures.length === 0) return;
+          
+          const firstMeasure = systemMeasures[0];
+          const xmlMeasureNum = parseInt(firstMeasure.getAttribute('n') || '1');
+          console.log("System " + (sysIdx + 1) + " -> Measure " + xmlMeasureNum);
+
+          const staves = firstMeasure.querySelectorAll('.staff');
+
+          // Staff grouping structure logging (on the first system)
+          if (sysIdx === 0) {
+            console.log("Staff count:", staves.length);
+            console.log("Staff grouping structure:");
+            let staffIndex = 0;
+            partStavesCounts.forEach((count, pIdx) => {
+              console.log("  Part " + (pIdx + 1) + " contains " + count + " staves");
+              for (let i = 0; i < count; i++) {
+                const sEl = staves[staffIndex];
+                if (sEl) {
+                  console.log("    SVG Staff " + (staffIndex + 1) + " (class: " + sEl.getAttribute("class") + ")");
+                }
+                staffIndex++;
+              }
+            });
+          }
+          
+          if (staves.length > 0) {
+            const staffRanges = Array.from(staves).map(staff => getStaffLinesYRange(staff));
+            
+            let currentCounts = [...partStavesCounts];
+            if (currentCounts.length === 0) {
+              for (let i = 0; i < staves.length; i++) {
+                currentCounts.push(1);
+              }
+            }
+            console.log("DEBUG RANGES: currentCounts =", JSON.stringify(currentCounts));
+            
+            let staffIdx = 0;
+            const partRanges = [];
+            currentCounts.forEach((count, pIdx) => {
+              let partMinY = Infinity;
+              let partMaxY = -Infinity;
+              for (let i = 0; i < count; i++) {
+                const range = staffRanges[staffIdx];
+                console.log("DEBUG RANGES: staff[" + staffIdx + "] range =", JSON.stringify(range));
+                if (range) {
+                  if (range.minY < partMinY) partMinY = range.minY;
+                  if (range.maxY > partMaxY) partMaxY = range.maxY;
+                }
+                staffIdx++;
+              }
+              if (partMinY !== Infinity && partMaxY !== -Infinity) {
+                partRanges.push({ minY: partMinY, maxY: partMaxY, count: count });
+              }
+            });
+            console.log("DEBUG RANGES: partRanges =", JSON.stringify(partRanges));
+            
+            // Find system connector paths (vertical lines outside measures/staves)
+            const allPaths = systemEl.querySelectorAll('path');
+            const systemPaths = Array.from(allPaths).filter(p => !p.closest('.measure') && !p.closest('.staff'));
+            console.log("DEBUG RANGES: systemPaths count =", systemPaths.length);
+            
+            systemPaths.forEach((pathEl, idx) => {
+              const d = pathEl.getAttribute('d') || '';
+              const match = d.match(/M\s*([-\d.]+)[, ]\s*([-\d.]+)\s+L\s*([-\d.]+)[, ]\s*([-\d.]+)/i);
+              console.log("DEBUG RANGES: path[" + idx + "] d='" + d + "' match=", !!match);
+              if (match) {
+                const x1 = parseFloat(match[1]);
+                const y1 = parseFloat(match[2]);
+                const x2 = parseFloat(match[3]);
+                const y2 = parseFloat(match[4]);
+                
+                console.log("DEBUG RANGES: path[" + idx + "] x1=" + x1 + " y1=" + y1 + " x2=" + x2 + " y2=" + y2);
+                // If it's a vertical line (system connector)
+                if (Math.abs(x1 - x2) < 5) {
+                  const x = (x1 + x2) / 2;
+                  const ns = 'http://www.w3.org/2000/svg';
+                  
+                  partRanges.forEach(range => {
+                    if (range.count > 1) { // Only draw connector if it's a grand staff pair (count > 1)
+                      console.log("DEBUG RANGES: Drawing split connector for range minY=" + range.minY + " maxY=" + range.maxY);
+                      const newPath = document.createElementNS(ns, 'path');
+                      Array.from(pathEl.attributes).forEach(attr => {
+                        newPath.setAttribute(attr.name, attr.value);
+                      });
+                      newPath.setAttribute('d', "M" + x + " " + range.minY + " L" + x + " " + range.maxY);
+                      pathEl.parentNode.insertBefore(newPath, pathEl);
+                    } else {
+                      console.log("DEBUG RANGES: Skipping connector for single staff (count=1) range minY=" + range.minY + " maxY=" + range.maxY);
+                    }
+                  });
+                  
+                  // Remove original system-wide path
+                  console.log("DEBUG RANGES: Removing original path");
+                  pathEl.parentNode.removeChild(pathEl);
+                }
+              }
+            });
+          }
+
+          // Inject measure numbers above the top staff of each part in the first measure of this system
+          let currentStaffIndex = 0;
+          partStavesCounts.forEach((count, pIdx) => {
+            const partStartMeasureNum = xmlMeasureNum + pIdx * measuresPerPart;
+            const staffEl = staves[currentStaffIndex];
+            
+            if (staffEl) {
+              let label = staffEl.querySelector('.measureLabel');
+              if (!label) {
+                label = firstMeasure.querySelector('.measureLabel.part-' + pIdx);
+              }
+              
+              if (!label) {
+                let bbox;
+                try {
+                  bbox = staffEl.getBBox();
+                } catch (e) {
+                  bbox = { x: 0, y: 0 };
+                }
+                const ns = 'http://www.w3.org/2000/svg';
+                label = document.createElementNS(ns, 'g');
+                label.setAttribute('class', 'measureLabel mNum part-' + pIdx);
+                const text = document.createElementNS(ns, 'text');
+                text.setAttribute('x', String(bbox.x));
+                text.setAttribute('y', String(bbox.y - 180));
+                text.textContent = String(partStartMeasureNum);
+                label.appendChild(text);
+                firstMeasure.appendChild(label);
+              } else {
+                const textEl = label.querySelector('text');
+                if (textEl) {
+                  textEl.textContent = String(partStartMeasureNum);
+                }
+                label.setAttribute('class', 'measureLabel mNum part-' + pIdx);
+              }
+            }
+            currentStaffIndex += count;
+          });
+
+          // Clean up any extra or duplicate measure labels on the first measure
+          const allFirstMeasureLabels = firstMeasure.querySelectorAll('.measureLabel, .mNum');
+          allFirstMeasureLabels.forEach(lbl => {
+            let isPartLabel = false;
+            partStavesCounts.forEach((_, pIdx) => {
+              if (lbl.classList.contains('part-' + pIdx)) {
+                isPartLabel = true;
+              }
+            });
+            if (!isPartLabel) {
+              lbl.parentNode.removeChild(lbl);
+            }
+          });
+
+          // Remove measure labels from all subsequent measures in this system
+          for (let i = 1; i < systemMeasures.length; i++) {
+            const otherMeasure = systemMeasures[i];
+            const labels = otherMeasure.querySelectorAll('.measureLabel, .mNum');
+            labels.forEach(lbl => {
+              lbl.parentNode.removeChild(lbl);
+            });
+          }
+        });
+      }
+
+
+      function renderScore() {
+        console.log("ACTIVE RENDERSCORE FILE");
+        console.log("ACTIVE RENDERSCORE FILE: src/components/sheetMusicShared.ts");
+        console.log("RENDER SCORE CALLED", {
+          selectedStaffNum, selectedMeasureNum, selectedBarId, selectedNoteId
+        });
+        window.ReactNativeWebView?.postMessage("RENDER SCORE CALLED");
+        window.parent?.postMessage("RENDER SCORE CALLED", "*");
+
+        console.log("Verovio available:", typeof verovio);
+        if (!verovioLoaded) {
+          console.log("Verovio WebAssembly toolkit is not fully initialized yet. Skipping render.");
+          return;
+        }
+        try {
+          console.log("Starting render");
+          if (typeof verovio === 'undefined') {
+            throw new Error('Verovio WebAssembly toolkit failed to initialize.');
+          }
+          if (!vrvToolkit) {
+            vrvToolkit = new verovio.toolkit();
+          }
+
+          let musicxml = atob(musicxmlBase64);
+          if (!musicxml) {
+            showError("No MusicXML score data provided.");
+            return;
+          }
+
+          try {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(musicxml, "text/xml");
+
+            // Feature 1: Remove automatic staff labels ("Music 1", "Music 2", etc.)
+            const partNames = xmlDoc.getElementsByTagName("part-name");
+            for (let i = 0; i < partNames.length; i++) {
+              partNames[i].textContent = "";
+            }
+            const partAbbrs = xmlDoc.getElementsByTagName("part-abbreviation");
+            for (let i = 0; i < partAbbrs.length; i++) {
+              partAbbrs[i].textContent = "";
+            }
+
+            // Check if there is any Bass staff in the score (to differentiate Grand Staff vs Single Staff)
+            let hasBassClef = false;
+            const clefs = xmlDoc.getElementsByTagName("clef");
+            for (let i = 0; i < clefs.length; i++) {
+              const sign = clefs[i].getElementsByTagName("sign")[0]?.textContent;
+              if (sign === "F") {
+                hasBassClef = true;
+                break;
+              }
+            }
+
+            // Set class on body to coordinate CSS rules for clefs
+            if (hasBassClef) {
+              document.body.classList.remove('no-bass-staff');
+              document.body.classList.add('has-bass-staff');
+            } else {
+              document.body.classList.remove('has-bass-staff');
+              document.body.classList.add('no-bass-staff');
+            }
+
+            // Feature 3: Time signature shown only once at the beginning of the score
+            // Remove <time> elements from all parts except the first part
+            const parts = xmlDoc.getElementsByTagName("part");
+            for (let i = 1; i < parts.length; i++) {
+              const part = parts[i];
+              const times = part.getElementsByTagName("time");
+              while (times.length > 0) {
+                times[0].parentNode.removeChild(times[0]);
+              }
+            }
+
+            // Serialize back to string
+            const serializer = new XMLSerializer();
+            musicxml = serializer.serializeToString(xmlDoc);
+          } catch (e) {
+            console.error("Error preprocessing MusicXML inside renderScore:", e);
+          }
+
+          // Dynamically compute pageWidth based on number of measures
+          const numMeasures = (musicxml.match(/<measure/g) || []).length || 4;
+          const minMeasureWidth = 3200; // Increased to make measures wider and use available horizontal space
+          const containerWidth = window.innerWidth * 3.33; 
+          const calculatedWidth = Math.max(containerWidth, numMeasures * minMeasureWidth);
+
+          vrvToolkit.setOptions({
+            pageWidth: Math.round(calculatedWidth),
+            pageHeight: 20000,
+            scale: 45, // Keeps staff height smaller vertically
+            spacingLinear: 0.88, // Stretches horizontal spacing between notes
+            adjustPageHeight: true,
+            breaks: 'none',
+            svgAdditionalAttribute: ['note@pname', 'note@oct']
+          });
+
+          vrvToolkit.loadData(musicxml);
+
+          const pageCount = vrvToolkit.getPageCount();
+          console.log("PAGE COUNT =", pageCount);
+
+          if (pageCount < 1) {
+            throw new Error("Verovio loaded XML but produced 0 pages");
+          }
+
+          const svg = vrvToolkit.renderToSVG(1, {});
+          console.log("SVG LENGTH =", svg?.length);
+
+          const scoreRoot = document.getElementById('score');
+          if (scoreRoot) {
+            if (!svg || svg.length < 100) {
+              scoreRoot.innerHTML = "<h1 style='color:red'>SVG EMPTY</h1>";
+              return;
+            }
+            scoreRoot.innerHTML = svg;
+            ensureSelectionMetadata(scoreRoot);
+
+            // Tag music systems to differentiate first music system from subsequent ones
+            const systems = scoreRoot.querySelectorAll('.system');
+            let musicSystemIdx = 0;
+            systems.forEach((systemEl) => {
+              if (systemEl.querySelector('.staff')) {
+                systemEl.classList.add('music-system');
+                if (musicSystemIdx === 0) {
+                  systemEl.classList.add('first-music-system');
+                } else {
+                  systemEl.classList.add('subsequent-music-system');
+                }
+                musicSystemIdx++;
+              }
+            });
+
+            const svgEl = scoreRoot.querySelector("svg");
+            console.log("SVG FOUND:", !!svgEl);
+          }
+
+          const scoreSvg = scoreRoot.querySelector('svg');
+          if (scoreSvg) {
+            scoreSvg.style.width = 'auto';
+            scoreSvg.style.height = 'auto';
+            
+            // Adjust container size to enable scrollbars
+            const wrapper = document.getElementById('score-scale-wrapper');
+            if (wrapper) {
+              const svgWidth = parseFloat(scoreSvg.getAttribute('width')) || scoreSvg.clientWidth || 800;
+              const svgHeight = parseFloat(scoreSvg.getAttribute('height')) || scoreSvg.clientHeight || 400;
+              wrapper.style.width = (svgWidth * zoomLevel) + 'px';
+              wrapper.style.height = (svgHeight * zoomLevel) + 'px';
+            }
+          }
+
+          // Inject staff handles, selection events, and re-apply selections after layout pass
+          setTimeout(() => {
+            try {
+              injectStaffHandles();
+              attachMeasureSelectionEvents();
+              attachNoteSelectionEvents();
+
+              // Re-apply selection if exists
+              console.log("RESTORE SELECTION STATE IN RENDERSCORE", {
+                selectedNoteId, selectedStaffNum, selectedMeasureNum, selectedBarId
+              });
+              if (selectedNoteId) {
+                const noteEl = document.getElementById(selectedNoteId);
+                if (noteEl) noteEl.classList.add('selected-note');
+              }
+              if (selectedStaffNum !== null) {
+                const staves = document.querySelectorAll('.staff[n="' + selectedStaffNum + '"]');
+                staves.forEach(el => el.classList.add('selected-staff'));
+                const handle = document.querySelector('.staff-handle[data-staff-num="' + selectedStaffNum + '"]');
+                if (handle) handle.classList.add('selected-handle');
+              }
+              if (selectedMeasureNum !== null) {
+                const measureEl = document.querySelector('.measure[n="' + selectedMeasureNum + '"]');
+                if (measureEl) measureEl.classList.add('selected-measure');
+              }
+              if (selectedBarId) {
+                const selectedEl = document.querySelector('.staff[data-bar-id="' + selectedBarId + '"]');
+                if (selectedEl) {
+                  selectedEl.classList.add('selected-bar');
+                }
+              }
+
+              sendResponse({
+                type: 'RENDER_SUCCESS'
+              });
+            } catch (e) {
+              console.warn("Error applying layout elements:", e);
+            }
+          }, 50);
+
+          setTimeout(() => {
+            if (typeof updateClickBackgrounds === 'function') {
+              updateClickBackgrounds();
+            }
+          }, 200);
+
+          setTimeout(() => {
+            if (typeof updateClickBackgrounds === 'function') {
+              updateClickBackgrounds();
+            }
+          }, 500);
+
+          updateProgressUI(0);
+          const roundedOriginal = Math.round(originalTempo);
+          const detectedText = document.getElementById('detected-tempo-text');
+          if (detectedText) detectedText.textContent = 'Detected: ' + roundedOriginal + ' BPM';
+
+          const slider = document.getElementById('tempo-range');
+          if (slider) slider.value = roundedOriginal;
+
+          const valLabel = document.getElementById('tempo-val');
+          if (valLabel) valLabel.textContent = roundedOriginal;
+
+          console.log("Render success");
+        } catch (error) {
+          console.error(error);
+          showError(error.message);
+          
+          // Fullscreen error display (TEST 4 / TEST 5)
+          const errOverlay = document.createElement('div');
+          errOverlay.style.position = 'fixed';
+          errOverlay.style.top = '0';
+          errOverlay.style.left = '0';
+          errOverlay.style.width = '100%';
+          errOverlay.style.height = '100%';
+          errOverlay.style.backgroundColor = '#fee2e2';
+          errOverlay.style.color = '#991b1b';
+          errOverlay.style.padding = '24px';
+          errOverlay.style.boxSizing = 'border-box';
+          errOverlay.style.zIndex = '999999';
+          errOverlay.style.overflow = 'auto';
+          errOverlay.innerHTML = "<h1>ERROR</h1><pre>" + error + "\n\nStack:\n" + (error.stack || '') + "</pre>";
+          document.body.appendChild(errOverlay);
+        }
+      }
+
+      // Zoom State & Gesture Controls
+      let zoomLevel = 1.0;
+
+      window.updateZoom = function(newZoom) {
+        zoomLevel = Math.max(0.5, Math.min(3.0, newZoom));
+        const score = document.getElementById('score');
+        if (score) {
+          score.style.transform = 'scale(' + zoomLevel + ')';
+          score.style.transformOrigin = 'top left';
+          
+          const wrapper = document.getElementById('score-scale-wrapper');
+          const scoreSvg = score.querySelector('svg');
+          if (wrapper && scoreSvg) {
+            const svgWidth = parseFloat(scoreSvg.getAttribute('width')) || scoreSvg.clientWidth || 800;
+            const svgHeight = parseFloat(scoreSvg.getAttribute('height')) || scoreSvg.clientHeight || 400;
+            wrapper.style.width = (svgWidth * zoomLevel) + 'px';
+            wrapper.style.height = (svgHeight * zoomLevel) + 'px';
+          }
+        }
+      };
+
+      // Selection state
+      let selectedStaffNum = null;
+      let selectedMeasureNum = null; // Bypassed for individual bar selection
+      let selectedBarId = null;
+      let pressTimer = null;
+      let wasLongPress = false;
+      let lastClickTime = 0;
+      let lastClickedBarId = null;
+
+      function resetDoubleTapTimer() {
+        lastClickTime = 0;
+        lastClickedBarId = null;
+      }
+
+      function updateSelectionState(newStaffNum, newMeasureNum, newBarId, sourceName) {
+        const oldSelection = { selectedStaffNum, selectedMeasureNum, selectedBarId };
+        selectedStaffNum = newStaffNum;
+        selectedMeasureNum = newMeasureNum;
+        selectedBarId = newBarId;
+        console.log(
+          "SELECTION CHANGED",
+          {
+            oldSelection: oldSelection,
+            newSelection: { selectedStaffNum, selectedMeasureNum, selectedBarId },
+            source: sourceName
+          }
+        );
+      }
+
+      function selectStaff(staffNum) {
+        clearSelection();
+        resetDoubleTapTimer();
+        updateSelectionState(staffNum, null, null, 'selectStaff');
+
+        // Highlight all .staff elements with n === staffNum across all measures
+        const staves = document.querySelectorAll('.staff[n="' + staffNum + '"]');
+        staves.forEach(el => {
+          el.classList.add('selected-staff');
+        });
+
+        // Highlight the handle
+        const handle = document.querySelector('.staff-handle[data-staff-num="' + staffNum + '"]');
+        if (handle) {
+          handle.classList.add('selected-handle');
+        }
+
+        sendResponse({
+          type: 'STAFF_SELECTED',
+          staffIndex: parseInt(staffNum) - 1
+        });
+      }
+
+      function selectMeasure(measureNum, isLongPress) {
+        // Kept for backward compatibility
+        clearSelection();
+        resetDoubleTapTimer();
+        updateSelectionState(null, measureNum, null, 'selectMeasure');
+
+        const measureEl = document.querySelector('.measure[n="' + measureNum + '"]');
+        if (measureEl) {
+          measureEl.classList.add('selected-measure');
+        }
+
+        sendResponse({
+          type: 'MEASURE_SELECTED',
+          measureIndex: parseInt(measureNum) - 1,
+          isLongPress: !!isLongPress
+        });
+      }
+
+      function selectBar(selectionId, staffNum, measureNum, isLongPress, clickedEl, isDoubleTap) {
+        clearSelection();
+        const parsedStaff = parseInt(staffNum) || 1;
+        const parsedMeasure = parseInt(measureNum) || 1;
+        updateSelectionState(parsedStaff, parsedMeasure, selectionId, 'selectBar');
+
+        const staffEl = clickedEl || document.querySelector('.staff[data-bar-id="' + selectionId + '"]');
+        if (staffEl) {
+          staffEl.classList.add('selected-bar');
+        }
+
+        console.log(
+          "BAR CLICKED",
+          selectionId
+        );
+
+        console.log("CLICKED:\nstaff=" + parsedStaff + "\nmeasure=" + parsedMeasure);
+        console.log("SELECTED:\nstaff=" + parsedStaff + "\nmeasure=" + parsedMeasure);
+
+        sendResponse({
+          type: 'BAR_SELECTED',
+          selectionId: selectionId,
+          staffNumber: parsedStaff,
+          measureNumber: parsedMeasure,
+          isLongPress: !!isLongPress,
+          isDoubleTap: !!isDoubleTap
+        });
+      }
+        
+
+      function selectNote(noteId) {
+        updateSelectionState(null, null, null, 'selectNote');
+        resetDoubleTapTimer();
+        document.querySelectorAll('.selected-staff').forEach(el => el.classList.remove('selected-staff'));
+        document.querySelectorAll('.selected-handle').forEach(el => el.classList.remove('selected-handle'));
+        document.querySelectorAll('.selected-measure').forEach(el => el.classList.remove('selected-measure'));
+        document.querySelectorAll('.selected-bar').forEach(el => el.classList.remove('selected-bar'));
+        document.querySelectorAll('.selected-note').forEach(el => el.classList.remove('selected-note'));
+        
+        selectedNoteId = noteId;
+        const noteEl = document.getElementById(noteId);
+        if (noteEl) {
+          noteEl.classList.add('selected-note');
+        }
+        
+        sendResponse({
+          type: 'NOTE_SELECTED',
+          noteId: noteId
+        });
+      }
+
+      function attachNoteSelectionEvents() {
+        const notes = document.querySelectorAll('.note');
+        notes.forEach(noteEl => {
+          noteEl.style.cursor = 'pointer';
+          
+          if (!noteEl.hasClickListener) {
+            noteEl.hasClickListener = true;
+            noteEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const noteId = noteEl.getAttribute('id');
+              if (noteId) {
+                selectNote(noteId);
+              }
+            });
+          }
+        });
+      }
+
+      function clearSelection() {
+        updateSelectionState(null, null, null, 'clearSelection');
+        selectedNoteId = '';
+        document.querySelectorAll('.selected-staff').forEach(el => el.classList.remove('selected-staff'));
+        document.querySelectorAll('.selected-handle').forEach(el => el.classList.remove('selected-handle'));
+        document.querySelectorAll('.selected-measure').forEach(el => el.classList.remove('selected-measure'));
+        document.querySelectorAll('.selected-bar').forEach(el => el.classList.remove('selected-bar'));
+        document.querySelectorAll('.selected-note').forEach(el => el.classList.remove('selected-note'));
+        sendResponse({
+          type: 'NOTE_DESELECTED'
+        });
+      }
+
+      // Inject Handles
+      function injectStaffHandles() {
+        const oldHandles = document.querySelectorAll('.staff-handle');
+        oldHandles.forEach(h => h.remove());
+
+        let firstMeasure = document.querySelector('.measure[n="1"]');
+        if (!firstMeasure) {
+          firstMeasure = document.querySelector('.measure');
+        }
+        if (!firstMeasure) return;
+
+        const staves = firstMeasure.querySelectorAll('.staff');
+        staves.forEach((staffEl, sIdx) => {
+          let staffNum = staffEl.getAttribute('n');
+          if (!staffNum || staffNum === 'null') {
+            staffNum = String(sIdx + 1);
+            staffEl.setAttribute('n', staffNum);
+          }
+          
+          const handleGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          handleGroup.setAttribute('class', 'staff-handle');
+          handleGroup.setAttribute('data-staff-num', staffNum);
+          handleGroup.style.cursor = 'pointer';
+
+          let yCenter = 0;
+          try {
+            const bbox = staffEl.getBBox();
+            yCenter = bbox.y + bbox.height / 2;
+          } catch (e) {
+            yCenter = 0;
+          }
+
+          // Connecting line from handle to staff (Feature 1)
+          const connLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          connLine.setAttribute('x1', '-550');
+          connLine.setAttribute('y1', yCenter);
+          connLine.setAttribute('x2', '-100');
+          connLine.setAttribute('y2', yCenter);
+          connLine.setAttribute('stroke', '#a1a1aa');
+          connLine.setAttribute('stroke-width', '10');
+          connLine.setAttribute('stroke-dasharray', '25,25');
+          handleGroup.appendChild(connLine);
+
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', '-550');
+          circle.setAttribute('cy', yCenter);
+          circle.setAttribute('r', '75');
+          handleGroup.appendChild(circle);
+
+          staffEl.appendChild(handleGroup);
+        });
+      }
+
+      // Selection Events for Measures (now for individual bar selection: staff × measure)
+      let hasDraggedRecently = false;
+
+      function attachMeasureSelectionEvents() {
+        console.log("attachMeasureSelectionEvents() called", {
+          selectedBarId
+        });
+        resetDoubleTapTimer(); // Ensure reset on every attach/render
+        // Clear any old overlays to prevent duplicates
+        document.querySelectorAll('.bar-click-bg').forEach(el => el.remove());
+        const measures = document.querySelectorAll('.measure');
+        measures.forEach((measureEl, mIdx) => {
+          let measureNumber = measureEl.getAttribute('n');
+          if (!measureNumber || measureNumber === 'null') {
+            measureNumber = String(mIdx + 1);
+            measureEl.setAttribute('n', measureNumber);
+          }
+          
+          const staves = measureEl.querySelectorAll('.staff');
+          staves.forEach((staffEl, sIdx) => {
+            let staffNumber = staffEl.getAttribute('n');
+            if (!staffNumber || staffNumber === 'null') {
+              staffNumber = String(sIdx + 1);
+              staffEl.setAttribute('n', staffNumber);
+            }
+            
+            const barId = 'staff' + staffNumber + '_m' + measureNumber;
+
+            console.log(
+              "BAR OVERLAY CREATED",
+              {
+                barId,
+                staffNumber,
+                measureNumber
+              }
+            );
+
+            // Store attributes on the staff element itself
+            staffEl.setAttribute('data-bar-id', barId);
+            staffEl.setAttribute('data-staff-number', staffNumber);
+            staffEl.setAttribute('data-measure-number', measureNumber);
+            staffEl.style.cursor = 'pointer';
+
+            // Generate overlay rect
+            try {
+              const measureBBox = measureEl.getBBox();
+              const staffBBox = staffEl.getBBox();
+              
+              let x = measureBBox.x;
+              let width = measureBBox.width;
+              let y = staffBBox.y;
+              let height = staffBBox.height;
+              if (width <= 0) {
+                x = 0;
+                y = 0;
+                width = 0;
+                height = 0;
+              }
+
+              let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+              bg.setAttribute('class', 'bar-click-bg');
+              bg.setAttribute('data-bar-id', barId);
+              bg.setAttribute('data-staff-number', staffNumber);
+              bg.setAttribute('data-measure-number', measureNumber);
+              bg.setAttribute('x', x);
+              bg.setAttribute('y', y);
+              bg.setAttribute('width', width);
+              bg.setAttribute('height', height);
+              bg.setAttribute('rx', '10');
+              bg.setAttribute('ry', '10');
+              bg.setAttribute('fill', 'white');
+              bg.setAttribute('fill-opacity', '0');
+              bg.setAttribute('style', 'pointer-events: all; cursor: pointer;');
+              
+              // Insert as first child of staffEl so it resides behind notes/lines
+              staffEl.insertBefore(bg, staffEl.firstChild);
+            } catch (e) {
+              console.warn("Failed to add bar click background:", e);
+            }
+
+             // Bind click event listener to the parent staffEl element to capture clicks on staff lines and whitespace
+             if (!staffEl.hasClickListener) {
+               staffEl.hasClickListener = true;
+               staffEl.addEventListener('click', (e) => {
+                 if (e.target.closest('.staff-handle')) return;
+                 if (e.target.closest('.note')) return; // let note selection handle it
+                 if (wasLongPress || hasDraggedRecently) {
+                   wasLongPress = false;
+                   e.stopPropagation();
+                   return;
+                 }
+
+                 // Task 2: Log details for tracing click event path
+                 console.log("CLICK PATH TRACE:");
+                 console.log("clicked element:", staffEl);
+                 console.log("event.target:", e.target);
+                 console.log("event.currentTarget:", e.currentTarget);
+                 console.log("selected measure number:", measureNumber);
+                 console.log("selected staff number:", staffNumber);
+
+                 // Task 3: Verify whether the clicked measure and selected measure are different
+                 const clickedMeasureNum = parseInt(measureNumber);
+                 const prevSelectedMeasureNumVal = selectedBarId ? parseInt(selectedBarId.split('_m')[1]) : null;
+                 console.log("Clicked measure and selected measure different:", clickedMeasureNum !== prevSelectedMeasureNumVal);
+
+                 const now = Date.now();
+                 const isDoubleTap = (now - lastClickTime < 300) && (lastClickedBarId === barId);
+                 lastClickTime = now;
+                 lastClickedBarId = barId;
+
+                 selectBar(barId, staffNumber, measureNumber, false, staffEl, isDoubleTap);
+                 e.stopPropagation();
+               });
+             }
+           });
+         });
+
+        // Re-apply selected bar class if selectedBarId is active
+        console.log("RESTORE SELECTION STATE IN ATTACHMEASURESELECTIONEVENTS", {
+          selectedBarId
+        });
+        if (selectedBarId) {
+          const selectedEl = document.querySelector('.staff[data-bar-id="' + selectedBarId + '"]');
+          if (selectedEl) {
+            selectedEl.classList.add('selected-bar');
+          }
+        }
+      }
+
+      function updateClickBackgrounds() {
+        const staves = document.querySelectorAll('.measure .staff');
+        
+        // Temporarily hide overlays to measure actual notation dimensions
+        const overlays = [];
+        staves.forEach(staffEl => {
+          const bg = staffEl.querySelector('.bar-click-bg');
+          if (bg) {
+            overlays.push({ bg, display: bg.style.display });
+            bg.style.display = 'none';
+          }
+        });
+
+        staves.forEach(staffEl => {
+          try {
+            let measureEl = staffEl.closest('.measure');
+            if (!measureEl) {
+              let parent = staffEl.parentNode;
+              while (parent && parent !== document) {
+                if (parent.classList && parent.classList.contains('measure')) {
+                  measureEl = parent;
+                  break;
+                }
+                parent = parent.parentNode;
+              }
+            }
+            if (measureEl) {
+              const measureBBox = measureEl.getBBox();
+              const staffBBox = staffEl.getBBox();
+              
+              let x = measureBBox.x;
+              let width = measureBBox.width;
+              if (width <= 0) {
+                x = staffBBox.x;
+                width = staffBBox.width;
+              }
+              let y = staffBBox.y;
+              let height = staffBBox.height;
+
+              const bg = staffEl.querySelector('.bar-click-bg');
+              if (bg && width > 0 && height > 0) {
+                bg.setAttribute('x', x);
+                bg.setAttribute('y', y);
+                bg.setAttribute('width', width);
+                bg.setAttribute('height', height);
+              }
+            }
+          } catch (e) {
+            // ignore
+          }
+        });
+
+        // Restore overlay displays
+        overlays.forEach(item => {
+          item.bg.style.display = item.display;
+        });
+      }
+
+      // Drag and Drop Logic
+      let activeDrag = null;
+
+      function initDragAndDrop() {
+        const scoreWrap = document.getElementById('score-wrap');
+        if (!scoreWrap) return;
+
+        const startPressTimer = (staffNum) => {
+          cancelPressTimer();
+          wasLongPress = false;
+          pressTimer = setTimeout(() => {
+            console.log("Long press detected for staff " + staffNum);
+            selectStaff(staffNum);
+            wasLongPress = true;
+            pressTimer = null;
+          }, 500);
+        };
+
+        const cancelPressTimer = () => {
+          if (pressTimer) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+          }
+        };
+
+        let barPressTimer = null;
+        let barTimerCoords = null;
+        let barTimerEl = null;
+        const startBarPressTimer = (selectionId, staffNum, measureNum, coords, clickedEl) => {
+          cancelBarPressTimer();
+          wasLongPress = false;
+          barTimerCoords = coords;
+          barTimerEl = clickedEl;
+          barPressTimer = setTimeout(() => {
+            console.log("Long press detected for bar " + selectionId);
+            selectBar(selectionId, staffNum, measureNum, true, barTimerEl);
+            wasLongPress = true;
+            activeDrag = {
+              type: 'measure',
+              id: measureNum,
+              startX: barTimerCoords.x,
+              startY: barTimerCoords.y,
+              currentX: barTimerCoords.x,
+              currentY: barTimerCoords.y,
+              hasDragged: false
+            };
+            barPressTimer = null;
+          }, 500);
+        };
+
+        const cancelBarPressTimer = () => {
+          if (barPressTimer) {
+            clearTimeout(barPressTimer);
+            barPressTimer = null;
+          }
+          barTimerCoords = null;
+        };
+
+        const getEventCoords = (e) => {
+          if (e.touches && e.touches.length > 0) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+          }
+          return { x: e.clientX, y: e.clientY };
+        };
+
+        let isPanning = false;
+        let panStartX = 0;
+        let panStartY = 0;
+        let scrollStartX = 0;
+        let scrollStartY = 0;
+        let docHasDragged = false;
+
+        const handleStart = (e) => {
+          cancelPressTimer();
+          cancelBarPressTimer();
+          wasLongPress = false;
+
+          const isNoteOrHandle = e.target.closest('.note') || e.target.closest('.staff-handle');
+          if (!isNoteOrHandle) {
+            isPanning = true;
+            const coords = getEventCoords(e);
+            panStartX = coords.x;
+            panStartY = coords.y;
+            scrollStartX = scoreWrap.scrollLeft;
+            scrollStartY = scoreWrap.scrollTop;
+            docHasDragged = false;
+            if (e.type === 'mousedown') {
+              e.preventDefault();
+            }
+
+            // Start the bar press timer just in case it is a tap or long press (not a pan)!
+            const staffEl = e.target.closest('.staff');
+            if (staffEl) {
+              const bg = staffEl.querySelector('.bar-click-bg');
+              if (bg) {
+                const selectionId = bg.getAttribute('data-bar-id');
+                const staffNum = bg.getAttribute('data-staff-number');
+                const measureNum = bg.getAttribute('data-measure-number');
+                startBarPressTimer(selectionId, staffNum, measureNum, coords, staffEl);
+              }
+            }
+            return;
+          }
+
+          const handleEl = e.target.closest('.staff-handle');
+          if (handleEl) {
+            const staffNum = handleEl.getAttribute('data-staff-num');
+            const coords = getEventCoords(e);
+            activeDrag = {
+              type: 'staff',
+              id: staffNum,
+              startX: coords.x,
+              startY: coords.y,
+              currentX: coords.x,
+              currentY: coords.y
+            };
+            selectStaff(staffNum);
+            e.preventDefault();
+            return;
+          }
+        };
+
+        const handleMove = (e) => {
+          const coords = getEventCoords(e);
+
+          if (isPanning) {
+            const dx = coords.x - panStartX;
+            const dy = coords.y - panStartY;
+            scoreWrap.scrollLeft = scrollStartX - dx;
+            scoreWrap.scrollTop = scrollStartY - dy;
+            if (Math.hypot(dx, dy) > 5) {
+              docHasDragged = true;
+              hasDraggedRecently = true;
+              cancelBarPressTimer();
+            }
+            e.preventDefault();
+            return;
+          }
+
+          if (barPressTimer && barTimerCoords) {
+            const dx = coords.x - barTimerCoords.x;
+            const dy = coords.y - barTimerCoords.y;
+            if (Math.hypot(dx, dy) > 15) {
+              // User is dragging/scrolling before long-press fires: cancel timer so scroll goes through
+              cancelBarPressTimer();
+              hasDraggedRecently = true;
+            }
+          }
+
+          if (pressTimer) {
+            // Cancel staff select timer if moved
+            cancelPressTimer();
+          }
+
+          if (!activeDrag) return;
+          const dx = coords.x - activeDrag.startX;
+          const dy = coords.y - activeDrag.startY;
+
+          activeDrag.currentX = coords.x;
+          activeDrag.currentY = coords.y;
+
+          if (activeDrag.type === 'staff') {
+            e.preventDefault();
+            showStaffDragLine(activeDrag.currentY);
+          } else if (activeDrag.type === 'measure') {
+            activeDrag.hasDragged = true;
+            e.preventDefault();
+            showMeasureDragLine(activeDrag.currentX);
+          }
+        };
+
+        const handleEnd = (e) => {
+          cancelPressTimer();
+          cancelBarPressTimer();
+          
+          if (isPanning) {
+            isPanning = false;
+            if (docHasDragged) {
+              hasDraggedRecently = true;
+              setTimeout(() => {
+                docHasDragged = false;
+                hasDraggedRecently = false;
+              }, 50);
+            }
+            return;
+          }
+
+          if (wasLongPress) {
+            setTimeout(() => {
+              wasLongPress = false;
+            }, 50);
+          }
+          if (hasDraggedRecently) {
+            setTimeout(() => {
+              hasDraggedRecently = false;
+            }, 100);
+          }
+          if (!activeDrag) return;
+          hideDragLines();
+
+          if (activeDrag.type === 'staff') {
+            const targetIndex = findStaffDropTarget(activeDrag.currentY);
+            const fromIndex = parseInt(activeDrag.id) - 1;
+            if (targetIndex !== null && targetIndex !== fromIndex) {
+              sendResponse({
+                type: 'STAFF_REORDER',
+                fromIndex: fromIndex,
+                toIndex: targetIndex
+              });
+            }
+          } else if (activeDrag.type === 'measure' && activeDrag.hasDragged) {
+            const targetIndex = findMeasureDropTarget(activeDrag.currentX);
+            const fromIndex = parseInt(activeDrag.id) - 1;
+            if (targetIndex !== null && targetIndex !== fromIndex) {
+              sendResponse({
+                type: 'MEASURE_REORDER',
+                fromIndex: fromIndex,
+                toIndex: targetIndex
+              });
+            }
+          }
+          activeDrag = null;
+        };
+
+        scoreWrap.addEventListener('mousedown', handleStart);
+        scoreWrap.addEventListener('touchstart', handleStart);
+
+        window.addEventListener('mousemove', handleMove, { passive: false });
+        window.addEventListener('touchmove', handleMove, { passive: false });
+
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchend', handleEnd);
+
+        // Zoom gestures: Mobile pinch-to-zoom
+        let initialDist = 0;
+        let initialZoom = 1.0;
+        scoreWrap.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 2) {
+            initialDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialZoom = zoomLevel;
+          }
+        });
+
+        scoreWrap.addEventListener('touchmove', (e) => {
+          if (e.touches.length === 2 && initialDist > 0) {
+            e.preventDefault();
+            const currentDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            const newZoom = initialZoom * (currentDist / initialDist);
+            window.updateZoom(newZoom);
+          }
+        }, { passive: false });
+
+        scoreWrap.addEventListener('touchend', (e) => {
+          if (e.touches.length < 2) {
+            initialDist = 0;
+          }
+        });
+
+        // Zoom gestures: Web Ctrl + Mouse Wheel & Shift + Mouse Wheel for horizontal scroll
+        scoreWrap.addEventListener('wheel', (e) => {
+          if (e.ctrlKey) {
+            e.preventDefault();
+            const factor = e.deltaY < 0 ? 1.1 : 0.9;
+            window.updateZoom(zoomLevel * factor);
+          } else if (e.shiftKey) {
+            e.preventDefault();
+            scoreWrap.scrollLeft += e.deltaY;
+          }
+        }, { passive: false });
+      }
+
+      function showStaffDragLine(screenY) {
+        let line = document.getElementById('staff-drag-line');
+        if (!line) {
+          line = document.createElement('div');
+          line.id = 'staff-drag-line';
+          line.style.cssText = 'position: absolute; left: 0; right: 0; height: 4px; background: #8b5cf6; pointer-events: none; z-index: 9999;';
+          document.body.appendChild(line);
+        }
+
+        const dropTarget = findStaffDropTarget(screenY);
+        if (dropTarget !== null) {
+          const firstMeasure = document.querySelector('.measure[n="1"]');
+          if (firstMeasure) {
+            const staves = firstMeasure.querySelectorAll('.staff');
+            const staffEl = staves[dropTarget];
+            if (staffEl) {
+              const bbox = staffEl.getBoundingClientRect();
+              const scrollY = window.scrollY || window.pageYOffset;
+              line.style.top = (bbox.top + scrollY) + 'px';
+              line.style.display = 'block';
+            }
+          }
+        } else {
+          line.style.display = 'none';
+        }
+      }
+
+      function findStaffDropTarget(screenY) {
+        const firstMeasure = document.querySelector('.measure[n="1"]');
+        if (!firstMeasure) return null;
+
+        const staves = firstMeasure.querySelectorAll('.staff');
+        let closestIndex = null;
+        let minDiff = Infinity;
+
+        staves.forEach((staffEl, idx) => {
+          const bbox = staffEl.getBoundingClientRect();
+          const yCenter = bbox.top + bbox.height / 2;
+          const diff = Math.abs(screenY - yCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIndex = idx;
+          }
+        });
+
+        return closestIndex;
+      }
+
+      function showMeasureDragLine(screenX) {
+        let line = document.getElementById('measure-drag-line');
+        if (!line) {
+          line = document.createElement('div');
+          line.id = 'measure-drag-line';
+          line.style.cssText = 'position: absolute; top: 0; bottom: 0; width: 4px; background: #8b5cf6; pointer-events: none; z-index: 9999;';
+          document.body.appendChild(line);
+        }
+
+        const dropTarget = findMeasureDropTarget(screenX);
+        if (dropTarget !== null) {
+          const measureEl = document.querySelector('.measure[n="' + (dropTarget + 1) + '"]');
+          if (measureEl) {
+            const bbox = measureEl.getBoundingClientRect();
+            const scrollX = window.scrollX || window.pageXOffset;
+            line.style.left = (bbox.left + scrollX) + 'px';
+            line.style.display = 'block';
+          }
+        } else {
+          line.style.display = 'none';
+        }
+      }
+
+      function findMeasureDropTarget(screenX) {
+        const measures = document.querySelectorAll('.measure');
+        let closestIndex = null;
+        let minDiff = Infinity;
+
+        measures.forEach((measureEl, idx) => {
+          const bbox = measureEl.getBoundingClientRect();
+          const xCenter = bbox.left + bbox.width / 2;
+          const diff = Math.abs(screenX - xCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIndex = idx;
+          }
+        });
+
+        return closestIndex;
+      }
+
+      function hideDragLines() {
+        const staffLine = document.getElementById('staff-drag-line');
+        if (staffLine) staffLine.style.display = 'none';
+        
+        const measureLine = document.getElementById('measure-drag-line');
+        if (measureLine) measureLine.style.display = 'none';
+      }
+
+      function initClickOutsideListener() {
+        let docDragStartX = 0;
+        let docDragStartY = 0;
+        let docHasDragged = false;
+
+        document.addEventListener('mousedown', (e) => {
+          docDragStartX = e.clientX;
+          docDragStartY = e.clientY;
+          docHasDragged = false;
+        });
+        
+        document.addEventListener('touchstart', (e) => {
+          if (e.touches && e.touches[0]) {
+            docDragStartX = e.touches[0].clientX;
+            docDragStartY = e.touches[0].clientY;
+          }
+          docHasDragged = false;
+        }, { passive: true });
+
+        document.addEventListener('mousemove', (e) => {
+          const dx = e.clientX - docDragStartX;
+          const dy = e.clientY - docDragStartY;
+          if (Math.hypot(dx, dy) > 10) {
+            docHasDragged = true;
+          }
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+          if (e.touches && e.touches[0]) {
+            const dx = e.touches[0].clientX - docDragStartX;
+            const dy = e.touches[0].clientY - docDragStartY;
+            if (Math.hypot(dx, dy) > 10) {
+              docHasDragged = true;
+            }
+          }
+        }, { passive: true });
+
+        document.addEventListener('click', (e) => {
+          if (docHasDragged) {
+            return;
+          }
+
+          // Exclude buttons, inputs, controls, etc.
+          if (e.target.closest('.tempo-control') || 
+              e.target.closest('.player-header') || 
+              e.target.closest('.player-footer') || 
+              e.target.closest('button') || 
+              e.target.closest('input')) {
+            return;
+          }
+
+          // Exclude music items
+          if (e.target.closest('.staff') || 
+              e.target.closest('.note') || 
+              e.target.closest('.staff-handle')) {
+            return;
+          }
+
+          if (wasLongPress || hasDraggedRecently) {
+            return;
+          }
+
+          console.log("Deselect clicked elsewhere:", e.target);
+          resetDoubleTapTimer();
+          clearSelection();
+        });
+      }
+
+      // Initialize Drag & Drop listeners on load
+      window.addEventListener('load', () => {
+        initDragAndDrop();
+        initClickOutsideListener();
+      });
+
+      const cdns = [
+        "https://cdn.jsdelivr.net/npm/verovio@4.1.0/dist/verovio-toolkit-wasm.js",
+        "https://unpkg.com/verovio@4.1.0/dist/verovio-toolkit-wasm.js",
+        "https://www.verovio.org/javascript/4.1.0/verovio-toolkit-wasm.js"
+      ];
+      let currentCdnIndex = 0;
+
+      function loadScript(url, onSuccess, onError) {
+        const script = document.createElement('script');
+        script.src = url;
+        script.onload = onSuccess;
+        script.onerror = onError;
+        document.head.appendChild(script);
+      }
+
+      function tryNextCdn() {
+        if (currentCdnIndex >= cdns.length) {
+          console.error("All CDNs failed to load Verovio script.");
+          showError("Verovio script failed to load from all CDNs. Please check your internet connection.");
+          return;
+        }
+        const url = cdns[currentCdnIndex++];
+        console.log("Attempting to load Verovio from:", url);
+        loadScript(url, 
+          () => {
+            console.log("Verovio script loaded from:", url);
+            let retries = 0;
+            const interval = setInterval(() => {
+              if (typeof verovio !== 'undefined' && verovio.module) {
+                clearInterval(interval);
+                if (verovio.toolkit && verovio.toolkit.prototype) {
+                  const originalSetOptions = verovio.toolkit.prototype.setOptions;
+                  verovio.toolkit.prototype.setOptions = function(options) {
+                    const customOptions = {
+                      ...options,
+                      mnumInterval: 0
+                    };
+                    return originalSetOptions.call(this, customOptions);
+                  };
+                }
+                verovio.module.onRuntimeInitialized = () => {
+                  verovioLoaded = true;
+                  renderScore();
+                };
+                if (verovio.module.calledRun) {
+                  verovioLoaded = true;
+                  renderScore();
+                }
+              } else {
+                retries++;
+                if (retries > 360) { // Increased from 120 to 360 (18 seconds) for slower mobile CPUs
+                  clearInterval(interval);
+                  console.warn("WASM compilation timed out for:", url);
+                  tryNextCdn();
+                }
+              }
+            }, 50);
+          }, 
+          () => {
+            console.warn("Failed to load Verovio script from:", url);
+            tryNextCdn();
+          }
+        );
+      }
+
+      function initAndRender() {
+        tryNextCdn();
+      }
+
+      function sendResponse(payload) {
+        const jsonStr = JSON.stringify(payload);
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(jsonStr);
+        } else {
+          window.parent.postMessage(jsonStr, '*');
+        }
+      }
+
+      window.generatePDF = async function() {
+        try {
+          if (typeof window.jspdf === 'undefined') {
+            throw new Error('jsPDF library failed to load.');
+          }
+          const { jsPDF } = window.jspdf;
+          
+          // Save current options
+          const oldOpts = vrvToolkit.getOptions();
+          
+          // Set pagination options for A4 (ratio 1:1.414)
+          const pdfPageWidth = 1200;
+          const pdfPageHeight = 1697; // 1200 * 1.414
+          
+          vrvToolkit.setOptions({
+            pageWidth: pdfPageWidth,
+            pageHeight: pdfPageHeight,
+            scale: 30,
+            adjustPageHeight: false,
+            breaks: 'auto'
+          });
+          
+          // Reload data to apply pagination options
+          const musicxml = atob(musicxmlBase64);
+          vrvToolkit.loadData(musicxml);
+          
+          const pageCount = vrvToolkit.getPageCount();
+          const pdf = new jsPDF('p', 'px', [pdfPageWidth, pdfPageHeight]);
+          
+          for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
+            if (pageNum > 1) {
+              pdf.addPage([pdfPageWidth, pdfPageHeight], 'p');
+            }
+            
+            const rawSvgString = vrvToolkit.renderToSVG(pageNum, {});
+            const scoreRoot = document.getElementById('score');
+            const originalInnerHTML = scoreRoot ? scoreRoot.innerHTML : '';
+            if (scoreRoot) {
+              scoreRoot.innerHTML = rawSvgString;
+              ensureSelectionMetadata(scoreRoot);
+            }
+            const svgString = scoreRoot ? scoreRoot.innerHTML : rawSvgString;
+            if (scoreRoot) {
+              scoreRoot.innerHTML = originalInnerHTML;
+            }
+            
+            // Convert SVG string to canvas
+            const canvas = await new Promise((resolve, reject) => {
+              const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+              const blobURL = (window.URL || window.webkitURL || window).createObjectURL(svgBlob);
+              const image = new Image();
+              image.onload = () => {
+                const c = document.createElement('canvas');
+                c.width = pdfPageWidth;
+                c.height = pdfPageHeight;
+                const ctx = c.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, pdfPageWidth, pdfPageHeight);
+                ctx.drawImage(image, 0, 0);
+                (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
+                resolve(c);
+              };
+              image.onerror = (err) => {
+                (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
+                reject(new Error('Failed to load SVG image for canvas rendering.'));
+              };
+              image.src = blobURL;
+            });
+            
+            const imgData = canvas.toDataURL('image/png');
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfPageWidth, pdfPageHeight);
+          }
+          
+          // Restore original options and re-render for screen display
+          vrvToolkit.setOptions(oldOpts);
+          vrvToolkit.loadData(musicxml);
+          const svg = vrvToolkit.renderToSVG(1, {});
+          
+
+          document.getElementById('score').innerHTML = svg;
+          ensureSelectionMetadata(document.getElementById('score'));
+          const scoreSvg = document.getElementById('score').querySelector('svg');
+          if (scoreSvg) {
+            scoreSvg.style.width = '100%';
+            scoreSvg.style.height = 'auto';
+          }
+          
+          const pdfBase64 = pdf.output('datauristring');
+          sendResponse({
+            type: 'PDF_GENERATED',
+            data: pdfBase64
+          });
+          
+        } catch (err) {
+          sendResponse({
+            type: 'PDF_ERROR',
+            error: err.message
+          });
+        }
+      };
+
+      function handleIncomingMessage(event) {
+        try {
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+          if (!data) return;
+          console.log("WEBVIEW RECEIVED MESSAGE:", data);
+          
+          if (data.type === 'UPDATE_XML') {
+            if (data.musicxml) {
+              console.log("WEBVIEW RECEIVED UPDATE_XML, re-rendering score");
+              musicxmlBase64 = btoa(data.musicxml);
+              renderScore();
+              rebuildPlaybackSchedule();
+            }
+          } else if (data.type === 'UPDATE_TEMPO') {
+            if (data.tempo !== undefined) {
+              console.log("WEBVIEW RECEIVED UPDATE_TEMPO:", data.tempo);
+              originalTempo = data.tempo;
+              tempo = data.tempo;
+              const roundedOriginal = Math.round(originalTempo);
+              const detectedText = document.getElementById('detected-tempo-text');
+              if (detectedText) detectedText.textContent = 'Detected: ' + roundedOriginal + ' BPM';
+              const slider = document.getElementById('tempo-range');
+              if (slider) slider.value = roundedOriginal;
+              const valLabel = document.getElementById('tempo-val');
+              if (valLabel) valLabel.textContent = roundedOriginal;
+            }
+          } else if (data.type === 'UPDATE_TIME_SIGNATURE') {
+            if (data.timeSignature) {
+              console.log("WEBVIEW RECEIVED UPDATE_TIME_SIGNATURE:", data.timeSignature);
+              timeSignature = data.timeSignature;
+            }
+          } else if (data.type === 'GENERATE_PDF') {
+            window.generatePDF();
+          } else if (data.type === 'PLAY') {
+            startPlayback();
+          } else if (data.type === 'PAUSE') {
+            pausePlayback();
+          } else if (data.type === 'RESTART') {
+            window.restartPlayback();
+          } else if (data.type === 'SEEK') {
+            window.seekToTime(data.time);
+          } else if (data.type === 'SET_TEMPO') {
+            if (data.tempo !== undefined) {
+              window.setTempo(data.tempo, false);
+              const slider = document.getElementById('tempo-range');
+              if (slider) slider.value = Math.round(data.tempo);
+            }
+          } else if (data.type === 'SET_SPEED') {
+            if (data.rate !== undefined) {
+              window.setTempo(originalTempo * data.rate, false);
+              const slider = document.getElementById('tempo-range');
+              if (slider) slider.value = Math.round(originalTempo * data.rate);
+            }
+          } else if (data.type === 'HIGHLIGHT_NOTE') {
+            if (data.time !== undefined) {
+              const speed = tempo / originalTempo;
+              window.highlightCurrentNote(data.time * speed);
+            }
+          } else if (data.type === 'ZOOM_IN') {
+            window.updateZoom(zoomLevel + 0.1);
+          } else if (data.type === 'ZOOM_OUT') {
+            window.updateZoom(zoomLevel - 0.1);
+          } else if (data.type === 'RESET_ZOOM') {
+            window.updateZoom(1.0);
+          } else if (data.type === 'SELECT_BAR') {
+            if (data.selectionId !== undefined) {
+              selectBar(data.selectionId, data.staffNumber, data.measureNumber, !!data.isLongPress);
+            }
+          } else if (data.type === 'SELECT_NOTE') {
+            if (data.noteId !== undefined) {
+              selectNote(data.noteId);
+            }
+          } else if (data.type === 'SELECT_MEASURE') {
+            if (data.measureIndex !== undefined) {
+              selectMeasure(data.measureIndex + 1, !!data.isLongPress);
+            }
+          } else if (data.type === 'SELECT_STAFF') {
+            if (data.staffIndex !== undefined) {
+              selectStaff(data.staffIndex + 1);
+            }
+          } else if (data.type === 'CLEAR_SELECTION') {
+            clearSelection();
+          }
+        } catch (e) {
+          // Ignore parse errors from unrelated messages
+        }
+      }
+
+      window.addEventListener('message', handleIncomingMessage);
+      document.addEventListener('message', handleIncomingMessage);
+      window.addEventListener('resize', () => {
+        renderScore();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (!selectedNoteId) return;
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          sendResponse({
+            type: 'MOVE_NOTE',
+            noteId: selectedNoteId,
+            direction: 'up'
+          });
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          sendResponse({
+            type: 'MOVE_NOTE',
+            noteId: selectedNoteId,
+            direction: 'down'
+          });
+        }
+      });
+
+      if (document.readyState === 'complete') {
+        initAndRender();
+      } else {
+        window.addEventListener('load', initAndRender);
+      }
+    </script>
+  
+</body></html>

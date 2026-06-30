@@ -1,0 +1,34 @@
+2026-06-29 18:52:21,202 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:560  | 1 sheet in C:\ReactNative\music-app\MeloNote\backend\temp\957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865.jpeg
+2026-06-29 18:52:21,502 INFO []                 Book.java:2565 | Stored /book.xml
+2026-06-29 18:52:21,504 INFO []                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865.omr
+2026-06-29 18:52:21,516 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-06-29 18:52:21,519 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]       StepMonitoring.java:98   | LOAD
+2026-06-29 18:52:22,027 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]            SheetStub.java:1278 | Loaded image #1 4960x2800 from C:\ReactNative\music-app\MeloNote\backend\temp\957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865.jpeg
+2026-06-29 18:52:22,033 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]       StepMonitoring.java:98   | BINARY
+2026-06-29 18:52:23,662 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]       StepMonitoring.java:98   | SCALE
+2026-06-29 18:52:23,722 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]         ScaleBuilder.java:255  | Beam  guessed height: 26 -- mid of [12..40]
+2026-06-29 18:52:23,725 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]         ScaleBuilder.java:271  | Beam measured height: 15 -- 0.11 of [12..40] range at 30% of needed quorum
+2026-06-29 18:52:23,725 WARN [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]         ScaleBuilder.java:300  | No reliable beam height found, guessed value: 26
+2026-06-29 18:52:23,725 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]         ScaleBuilder.java:401  | Normalized black jitter: 2.38 %
+2026-06-29 18:52:23,725 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]            ScaleStep.java:65   | Scale{ interline(40,42,44) line(1,1,2) beam(26 extra)}
+2026-06-29 18:52:23,727 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]       StepMonitoring.java:98   | GRID
+2026-06-29 18:52:24,547 WARN [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]            SheetStub.java:411  | 957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865 Too few staff filaments: 0 This sheet does not seem to contain staff lines.
+2026-06-29 18:52:24,548 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:543  | Created scores: []
+2026-06-29 18:52:24,549 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]            SheetStub.java:1194 | Sheet 957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865 flagged as invalid.
+2026-06-29 18:52:24,550 WARN [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:2044 | Error processing stub
+2026-06-29 18:52:24,551 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:2584 | Book{957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865} storing
+2026-06-29 18:52:24,594 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:2565 | Stored /book.xml
+2026-06-29 18:52:24,931 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-06-29 18:52:25,383 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-06-29 18:52:25,384 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865.omr
+2026-06-29 18:52:25,393 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]            SheetStub.java:1655 | Sheet disposed
+2026-06-29 18:52:25,417 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:2050 | End of Stub#1
+2026-06-29 18:52:25,419 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:2057 | End of Book{957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865}
+2026-06-29 18:52:25,419 INFO [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                 Book.java:596  | Could not export since transcription did not complete successfully
+2026-06-29 18:52:25,420 WARN [957de3ef-04ff-4569-a116-9764060943e2_clean_10dfa46a-120b-492d-a5cd-34ddb5b86865]                  CLI.java:956  | Exception occurred java.lang.Exception: Error in export
+java.lang.Exception: Error in export
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:930)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:513)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:361)
+	at org.audiveris.omr.Main.main(Main.java:263)
+	at Audiveris.main(Audiveris.java:50)

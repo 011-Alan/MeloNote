@@ -1,0 +1,116 @@
+{
+  "project_id": "13e83946-7868-407d-ae17-c74665b74717",
+  "original_filename": "43508b0a-0452-49f9-9d4e-39c644efc0d8",
+  "time_signature": "4/4",
+  "notes": [
+    {
+      "pitch": "E3",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 0
+    },
+    {
+      "pitch": "E3",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 1
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    }
+  ],
+  "treble_notes": [],
+  "bass_notes": [
+    {
+      "pitch": "E3",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 0
+    },
+    {
+      "pitch": "E3",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 1
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    }
+  ],
+  "detected_tempo": 120.0,
+  "tempo": 120.0,
+  "tempo_confidence": "LOW",
+  "duration_preserved": true,
+  "musicxml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n<score-partwise version=\"4.0\">\n  <work><work-title>Transcribed Score</work-title></work>\n  <part-list>\n    <score-part id=\"P1\"><part-name>Piano</part-name></score-part>\n  </part-list>\n  <part id=\"P1\">\n    <measure number=\"1\">\n      <attributes>\n        <divisions>4</divisions>\n        <key><fifths>0</fifths><mode>major</mode></key>\n        <time><beats>4</beats><beat-type>4</beat-type></time>\n        <staves>2</staves>\n        <clef number=\"1\"><sign>G</sign><line>2</line></clef>\n        <clef number=\"2\"><sign>F</sign><line>4</line></clef>\n      </attributes>\n      <direction placement=\"above\">\n        <direction-type>\n          <metronome><beat-unit>quarter</beat-unit><per-minute>120</per-minute></metronome>\n        </direction-type>\n        <sound tempo=\"120\"/>\n      </direction>\n      <note>\n        <rest measure=\"yes\"/>\n        <duration>16</duration>\n        <voice>1</voice>\n        <type>whole</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note id=\"n0\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n1\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>8</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n  </part>\n</score-partwise>",
+  "quality_scores": {
+    "pitch_accuracy": 53.3,
+    "rhythm_accuracy": 50.0,
+    "tempo_accuracy": 80.0,
+    "chroma_similarity": 40.3,
+    "overall_score": 51.4,
+    "best_tempo": 120,
+    "best_gap_threshold": 0.35,
+    "best_grid_resolution": 0.25,
+    "pitchAccuracy": 53.3,
+    "rhythmAccuracy": 50.0,
+    "tempoAccuracy": 80.0,
+    "chromaSimilarity": 40.3,
+    "overallScore": 51.4,
+    "bestTempo": 120,
+    "bestGapThreshold": 0.35,
+    "bestGridResolution": 0.25
+  },
+  "raw_notes": [
+    [
+      0.0,
+      0.08000000000000007,
+      52,
+      0.5984251968503937,
+      null
+    ],
+    [
+      0.06611180305480957,
+      0.8286790199279785,
+      52,
+      0.5511811023622047,
+      null
+    ]
+  ],
+  "best_grid_resolution": 0.25,
+  "activated_modules": {
+    "spleeter": false,
+    "hpss": false,
+    "torchcrepe": false,
+    "pyin": false,
+    "basic_pitch_ensemble": false,
+    "butterworth_filter": true,
+    "spectral_gating": true
+  },
+  "activation_reasons": {
+    "butterworth_filter": "Always active as baseline preprocessing",
+    "spleeter": "Bypassed (not requested or vocals not detected)",
+    "hpss": "Bypassed (vocals not detected)",
+    "spectral_gating": "Active (Noise floor -34.2 dB > threshold -55.0 dB)",
+    "basic_pitch_ensemble": "Bypassed (Basic Pitch ensembled but no new notes matched)",
+    "torchcrepe": "Bypassed (unrefined similarity 0.4120 was highest)",
+    "pyin": "Bypassed (unrefined similarity 0.4120 was highest)"
+  }
+}

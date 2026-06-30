@@ -1,0 +1,27 @@
+2026-06-29 22:19:25,746 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:560  | 1 sheet in C:\ReactNative\music-app\MeloNote\backend\temp\a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce.jpeg
+2026-06-29 22:19:26,051 INFO []                 Book.java:2565 | Stored /book.xml
+2026-06-29 22:19:26,051 INFO []                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce.omr
+2026-06-29 22:19:26,062 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-06-29 22:19:26,065 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]       StepMonitoring.java:98   | LOAD
+2026-06-29 22:19:27,131 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]            SheetStub.java:1278 | Loaded image #1 4960x2800 from C:\ReactNative\music-app\MeloNote\backend\temp\a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce.jpeg
+2026-06-29 22:19:27,138 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]       StepMonitoring.java:98   | BINARY
+2026-06-29 22:19:28,864 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]       StepMonitoring.java:98   | SCALE
+2026-06-29 22:19:28,932 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:543  | Created scores: []
+2026-06-29 22:19:28,933 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]            SheetStub.java:1194 | Sheet a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce flagged as invalid.
+2026-06-29 22:19:28,934 WARN [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:2044 | Error processing stub
+2026-06-29 22:19:28,935 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:2584 | Book{a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce} storing
+2026-06-29 22:19:28,965 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:2565 | Stored /book.xml
+2026-06-29 22:19:29,406 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-06-29 22:19:29,840 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-06-29 22:19:29,841 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce.omr
+2026-06-29 22:19:29,852 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]            SheetStub.java:1655 | Sheet disposed
+2026-06-29 22:19:29,879 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:2050 | End of Stub#1
+2026-06-29 22:19:29,881 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:2057 | End of Book{a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce}
+2026-06-29 22:19:29,881 INFO [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                 Book.java:596  | Could not export since transcription did not complete successfully
+2026-06-29 22:19:29,882 WARN [a6c9147c-966d-425f-a8d4-210e0d1b1e40_clean_0ac6060d-4753-4709-a657-9de9ab5e27ce]                  CLI.java:956  | Exception occurred java.lang.Exception: Error in export
+java.lang.Exception: Error in export
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:930)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:513)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:361)
+	at org.audiveris.omr.Main.main(Main.java:263)
+	at Audiveris.main(Audiveris.java:50)

@@ -1,0 +1,127 @@
+2026-06-29 17:41:03,740 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Book.java:560  | 1 sheet in C:\ReactNative\music-app\MeloNote\backend\temp\0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4.jpeg
+2026-06-29 17:41:04,049 INFO []                 Book.java:2565 | Stored /book.xml
+2026-06-29 17:41:04,050 INFO []                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4.omr
+2026-06-29 17:41:04,063 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-06-29 17:41:04,067 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | LOAD
+2026-06-29 17:41:04,434 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]            SheetStub.java:1278 | Loaded image #1 2800x3401 from C:\ReactNative\music-app\MeloNote\backend\temp\0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4.jpeg
+2026-06-29 17:41:04,440 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | BINARY
+2026-06-29 17:41:05,476 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | SCALE
+2026-06-29 17:41:05,536 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]         ScaleBuilder.java:255  | Beam  guessed height: 14 -- mid of [7..22]
+2026-06-29 17:41:05,538 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]         ScaleBuilder.java:271  | Beam measured height: 20 -- 0.87 of [7..22] range at 29% of needed quorum
+2026-06-29 17:41:05,539 WARN [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]         ScaleBuilder.java:300  | No reliable beam height found, guessed value: 14
+2026-06-29 17:41:05,540 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]         ScaleBuilder.java:401  | Normalized black jitter: 12.50 %
+2026-06-29 17:41:05,541 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]            ScaleStep.java:65   | Scale{ interline(23,24,25) line(4,6,7) beam(14 extra)}
+2026-06-29 17:41:05,543 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | GRID
+2026-06-29 17:41:06,772 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       LinesRetriever.java:1500 | Global slope: 0.00354
+2026-06-29 17:41:06,853 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]    ClustersRetriever.java:326  | Retrieved raw line clusters: 7 of sizes [5] with interline(23,24,25)
+2026-06-29 17:41:07,437 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]            PeakGraph.java:310  | Systems: #1[1] #2[2] #3[3] #4[4] #5[5] #6[6] #7[7]
+2026-06-29 17:41:08,405 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        SystemManager.java:779  | 1 part along 7 systems
+2026-06-29 17:41:08,407 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Book.java:543  | Created scores: [{Score 1}]
+2026-06-29 17:41:08,408 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | HEADERS
+2026-06-29 17:41:10,751 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | STEM_SEEDS
+2026-06-29 17:41:10,872 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        StemSeedsStep.java:86   | stem(6 max:7)
+2026-06-29 17:41:11,025 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | BEAMS
+2026-06-29 17:41:22,200 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | LEDGERS
+2026-06-29 17:41:22,728 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | HEADS
+2026-06-29 17:41:33,193 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_VOID[R:1.2] NOTEHEAD_BLACK[R:1.3]}
+2026-06-29 17:41:33,194 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | STEMS
+2026-06-29 17:41:33,713 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | REDUCTION
+2026-06-29 17:41:33,839 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        ReductionStep.java:105  | Stems free length median value: 86 pixels, 3.6 interlines
+2026-06-29 17:41:33,845 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | CUE_BEAMS
+2026-06-29 17:41:33,846 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2026-06-29 17:41:33,847 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | TEXTS
+2026-06-29 17:41:35,794 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | MEASURES
+2026-06-29 17:41:35,815 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Page.java:307  | 56 raw measures: [8 in system#1, 8 in system#2, 8 in system#3, 8 in system#4, 8 in system#5, 8 in system#6, 8 in system#7]
+2026-06-29 17:41:35,816 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | CHORDS
+2026-06-29 17:41:35,846 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | CURVES
+2026-06-29 17:41:37,515 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]         SlursBuilder.java:240  | Slurs: 12
+2026-06-29 17:41:37,533 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]      SegmentsBuilder.java:155  | Segments: 0
+2026-06-29 17:41:37,551 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | SYMBOLS
+2026-06-29 17:41:38,465 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | LINKS
+2026-06-29 17:41:38,472 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        SentenceInter.java:463  | No chord near SentenceInter#2025{(0.685) staff:1 mFont:52 Direction} Plano
+2026-06-29 17:41:38,514 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        SentenceInter.java:463  | No chord near SentenceInter#2064{(0.698) staff:3 mFont:B-45 Direction} Voice: Strings
+2026-06-29 17:41:38,541 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | RHYTHMS
+2026-06-29 17:41:38,587 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#2} No timeOffset for HeadChordInter#2192{(0.821/0.821) staff:1 slot#2 dur:1/2}
+2026-06-29 17:41:38,589 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S1 MeasureStack#2 no correct rhythm
+2026-06-29 17:41:38,593 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#6} No timeOffset for HeadChordInter#2197{(0.849/0.849) staff:1 slot#2 dur:1/2}
+2026-06-29 17:41:38,594 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S1 MeasureStack#6 no correct rhythm
+2026-06-29 17:41:38,600 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#7} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,601 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S1 MeasureStack#7 no correct rhythm
+2026-06-29 17:41:38,608 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#11} No timeOffset for HeadChordInter#2204{(0.906/0.906) slot#2 dur:1/4}
+2026-06-29 17:41:38,609 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S2 MeasureStack#11 no correct rhythm
+2026-06-29 17:41:38,611 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#13} No timeOffset for HeadChordInter#2207{(0.826/0.826) slot#2 dur:1/2}
+2026-06-29 17:41:38,611 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S2 MeasureStack#13 no correct rhythm
+2026-06-29 17:41:38,613 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#15} No timeOffset for HeadChordInter#2210{(0.812/0.812) slot#2 dur:1/2}
+2026-06-29 17:41:38,613 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S2 MeasureStack#15 no correct rhythm
+2026-06-29 17:41:38,615 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#18} No timeOffset for HeadChordInter#2213{(0.896/0.896) slot#2 dur:1/2}
+2026-06-29 17:41:38,615 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S3 MeasureStack#18 no correct rhythm
+2026-06-29 17:41:38,617 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#21} No timeOffset for HeadChordInter#2217{(0.805/0.805) slot#2 dur:1/2}
+2026-06-29 17:41:38,618 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S3 MeasureStack#21 no correct rhythm
+2026-06-29 17:41:38,619 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#22} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,620 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S3 MeasureStack#22 no correct rhythm
+2026-06-29 17:41:38,621 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#23} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,621 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S3 MeasureStack#23 no correct rhythm
+2026-06-29 17:41:38,625 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#27} No timeOffset for HeadChordInter#2226{(0.894/0.894) slot#2 dur:1/2}
+2026-06-29 17:41:38,626 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S4 MeasureStack#27 no correct rhythm
+2026-06-29 17:41:38,629 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#29} No timeOffset for HeadChordInter#2229{(0.810/0.810) slot#2 dur:1/2}
+2026-06-29 17:41:38,630 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S4 MeasureStack#29 no correct rhythm
+2026-06-29 17:41:38,631 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#30} No timeOffset for HeadChordInter#2231{(0.898/0.898) slot#2 dur:1/4}
+2026-06-29 17:41:38,631 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S4 MeasureStack#30 no correct rhythm
+2026-06-29 17:41:38,633 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#31} No timeOffset for HeadChordInter#2233{(0.908/0.908) slot#2 dur:1/4}
+2026-06-29 17:41:38,634 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S4 MeasureStack#31 no correct rhythm
+2026-06-29 17:41:38,637 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#34} No timeOffset for HeadChordInter#2237{(0.831/0.831) slot#2 dur:1/2}
+2026-06-29 17:41:38,639 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S5 MeasureStack#34 no correct rhythm
+2026-06-29 17:41:38,640 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#35} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,641 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S5 MeasureStack#35 no correct rhythm
+2026-06-29 17:41:38,643 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#37} No timeOffset for HeadChordInter#2242{(0.914/0.914) slot#2 dur:1/4}
+2026-06-29 17:41:38,644 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S5 MeasureStack#37 no correct rhythm
+2026-06-29 17:41:38,646 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#39} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,647 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S5 MeasureStack#39 no correct rhythm
+2026-06-29 17:41:38,648 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#41} No timeOffset for HeadChordInter#2248{(0.834/0.834) slot#2 dur:1/2}
+2026-06-29 17:41:38,649 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S6 MeasureStack#41 no correct rhythm
+2026-06-29 17:41:38,651 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#42} No timeOffset for HeadChordInter#2250{(0.907/0.907) slot#2 dur:1/4}
+2026-06-29 17:41:38,652 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S6 MeasureStack#42 no correct rhythm
+2026-06-29 17:41:38,653 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#43} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,655 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S6 MeasureStack#43 no correct rhythm
+2026-06-29 17:41:38,657 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#45} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,658 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S6 MeasureStack#45 no correct rhythm
+2026-06-29 17:41:38,659 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#46} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,659 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S6 MeasureStack#46 no correct rhythm
+2026-06-29 17:41:38,660 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#47} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,661 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S6 MeasureStack#47 no correct rhythm
+2026-06-29 17:41:38,662 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#49} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,664 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S7 MeasureStack#49 no correct rhythm
+2026-06-29 17:41:38,665 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        MeasureRhythm.java:1044 | Measure{#51} No timeOffset for HeadChordInter#2265{(0.896/0.896) slot#2 dur:1/2}
+2026-06-29 17:41:38,666 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S7 MeasureStack#51 no correct rhythm
+2026-06-29 17:41:38,667 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#53} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,668 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S7 MeasureStack#53 no correct rhythm
+2026-06-29 17:41:38,669 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#54} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,671 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S7 MeasureStack#54 no correct rhythm
+2026-06-29 17:41:38,672 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#55} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,672 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]          StackRhythm.java:224  | S7 MeasureStack#55 no correct rhythm
+2026-06-29 17:41:38,674 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]       StepMonitoring.java:98   | PAGE
+2026-06-29 17:41:38,693 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#7} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,694 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#22} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,695 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#23} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,696 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#35} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,697 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#39} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,698 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#43} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,698 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#45} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,699 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#46} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,699 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#47} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,700 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#49} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,701 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#53} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,701 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#54} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,702 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Voice.java:257  | Measure{#55} Voice{#1 excess:1/4} too long
+2026-06-29 17:41:38,704 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Book.java:2584 | Book{0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4} storing
+2026-06-29 17:41:38,790 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Book.java:2565 | Stored /book.xml
+2026-06-29 17:41:39,019 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-06-29 17:41:40,334 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-06-29 17:41:40,335 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4.omr
+2026-06-29 17:41:40,344 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]            SheetStub.java:1655 | Sheet disposed
+2026-06-29 17:41:40,395 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Book.java:2050 | End of Stub#1
+2026-06-29 17:41:40,397 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                 Book.java:2057 | End of Book{0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4}
+2026-06-29 17:41:41,266 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]            SheetStub.java:1000 | Loaded /sheet#1/sheet#1.xml
+2026-06-29 17:41:42,193 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]      PartwiseBuilder.java:2706 | Exporting sheet(s): [#1]
+2026-06-29 17:41:42,381 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]        ScoreExporter.java:164  | Score 0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4 exported to C:\ReactNative\music-app\MeloNote\backend\outputs\0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4.mxl
+2026-06-29 17:41:42,449 INFO [0939d8f6-82ca-4524-a2cb-988a712fef35_clean_35d3006a-b266-464a-8ec9-8dfc46992ae4]                Score.java:181  | Closing {Score 1}

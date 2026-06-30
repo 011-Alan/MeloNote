@@ -1,0 +1,237 @@
+console.log("=== SHEETMUSIC.TSX LOADED ===");
+import React, { useEffect } from 'react';
+import {
+  Text,
+  View,
+} from 'react-native';
+import { WebView } from 'react-native-webview';
+
+import {
+  buildSheetMusicHtml,
+  getSheetLayout,
+  parseSheetNotes,
+  getBeatsPerMeasure,
+  segmentNotesIntoMeasures,
+  type SheetMusicProps,
+} from './sheetMusicShared';
+
+export default function SheetMusic({
+  notes,
+  timeSignature = '4/4',
+  detectedTempo,
+  musicxml,
+  webViewRef,
+  onMessage,
+  id,
+  hideHeader = false,
+  hideFooter = false,
+  borderless = false,
+  score,
+  staves,
+}: SheetMusicProps) {
+  console.log("SHEET COMPONENT EXECUTING");
+  useEffect(() => {
+    const musicXML = musicxml;
+    console.log('[SHEET] Mounted');
+    console.log('[SHEET] Received musicXML:', !!musicXML);
+    console.log('[SHEET] XML Length:', musicXML?.length);
+  }, [musicxml]);
+
+  useEffect(() => {
+    console.log('[WEBVIEW] Mounted');
+    console.log('[WEBVIEW] Loading...');
+    const htmlContent = buildSheetMusicHtml(parsedNotes, timeSignature, detectedTempo, musicxml);
+    console.log('[WEBVIEW] HTML Length:', htmlContent?.length);
+    console.log('[WEBVIEW] XML Received:', !!musicxml);
+    console.log('[WEBVIEW] Style height:', height);
+  }, [musicxml]);
+
+  console.log("musicxml exists:", !!musicxml);
+  console.log("musicxml length:", musicxml?.length);
+  if (musicxml) {
+    console.log("musicxml preview:", musicxml.substring(0, 500));
+  }
+  console.log('[SHEET] Rendering');
+  console.log('[SHEET] XML length:', musicxml?.length);
+  
+
+  const {
+    bassCount,
+    parsedNotes,
+    skippedCount,
+    trebleCount,
+  } = parseSheetNotes(notes);
+
+  const beats = getBeatsPerMeasure(timeSignature);
+  
+  let measureCount = 0;
+  let hasNotes = false;
+  let totalNotesCount = 0;
+
+  if (musicxml) {
+    measureCount = (musicxml.match(/<measure\b/g) || []).length;
+    hasNotes = true;
+    // Calculate total notes from parsed notes if they exist, otherwise 0
+    if (parsedNotes && !Array.isArray(parsedNotes)) {
+      totalNotesCount = parsedNotes.treble.filter(n => n.pitch !== 'rest').length + parsedNotes.bass.filter(n => n.pitch !== 'rest').length;
+    } else if (Array.isArray(parsedNotes)) {
+      totalNotesCount = parsedNotes.filter(n => n.pitch !== 'rest').length;
+    }
+  } else if (parsedNotes && !Array.isArray(parsedNotes)) {
+    const trebleMeasures = segmentNotesIntoMeasures(parsedNotes.treble, beats);
+    const bassMeasures = segmentNotesIntoMeasures(parsedNotes.bass, beats);
+    measureCount = Math.max(trebleMeasures.length, bassMeasures.length);
+    hasNotes = (parsedNotes.treble.length > 0 || parsedNotes.bass.length > 0);
+    totalNotesCount = parsedNotes.treble.filter(n => n.pitch !== 'rest').length + parsedNotes.bass.filter(n => n.pitch !== 'rest').length;
+  } else {
+    const measures = segmentNotesIntoMeasures(parsedNotes as any[], beats);
+    measureCount = measures.length;
+    hasNotes = (parsedNotes as any[]).length > 0;
+    totalNotesCount = (parsedNotes as any[]).filter(n => n.pitch !== 'rest').length;
+  }
+
+  const { height } =
+    getSheetLayout(
+      measureCount
+    );
+
+    console.log("MEASURE COUNT =", measureCount);
+console.log("WEBVIEW HEIGHT =", height);
+  console.log("SHEET RETURNING JSX");
+  return (
+    <View
+      style={{
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: borderless ? 0 : 28,
+        paddingVertical: borderless ? 0 : 20,
+        paddingHorizontal: borderless ? 0 : 18,
+        borderWidth: borderless ? 0 : 1,
+        borderColor: '#d4d4d8',
+      }}
+    >
+      {!hideHeader && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent:
+              'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              paddingRight: 12,
+            }}
+          >
+            <Text
+              style={{
+                color: '#111111',
+                fontSize: 22,
+                fontWeight: '700',
+              }}
+            >
+              Notation Preview
+            </Text>
+
+            <Text
+              style={{
+                color: '#52525b',
+                marginTop: 4,
+              }}
+            >
+              Rendered as real sheet
+              music, not note names
+            </Text>
+          </View>
+
+          <View
+            style={{
+              backgroundColor:
+                '#f4f4f5',
+              borderRadius: 999,
+              paddingHorizontal: 12,
+              paddingVertical: 7,
+            }}
+          >
+            <Text
+              style={{
+                color: '#111111',
+                fontWeight: '700',
+              }}
+            >
+              {totalNotesCount} notes
+            </Text>
+          </View>
+        </View>
+      )}
+
+      <WebView
+        key={musicxml ? musicxml.length : 'empty'}
+        ref={webViewRef}
+        onMessage={onMessage}
+        originWhitelist={[
+          '*',
+        ]}
+        source={{
+          html: buildSheetMusicHtml(
+            parsedNotes,
+            timeSignature,
+            detectedTempo,
+            musicxml
+          ),
+          baseUrl: 'https://cdn.jsdelivr.net/',
+        }}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        startInLoadingState={false}
+        nestedScrollEnabled={false}
+        scrollEnabled={false}
+        allowsInlineMediaPlayback={true}
+        mediaPlaybackRequiresUserAction={false}
+        onError={(e) => console.error('[WEBVIEW ERROR]', e.nativeEvent)}
+        onHttpError={(e) => console.error('[WEBVIEW HTTP ERROR]', e.nativeEvent)}
+        style={{
+          height,
+          width: '100%',
+          backgroundColor: 'white',
+        }}
+      />
+
+      {!hideFooter && (
+        <>
+          <Text
+            style={{
+              color: '#52525b',
+              marginTop: 12,
+              fontSize: 13,
+            }}
+          >
+            Treble: {trebleCount} | Bass:{' '}
+            {bassCount}
+          </Text>
+
+          {skippedCount > 0 ? (
+            <Text
+              style={{
+                color: '#b91c1c',
+                marginTop: 6,
+                fontSize: 13,
+              }}
+            >
+              Skipped {skippedCount}{' '}
+              note
+              {skippedCount === 1
+                ? ''
+                : 's'}{' '}
+              that could not be
+              notated.
+            </Text>
+          ) : null}
+        </>
+      )}
+    </View>
+  );
+}

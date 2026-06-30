@@ -1,0 +1,4446 @@
+{
+  "project_id": "1fd68464-99c8-474b-a077-da6dbdc2c163",
+  "original_filename": "freesound_community-soft-piano-72454.mp3",
+  "time_signature": "4/4",
+  "notes": [
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 0
+    },
+    {
+      "pitch": "C5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 1
+    },
+    {
+      "pitch": "F5",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 2
+    },
+    {
+      "pitch": "A4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        8.0
+      ],
+      "absoluteIndex": 3
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 4
+    },
+    {
+      "pitch": "F5",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 5
+    },
+    {
+      "pitch": "G4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 6
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "D5,Eb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.25,
+        1.0
+      ],
+      "absoluteIndex": 8
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 9
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 10
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 11
+    },
+    {
+      "pitch": "D5,Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25,
+        1.0
+      ],
+      "absoluteIndex": 12
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 13
+    },
+    {
+      "pitch": "E4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 14
+    },
+    {
+      "pitch": "G4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 15
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 16
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 17
+    },
+    {
+      "pitch": "E4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 18
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 19
+    },
+    {
+      "pitch": "G4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 20
+    },
+    {
+      "pitch": "C3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 21
+    },
+    {
+      "pitch": "G4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 22
+    },
+    {
+      "pitch": "F4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 23
+    },
+    {
+      "pitch": "A4",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 24
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "F4,A4",
+      "duration": "w",
+      "beats": 4.0,
+      "pitch_beats": [
+        3.0,
+        4.0
+      ],
+      "absoluteIndex": 26
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 28
+    },
+    {
+      "pitch": "A4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 29
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 30
+    },
+    {
+      "pitch": "F5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 31
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 32
+    },
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        8.0
+      ],
+      "absoluteIndex": 33
+    },
+    {
+      "pitch": "Db5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 34
+    },
+    {
+      "pitch": "Db5",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 35
+    },
+    {
+      "pitch": "E5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 36
+    },
+    {
+      "pitch": "Db6",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 37
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 38
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 39
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 40
+    },
+    {
+      "pitch": "B4,C5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75,
+        0.75
+      ],
+      "absoluteIndex": 41
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 43
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 44
+    },
+    {
+      "pitch": "D5,Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25,
+        1.25
+      ],
+      "absoluteIndex": 45
+    },
+    {
+      "pitch": "B4,C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        0.25,
+        2.0
+      ],
+      "absoluteIndex": 46
+    },
+    {
+      "pitch": "E4",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 47
+    },
+    {
+      "pitch": "G4,G5,Ab5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0,
+        0.5,
+        0.5
+      ],
+      "absoluteIndex": 48
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 49
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 50
+    },
+    {
+      "pitch": "G4,E5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        4.0,
+        3.0
+      ],
+      "absoluteIndex": 51
+    },
+    {
+      "pitch": "E3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 52
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 53
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 54
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 55
+    },
+    {
+      "pitch": "rest",
+      "duration": "qdr",
+      "beats": 1.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 58
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 59
+    },
+    {
+      "pitch": "A4",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 60
+    },
+    {
+      "pitch": "Bb3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 61
+    },
+    {
+      "pitch": "F4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 62
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 63
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 64
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 65
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        6.0
+      ],
+      "absoluteIndex": 66
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 67
+    },
+    {
+      "pitch": "A4,Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0,
+        2.0
+      ],
+      "absoluteIndex": 68
+    },
+    {
+      "pitch": "Db5",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 69
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 71
+    },
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 72
+    },
+    {
+      "pitch": "Db6",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 73
+    },
+    {
+      "pitch": "F5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 74
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 75
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 77
+    },
+    {
+      "pitch": "D5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 78
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 79
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 80
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 81
+    },
+    {
+      "pitch": "D5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 82
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 83
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 84
+    },
+    {
+      "pitch": "E3",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 85
+    },
+    {
+      "pitch": "E3",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 86
+    },
+    {
+      "pitch": "G4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 87
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 88
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C3",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 90
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 92
+    },
+    {
+      "pitch": "G4,E5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        4.0,
+        2.0
+      ],
+      "absoluteIndex": 93
+    },
+    {
+      "pitch": "E3",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 94
+    },
+    {
+      "pitch": "G5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 95
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        0.5
+      ],
+      "absoluteIndex": 96
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "B4,C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0,
+        1.0
+      ],
+      "absoluteIndex": 98
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 99
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "F3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 101
+    },
+    {
+      "pitch": "F3,Bb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0,
+        2.0
+      ],
+      "absoluteIndex": 102
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 103
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "A4,Bb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        3.0,
+        2.0
+      ],
+      "absoluteIndex": 105
+    },
+    {
+      "pitch": "F4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 106
+    },
+    {
+      "pitch": "Bb5",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 107
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 108
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 109
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 110
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 112
+    },
+    {
+      "pitch": "A4,C5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0,
+        2.0
+      ],
+      "absoluteIndex": 113
+    },
+    {
+      "pitch": "Db6",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 114
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Db5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 116
+    },
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 117
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 118
+    },
+    {
+      "pitch": "F5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 119
+    },
+    {
+      "pitch": "Db3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 120
+    },
+    {
+      "pitch": "G4",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 121
+    },
+    {
+      "pitch": "G3",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 122
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 123
+    },
+    {
+      "pitch": "D5,Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0,
+        1.0
+      ],
+      "absoluteIndex": 124
+    },
+    {
+      "pitch": "B4,C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0,
+        1.0
+      ],
+      "absoluteIndex": 125
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 126
+    },
+    {
+      "pitch": "B4,C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0,
+        1.0
+      ],
+      "absoluteIndex": 127
+    },
+    {
+      "pitch": "D5,Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25,
+        1.25
+      ],
+      "absoluteIndex": 128
+    },
+    {
+      "pitch": "B4,C5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        0.25,
+        1.25
+      ],
+      "absoluteIndex": 129
+    },
+    {
+      "pitch": "E3",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.5
+      ],
+      "absoluteIndex": 130
+    },
+    {
+      "pitch": "E3",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 131
+    },
+    {
+      "pitch": "G4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 132
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 133
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "B4,C5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75,
+        0.75
+      ],
+      "absoluteIndex": 135
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4,Ab4,G5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.5,
+        1.5,
+        1.0
+      ],
+      "absoluteIndex": 137
+    },
+    {
+      "pitch": "E3",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 138
+    },
+    {
+      "pitch": "G5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 139
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.5
+      ],
+      "absoluteIndex": 140
+    },
+    {
+      "pitch": "G4",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 141
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 142
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 144
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "F3",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 146
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 147
+    },
+    {
+      "pitch": "F3",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 148
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 149
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 150
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 151
+    },
+    {
+      "pitch": "F4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 152
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 153
+    },
+    {
+      "pitch": "Db5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 154
+    },
+    {
+      "pitch": "A5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 155
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 156
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 157
+    }
+  ],
+  "treble_notes": [
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 0
+    },
+    {
+      "pitch": "C5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 1
+    },
+    {
+      "pitch": "F5",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 2
+    },
+    {
+      "pitch": "A4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        8.0
+      ],
+      "absoluteIndex": 3
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 4
+    },
+    {
+      "pitch": "F5",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 5
+    },
+    {
+      "pitch": "G4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 6
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 8
+    },
+    {
+      "pitch": "rest",
+      "duration": "qdr",
+      "beats": 1.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 11
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 12
+    },
+    {
+      "pitch": "rest",
+      "duration": "qr",
+      "beats": 1.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "E4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 14
+    },
+    {
+      "pitch": "G4",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 15
+    },
+    {
+      "pitch": "G4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 17
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 19
+    },
+    {
+      "pitch": "G4",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 20
+    },
+    {
+      "pitch": "G4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 22
+    },
+    {
+      "pitch": "F4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 23
+    },
+    {
+      "pitch": "A4",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 24
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "F4,A4",
+      "duration": "w",
+      "beats": 4.0,
+      "pitch_beats": [
+        3.0,
+        4.0
+      ],
+      "absoluteIndex": 26
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 28
+    },
+    {
+      "pitch": "A4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 29
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 30
+    },
+    {
+      "pitch": "F5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 31
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 32
+    },
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        8.0
+      ],
+      "absoluteIndex": 33
+    },
+    {
+      "pitch": "Db5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 34
+    },
+    {
+      "pitch": "Db5",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 35
+    },
+    {
+      "pitch": "E5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 36
+    },
+    {
+      "pitch": "Db6",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 37
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 38
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 39
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 40
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 41
+    },
+    {
+      "pitch": "G4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 43
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 45
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 46
+    },
+    {
+      "pitch": "E4",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 47
+    },
+    {
+      "pitch": "G5,Ab5",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        0.5,
+        0.5
+      ],
+      "absoluteIndex": 48
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 49
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "E5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 51
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 53
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 54
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 55
+    },
+    {
+      "pitch": "rest",
+      "duration": "qdr",
+      "beats": 1.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 58
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 59
+    },
+    {
+      "pitch": "A4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 60
+    },
+    {
+      "pitch": "F4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 62
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 63
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 64
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 65
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        6.0
+      ],
+      "absoluteIndex": 66
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 67
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 68
+    },
+    {
+      "pitch": "Db5",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 69
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Db5",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 71
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Db6",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 73
+    },
+    {
+      "pitch": "F5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 74
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 75
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 77
+    },
+    {
+      "pitch": "D5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 78
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 79
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 81
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 83
+    },
+    {
+      "pitch": "rest",
+      "duration": "hr",
+      "beats": 2.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 87
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 88
+    },
+    {
+      "pitch": "rest",
+      "duration": "qdr",
+      "beats": 1.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 92
+    },
+    {
+      "pitch": "E5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 93
+    },
+    {
+      "pitch": "G5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 95
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        0.5
+      ],
+      "absoluteIndex": 96
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 98
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 99
+    },
+    {
+      "pitch": "rest",
+      "duration": "qr",
+      "beats": 1.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 102
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 103
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb5",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 105
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb5",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 107
+    },
+    {
+      "pitch": "rest",
+      "duration": "hr",
+      "beats": 2.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 113
+    },
+    {
+      "pitch": "Db6",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 114
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 121
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 123
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 124
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 125
+    },
+    {
+      "pitch": "G4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 126
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 127
+    },
+    {
+      "pitch": "Eb5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 128
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 129
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 132
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 133
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 135
+    },
+    {
+      "pitch": "G5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 137
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 137
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 139
+    },
+    {
+      "pitch": "Ab5",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        0.5
+      ],
+      "absoluteIndex": 140
+    },
+    {
+      "pitch": "rest",
+      "duration": "hdr",
+      "beats": 3.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 147
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 149
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 150
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 151
+    },
+    {
+      "pitch": "F4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 152
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 153
+    },
+    {
+      "pitch": "Db5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 154
+    },
+    {
+      "pitch": "A5",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 155
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    }
+  ],
+  "bass_notes": [
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "qdr",
+      "beats": 1.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "D5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 8
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 9
+    },
+    {
+      "pitch": "G4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 10
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "D5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 12
+    },
+    {
+      "pitch": "C5",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 13
+    },
+    {
+      "pitch": "rest",
+      "duration": "qr",
+      "beats": 1.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 16
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "E4",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 18
+    },
+    {
+      "pitch": "C3",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 21
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "hr",
+      "beats": 2.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "B4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 41
+    },
+    {
+      "pitch": "rest",
+      "duration": "qdr",
+      "beats": 1.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 44
+    },
+    {
+      "pitch": "D5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 45
+    },
+    {
+      "pitch": "B4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 46
+    },
+    {
+      "pitch": "rest",
+      "duration": "hr",
+      "beats": 2.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 48
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 50
+    },
+    {
+      "pitch": "G4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 51
+    },
+    {
+      "pitch": "E3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 52
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "qdr",
+      "beats": 1.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb3",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 61
+    },
+    {
+      "pitch": "rest",
+      "duration": "hdr",
+      "beats": 3.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "A4",
+      "duration": "w",
+      "beats": 4.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 68
+    },
+    {
+      "pitch": "A4",
+      "duration": "w",
+      "beats": 4.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 72
+    },
+    {
+      "pitch": "rest",
+      "duration": "hdr",
+      "beats": 3.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 80
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "D5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 82
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 84
+    },
+    {
+      "pitch": "E3",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 85
+    },
+    {
+      "pitch": "E3",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 86
+    },
+    {
+      "pitch": "C3",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 90
+    },
+    {
+      "pitch": "rest",
+      "duration": "qr",
+      "beats": 1.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 93
+    },
+    {
+      "pitch": "E3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 94
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "B4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 98
+    },
+    {
+      "pitch": "rest",
+      "duration": "qr",
+      "beats": 1.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "F3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 101
+    },
+    {
+      "pitch": "F3",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 102
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "A4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 105
+    },
+    {
+      "pitch": "F4",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 106
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 108
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 109
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 110
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 112
+    },
+    {
+      "pitch": "A4",
+      "duration": "h",
+      "beats": 2.0,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 113
+    },
+    {
+      "pitch": "Db5",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 116
+    },
+    {
+      "pitch": "A4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 117
+    },
+    {
+      "pitch": "Db5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 118
+    },
+    {
+      "pitch": "F5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.25
+      ],
+      "absoluteIndex": 119
+    },
+    {
+      "pitch": "Db3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 120
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G3",
+      "duration": "q",
+      "beats": 1.25,
+      "pitch_beats": [
+        3.0
+      ],
+      "absoluteIndex": 122
+    },
+    {
+      "pitch": "D5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 124
+    },
+    {
+      "pitch": "B4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 125
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "B4",
+      "duration": "8d",
+      "beats": 0.75,
+      "pitch_beats": [
+        0.75
+      ],
+      "absoluteIndex": 127
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "D5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 128
+    },
+    {
+      "pitch": "B4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 129
+    },
+    {
+      "pitch": "rest",
+      "duration": "qr",
+      "beats": 1.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "E3",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.5
+      ],
+      "absoluteIndex": 130
+    },
+    {
+      "pitch": "E3",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        4.0
+      ],
+      "absoluteIndex": 131
+    },
+    {
+      "pitch": "B4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 135
+    },
+    {
+      "pitch": "rest",
+      "duration": "8dr",
+      "beats": 0.75,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 137
+    },
+    {
+      "pitch": "E3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 138
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "G4",
+      "duration": "8",
+      "beats": 0.5,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 141
+    },
+    {
+      "pitch": "C5",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 142
+    },
+    {
+      "pitch": "rest",
+      "duration": "16r",
+      "beats": 0.25,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "Ab4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        0.25
+      ],
+      "absoluteIndex": 144
+    },
+    {
+      "pitch": "rest",
+      "duration": "8r",
+      "beats": 0.5,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "F3",
+      "duration": "q",
+      "beats": 1.0,
+      "pitch_beats": [
+        1.0
+      ],
+      "absoluteIndex": 146
+    },
+    {
+      "pitch": "F3",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 148
+    },
+    {
+      "pitch": "rest",
+      "duration": "wr",
+      "beats": 4.0,
+      "absoluteIndex": -1
+    },
+    {
+      "pitch": "A4",
+      "duration": "16",
+      "beats": 0.25,
+      "pitch_beats": [
+        2.0
+      ],
+      "absoluteIndex": 156
+    },
+    {
+      "pitch": "Bb4",
+      "duration": "qd",
+      "beats": 1.5,
+      "pitch_beats": [
+        1.5
+      ],
+      "absoluteIndex": 157
+    }
+  ],
+  "detected_tempo": 126,
+  "tempo": 126,
+  "tempo_confidence": "HIGH",
+  "duration_preserved": false,
+  "musicxml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n<score-partwise version=\"4.0\">\n  <work><work-title>Transcribed Score</work-title></work>\n  <part-list>\n    <score-part id=\"P1\"><part-name>Piano</part-name></score-part>\n  </part-list>\n  <part id=\"P1\">\n    <measure number=\"1\">\n      <attributes>\n        <divisions>4</divisions>\n        <key><fifths>-1</fifths><mode>minor</mode></key>\n        <time><beats>4</beats><beat-type>4</beat-type></time>\n        <staves>2</staves>\n        <clef number=\"1\"><sign>G</sign><line>2</line></clef>\n        <clef number=\"2\"><sign>F</sign><line>4</line></clef>\n      </attributes>\n      <direction placement=\"above\">\n        <direction-type>\n          <metronome><beat-unit>quarter</beat-unit><per-minute>126</per-minute></metronome>\n        </direction-type>\n        <sound tempo=\"126\"/>\n      </direction>\n      <note id=\"n0\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n1\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n2\">\n        <pitch>\n          <step>F</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>8</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>16</duration>\n        <voice>5</voice>\n        <type>whole</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"2\">\n      <note id=\"n3\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n4\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n5\">\n        <pitch>\n          <step>F</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>8</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n6\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>16</duration>\n        <voice>5</voice>\n        <type>whole</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"3\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n7\">\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n8\">\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n9\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n10\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"4\">\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n11\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n12\">\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n13\">\n        <pitch>\n          <step>E</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n14\">\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n15\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>7</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"5\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>E</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n16\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>8</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n17\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n18\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n19\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n20\">\n        <pitch>\n          <step>E</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"6\">\n      <note id=\"n21\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>8</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n22\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n23\">\n        <pitch>\n          <step>F</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n24\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>E</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n25\">\n        <pitch>\n          <step>C</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>8</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"7\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>7</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n26\">\n        <pitch>\n          <step>F</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <note id=\"n26\">\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>12</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"8\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>F</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>10</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>10</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n27\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">forward hook</beam>\n      </note>\n      <note id=\"n28\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n        <beam number=\"1\">end</beam>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>12</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"9\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n29\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n30\">\n        <pitch>\n          <step>F</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n31\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n32\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>12</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"10\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">begin</beam>\n      </note>\n      <note id=\"n33\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <beam number=\"1\">continue</beam>\n        <beam number=\"2\">end</beam>\n      </note>\n      <note id=\"n34\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <beam number=\"1\">end</beam>\n      </note>\n      <note id=\"n35\">\n        <pitch>\n          <step>E</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n36\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>6</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n37\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n38\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>12</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"11\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n39\">\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n40\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n41\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n42\">\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n43\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"12\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n44\">\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n45\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n46\">\n        <pitch>\n          <step>E</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n47\">\n        <pitch>\n          <step>G</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <note id=\"n47\">\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n48\">\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n49\">\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>8</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n50\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"13\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>G</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <chord/>\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n51\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n52\">\n        <pitch>\n          <step>E</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n53\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n54\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note id=\"n55\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n56\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"14\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n57\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n58\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n59\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">forward hook</beam>\n      </note>\n      <note id=\"n60\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n        <beam number=\"1\">end</beam>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>14</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"15\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n61\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n62\">\n        <pitch>\n          <step>F</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n63\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n64\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n65\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>3</octave>\n        </pitch>\n        <duration>8</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"16\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n        <beam number=\"1\">begin</beam>\n      </note>\n      <note id=\"n66\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <beam number=\"1\">continue</beam>\n        <beam number=\"2\">begin</beam>\n      </note>\n      <note id=\"n67\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <beam number=\"1\">end</beam>\n        <beam number=\"2\">end</beam>\n      </note>\n      <note id=\"n68\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n69\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n70\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>8</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n71\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"17\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n72\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>8</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n73\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>6</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>10</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n74\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"18\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>6</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n75\">\n        <pitch>\n          <step>F</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n76\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n77\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>10</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"19\">\n      <note id=\"n78\">\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n79\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n80\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n81\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n82\">\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"20\">\n      <note id=\"n83\">\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>8</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n84\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">begin</beam>\n      </note>\n      <note id=\"n85\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <beam number=\"1\">end</beam>\n        <beam number=\"2\">end</beam>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n86\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n87\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n88\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n89\">\n        <pitch>\n          <step>C</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"21\">\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n90\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n91\">\n        <pitch>\n          <step>E</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n92\">\n        <pitch>\n          <step>G</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">forward hook</beam>\n      </note>\n      <note id=\"n93\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <beam number=\"1\">end</beam>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n94\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>C</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n95\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n96\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n97\">\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"22\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n98\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n99\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n100\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n101\">\n        <pitch>\n          <step>F</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n102\">\n        <pitch>\n          <step>F</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"23\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n103\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n104\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>7</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n105\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n106\">\n        <pitch>\n          <step>F</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n107\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note id=\"n108\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"24\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>8</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n109\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n110\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>6</octave>\n        </pitch>\n        <duration>4</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note id=\"n111\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n112\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n113\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>5</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"25\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>6</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>12</duration>\n        <voice>1</voice>\n        <type>half</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n114\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note id=\"n115\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n116\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note id=\"n117\">\n        <pitch>\n          <step>F</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"26\">\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n118\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n119\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n120\">\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>F</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n121\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>3</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n122\">\n        <pitch>\n          <step>G</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n123\">\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n      </note>\n    </measure>\n    <measure number=\"27\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n124\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n125\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n126\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n127\">\n        <pitch>\n          <step>E</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n128\">\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n129\">\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n130\">\n        <pitch>\n          <step>D</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"28\">\n      <note id=\"n131\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>5</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n132\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">begin</beam>\n      </note>\n      <note id=\"n133\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <beam number=\"1\">end</beam>\n        <beam number=\"2\">end</beam>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n134\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note id=\"n135\">\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n136\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n137\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n138\">\n        <pitch>\n          <step>B</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"29\">\n      <note id=\"n139\">\n        <pitch>\n          <step>G</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n140\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n141\">\n        <pitch>\n          <step>G</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n142\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note id=\"n143\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n144\">\n        <pitch>\n          <step>E</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n145\">\n        <pitch>\n          <step>G</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n146\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"30\">\n      <note>\n        <rest/>\n        <duration>6</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n147\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n148\">\n        <pitch>\n          <step>C</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <staff>1</staff>\n      </note>\n      <note id=\"n149\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">begin</beam>\n      </note>\n      <note id=\"n150\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <tie type=\"start\"/>\n        <voice>1</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n        <beam number=\"1\">end</beam>\n        <beam number=\"2\">end</beam>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note id=\"n151\">\n        <pitch>\n          <step>A</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>2</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n152\">\n        <pitch>\n          <step>F</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <staff>2</staff>\n      </note>\n      <note id=\"n153\">\n        <pitch>\n          <step>F</step>\n          <octave>3</octave>\n        </pitch>\n        <duration>6</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>5</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n    </measure>\n    <measure number=\"31\">\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note id=\"n154\">\n        <pitch>\n          <step>F</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <note id=\"n155\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>1</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n156\">\n        <pitch>\n          <step>D</step>\n          <alter>-1</alter>\n          <octave>5</octave>\n        </pitch>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <accidental>flat</accidental>\n        <staff>1</staff>\n      </note>\n      <note id=\"n157\">\n        <pitch>\n          <step>A</step>\n          <octave>5</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>1</voice>\n        <type>16th</type>\n        <staff>1</staff>\n      </note>\n      <note>\n        <rest/>\n        <duration>3</duration>\n        <voice>1</voice>\n        <type>eighth</type>\n        <dot/>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest/>\n        <duration>13</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n      <note id=\"n158\">\n        <pitch>\n          <step>A</step>\n          <octave>4</octave>\n        </pitch>\n        <duration>1</duration>\n        <voice>5</voice>\n        <type>16th</type>\n        <staff>2</staff>\n        <beam number=\"1\">begin</beam>\n        <beam number=\"2\">forward hook</beam>\n      </note>\n      <note id=\"n159\">\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>2</duration>\n        <tie type=\"start\"/>\n        <voice>5</voice>\n        <type>eighth</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"start\"/>\n        </notations>\n        <beam number=\"1\">end</beam>\n      </note>\n    </measure>\n    <measure number=\"32\">\n      <note>\n        <rest measure=\"yes\"/>\n        <duration>16</duration>\n        <voice>1</voice>\n        <type>whole</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <tie type=\"stop\"/>\n        <pitch>\n          <step>B</step>\n          <alter>-1</alter>\n          <octave>4</octave>\n        </pitch>\n        <duration>4</duration>\n        <voice>5</voice>\n        <type>quarter</type>\n        <accidental>flat</accidental>\n        <staff>2</staff>\n        <notations>\n          <tied type=\"stop\"/>\n        </notations>\n      </note>\n      <note>\n        <rest/>\n        <duration>12</duration>\n        <voice>5</voice>\n        <type>half</type>\n        <dot/>\n        <staff>2</staff>\n      </note>\n    </measure>\n  </part>\n</score-partwise>",
+  "quality_scores": {
+    "pitch_accuracy": 77.8,
+    "rhythm_accuracy": 91.4,
+    "tempo_accuracy": 88.8,
+    "chroma_similarity": 68.2,
+    "overall_score": 78.3,
+    "best_tempo": 126,
+    "best_gap_threshold": 0.35,
+    "best_grid_resolution": 0.25,
+    "pitchAccuracy": 77.8,
+    "rhythmAccuracy": 91.4,
+    "tempoAccuracy": 88.8,
+    "chromaSimilarity": 68.2,
+    "overallScore": 78.3,
+    "bestTempo": 126,
+    "bestGapThreshold": 0.35,
+    "bestGridResolution": 0.25
+  },
+  "raw_notes": [
+    [
+      0.0,
+      1.7573461918209146,
+      69,
+      0.6851120733135329,
+      null
+    ],
+    [
+      0.5496921428881751,
+      2.1973461298320838,
+      72,
+      0.48888867624529353,
+      null
+    ],
+    [
+      0.9954640627377698,
+      1.7733325434633935,
+      77,
+      0.4885759949684143,
+      null
+    ],
+    [
+      1.8773636610869975,
+      6.397345939097221,
+      69,
+      0.6593011582460929,
+      null
+    ],
+    [
+      2.2211286215160437,
+      4.008308329996879,
+      73,
+      0.5748031496062992,
+      null
+    ],
+    [
+      2.6896332044125466,
+      3.660014310297782,
+      77,
+      0.6174675477301981,
+      null
+    ],
+    [
+      3.6786527248692886,
+      4.539074947091511,
+      67,
+      0.5497240424156189,
+      null
+    ],
+    [
+      4.498018184122856,
+      5.167345920023735,
+      74,
+      0.5511811023622047,
+      null
+    ],
+    [
+      4.562294901740038,
+      4.968644108089244,
+      75,
+      0.47295108437538147,
+      null
+    ],
+    [
+      4.912461200175102,
+      5.577346244273002,
+      72,
+      0.5196850393700787,
+      null
+    ],
+    [
+      5.433043201059766,
+      6.328295355254777,
+      67,
+      0.5563746094703674,
+      null
+    ],
+    [
+      5.80964652579766,
+      6.4973463205669475,
+      72,
+      0.5826771653543307,
+      null
+    ],
+    [
+      6.289648929056938,
+      6.877345958170707,
+      74,
+      0.5669291338582677,
+      null
+    ],
+    [
+      6.351515309903303,
+      6.804304425549562,
+      75,
+      0.48266342282295227,
+      null
+    ],
+    [
+      6.739543357310112,
+      7.887346187052543,
+      72,
+      0.5118110236220472,
+      null
+    ],
+    [
+      7.235414430530639,
+      8.917345920023735,
+      64,
+      0.5687584056863635,
+      null
+    ],
+    [
+      7.291923473168609,
+      7.802762475436183,
+      64,
+      0.5724311470985413,
+      null
+    ],
+    [
+      7.779542520787657,
+      8.68640465230693,
+      67,
+      0.6270793676376343,
+      null
+    ],
+    [
+      8.185889163431938,
+      9.48734656852227,
+      72,
+      0.5433070866141733,
+      null
+    ],
+    [
+      8.68640465230693,
+      9.115973813304663,
+      67,
+      0.6574716567993164,
+      null
+    ],
+    [
+      9.063156703758047,
+      10.437346377787406,
+      64,
+      0.6815072178371309,
+      null
+    ],
+    [
+      9.115973813304663,
+      9.580372906275185,
+      67,
+      0.521889328956604,
+      null
+    ],
+    [
+      9.580372906275185,
+      10.475625060470197,
+      67,
+      0.6007546186447144,
+      null
+    ],
+    [
+      9.945579448160942,
+      10.807346263346489,
+      48,
+      0.5196850393700787,
+      null
+    ],
+    [
+      10.475625060470197,
+      11.197346606669242,
+      67,
+      0.5199700593948364,
+      null
+    ],
+    [
+      10.916804198792192,
+      11.67734614890557,
+      65,
+      0.49131089448928833,
+      null
+    ],
+    [
+      11.3231534051414,
+      12.2532354913092,
+      69,
+      0.4764530658721924,
+      null
+    ],
+    [
+      12.58309125841521,
+      14.924814176116454,
+      69,
+      0.5132408841095102,
+      null
+    ],
+    [
+      12.671194674982669,
+      13.91474614890557,
+      65,
+      0.4732484817504883,
+      null
+    ],
+    [
+      14.880299487528617,
+      14.960299487528617,
+      72,
+      0.6456692913385826,
+      null
+    ],
+    [
+      14.981565341600065,
+      16.682959475931938,
+      69,
+      0.6386049280133773,
+      null
+    ],
+    [
+      15.38609125393033,
+      16.682959475931938,
+      73,
+      0.5199872196659329,
+      null
+    ],
+    [
+      15.822153722466084,
+      17.162213244852836,
+      77,
+      0.6166147776241377,
+      null
+    ],
+    [
+      16.285998923538862,
+      17.162213244852836,
+      73,
+      0.49046346603885416,
+      null
+    ],
+    [
+      16.777355350582337,
+      21.437346377787406,
+      69,
+      0.6280661878858026,
+      null
+    ],
+    [
+      17.224060931620414,
+      18.511246600565727,
+      73,
+      0.6062992125984252,
+      null
+    ],
+    [
+      17.415713109767783,
+      18.831972995219047,
+      73,
+      0.463110636245078,
+      null
+    ],
+    [
+      17.565573611674125,
+      18.697346606669242,
+      76,
+      0.6299212598425197,
+      null
+    ],
+    [
+      18.131126851726087,
+      19.17734614890557,
+      85,
+      0.5382134400484131,
+      null
+    ],
+    [
+      18.57291485638856,
+      19.374003291762712,
+      67,
+      0.543351411819458,
+      null
+    ],
+    [
+      18.924211970441544,
+      19.467347064432914,
+      72,
+      0.5077503329421592,
+      null
+    ],
+    [
+      19.40834161492629,
+      19.95734683555108,
+      75,
+      0.5047677630397278,
+      null
+    ],
+    [
+      19.809172549662406,
+      19.889172549662405,
+      71,
+      0.49606299212598426,
+      null
+    ],
+    [
+      19.820245433507107,
+      20.467347064432914,
+      72,
+      0.4727408154977588,
+      null
+    ],
+    [
+      20.32730533257904,
+      21.209663609223032,
+      67,
+      0.5212359428405762,
+      null
+    ],
+    [
+      20.71568031965232,
+      21.317345538554008,
+      72,
+      0.49312119244590524,
+      null
+    ],
+    [
+      21.189961352762992,
+      21.867346682963188,
+      74,
+      0.5354330708661418,
+      null
+    ],
+    [
+      21.20450012366442,
+      21.69728265684208,
+      75,
+      0.5101760547226808,
+      null
+    ],
+    [
+      21.63656131309014,
+      21.71656131309014,
+      71,
+      0.48031496062992124,
+      null
+    ],
+    [
+      21.670673222296124,
+      22.567345538554008,
+      72,
+      0.4680676222668858,
+      null
+    ],
+    [
+      22.134103664085472,
+      22.685414629631197,
+      64,
+      0.683708029938495,
+      null
+    ],
+    [
+      22.705174365458305,
+      22.785174365458303,
+      80,
+      0.5748031496062992,
+      null
+    ],
+    [
+      22.707491794047172,
+      23.117346682963188,
+      79,
+      0.5433070866141733,
+      null
+    ],
+    [
+      22.7782944482253,
+      23.57938288359945,
+      67,
+      0.5345005989074707,
+      null
+    ],
+    [
+      23.08283702414971,
+      23.637345233378227,
+      72,
+      0.5433070866141733,
+      null
+    ],
+    [
+      23.60177127402764,
+      24.29734698813897,
+      68,
+      0.5748031496062992,
+      null
+    ],
+    [
+      23.912652651550136,
+      26.067345538554008,
+      67,
+      0.556978163424894,
+      null
+    ],
+    [
+      23.95868851238612,
+      25.257346072611625,
+      76,
+      0.5629383669359478,
+      null
+    ],
+    [
+      24.01023594482394,
+      24.486245015118723,
+      52,
+      0.5350450277328491,
+      null
+    ],
+    [
+      24.495673098978813,
+      24.897345462260063,
+      80,
+      0.5748031496062992,
+      null
+    ],
+    [
+      24.84112254661065,
+      25.807345309672172,
+      72,
+      0.5196850393700787,
+      null
+    ],
+    [
+      25.39308444541436,
+      25.49734584372979,
+      68,
+      0.5826771653543307,
+      null
+    ],
+    [
+      26.263939776835258,
+      27.17734614890557,
+      70,
+      0.5511811023622047,
+      null
+    ],
+    [
+      26.469801569331228,
+      28.79734698813897,
+      70,
+      0.47456404062237323,
+      null
+    ],
+    [
+      26.92132976598235,
+      28.029080310282524,
+      69,
+      0.455987030332248,
+      null
+    ],
+    [
+      27.19216434043389,
+      28.08734599631768,
+      58,
+      0.5354330708661418,
+      null
+    ],
+    [
+      27.575782883599448,
+      28.354935264551827,
+      65,
+      0.5052645802497864,
+      null
+    ],
+    [
+      27.990697438233806,
+      28.79734698813897,
+      69,
+      0.5268848433386623,
+      null
+    ],
+    [
+      28.092564502177055,
+      28.917345920023735,
+      70,
+      0.5275590551181102,
+      null
+    ],
+    [
+      28.821540779671942,
+      29.772636398338676,
+      69,
+      0.49664386138906635,
+      null
+    ],
+    [
+      28.922621646342094,
+      31.57423678916436,
+      70,
+      0.5433070866141733,
+      null
+    ],
+    [
+      29.017469655468027,
+      30.271878161845024,
+      70,
+      0.4492967235525762,
+      null
+    ],
+    [
+      29.77543536704522,
+      30.271878161845024,
+      73,
+      0.5669291338582677,
+      null
+    ],
+    [
+      29.77701655906182,
+      31.57423678916436,
+      69,
+      0.7086614173228346,
+      null
+    ],
+    [
+      30.285998891031067,
+      31.57423678916436,
+      73,
+      0.49934064192096084,
+      null
+    ],
+    [
+      31.120234408793266,
+      32.487347522196586,
+      73,
+      0.5433070866141733,
+      null
+    ],
+    [
+      31.6723580714604,
+      33.41734782737237,
+      69,
+      0.6261973708398698,
+      null
+    ],
+    [
+      32.13219074904641,
+      32.97734538596612,
+      85,
+      0.5270942745246286,
+      null
+    ],
+    [
+      32.478299805722465,
+      33.82734767478448,
+      77,
+      0.6055792700352631,
+      null
+    ],
+    [
+      33.0296851794846,
+      33.412823596415336,
+      73,
+      0.5314689946808214,
+      null
+    ],
+    [
+      33.820226349034456,
+      34.34953526455183,
+      72,
+      0.5034025633546311,
+      null
+    ],
+    [
+      34.29103938621026,
+      35.08734599631768,
+      74,
+      0.5669291338582677,
+      null
+    ],
+    [
+      34.716298660332015,
+      35.22734538596612,
+      72,
+      0.4785274234930361,
+      null
+    ],
+    [
+      35.231893541195824,
+      36.08070578609377,
+      67,
+      0.5107659101486206,
+      null
+    ],
+    [
+      35.61550207514521,
+      36.13875567271509,
+      72,
+      0.502788792972959,
+      null
+    ],
+    [
+      36.08441630881768,
+      36.957344928202446,
+      74,
+      0.5511811023622047,
+      null
+    ],
+    [
+      36.150365650039355,
+      36.59154478836135,
+      75,
+      0.4741765558719635,
+      null
+    ],
+    [
+      36.54612298456627,
+      37.09734431785088,
+      72,
+      0.47994492625392327,
+      null
+    ],
+    [
+      37.079163835980395,
+      37.3926332237355,
+      52,
+      0.45461317896842957,
+      null
+    ],
+    [
+      37.26542241030013,
+      38.46203503779446,
+      52,
+      0.6704189633569262,
+      null
+    ],
+    [
+      37.51763239560608,
+      38.47364501511872,
+      67,
+      0.609354157851437,
+      null
+    ],
+    [
+      37.60233394187432,
+      37.68233394187432,
+      80,
+      0.5669291338582677,
+      null
+    ],
+    [
+      37.992769726667404,
+      38.367344775614555,
+      48,
+      0.4838317610382096,
+      null
+    ],
+    [
+      38.50075236838799,
+      38.937344470438774,
+      68,
+      0.5748031496062992,
+      null
+    ],
+    [
+      38.813181095050695,
+      40.704044561603986,
+      67,
+      0.5565552670017295,
+      null
+    ],
+    [
+      38.85499961274619,
+      39.867344775614555,
+      76,
+      0.5479317818452993,
+      null
+    ],
+    [
+      38.91482415344072,
+      39.37090388816338,
+      52,
+      0.5123136043548584,
+      null
+    ],
+    [
+      39.29580012839776,
+      39.717347064432914,
+      79,
+      0.49606299212598426,
+      null
+    ],
+    [
+      39.39345637839776,
+      39.63734523337823,
+      80,
+      0.5826771653543307,
+      null
+    ],
+    [
+      39.73881618064385,
+      40.16734782737237,
+      72,
+      0.5039370078740157,
+      null
+    ],
+    [
+      39.75311398240942,
+      40.21642551398494,
+      71,
+      0.4884063597387216,
+      null
+    ],
+    [
+      40.2917451052044,
+      40.60734645408135,
+      68,
+      0.5590551181102362,
+      null
+    ],
+    [
+      40.66964597645704,
+      41.133613722601716,
+      53,
+      0.6416906591240815,
+      null
+    ],
+    [
+      41.133613722601716,
+      41.947596035526885,
+      53,
+      0.5858438014984131,
+      null
+    ],
+    [
+      41.16320125144463,
+      42.07734767478448,
+      82,
+      0.5196850393700787,
+      null
+    ],
+    [
+      41.55009298161001,
+      41.994035944823935,
+      72,
+      0.4597484902368756,
+      null
+    ],
+    [
+      42.10095122589014,
+      42.97734538596612,
+      82,
+      0.4927184754821259,
+      null
+    ],
+    [
+      42.14747219572743,
+      43.59734431785088,
+      69,
+      0.4726179241547434,
+      null
+    ],
+    [
+      42.45843503779446,
+      43.06215385865614,
+      65,
+      0.5321152210235596,
+      null
+    ],
+    [
+      42.98770228904229,
+      43.807347217020805,
+      82,
+      0.5511811023622047,
+      null
+    ],
+    [
+      43.25307632307029,
+      45.164843654574504,
+      70,
+      0.4611172317637233,
+      null
+    ],
+    [
+      43.71823378214767,
+      44.67722460695546,
+      69,
+      0.4966416187643067,
+      null
+    ],
+    [
+      43.82011882346612,
+      45.602887072977836,
+      70,
+      0.5354330708661418,
+      null
+    ],
+    [
+      44.67183772605401,
+      45.15760509055596,
+      69,
+      0.7086614173228346,
+      null
+    ],
+    [
+      45.1224335817669,
+      46.46486369651299,
+      69,
+      0.4330708661417323,
+      null
+    ],
+    [
+      45.13510487534406,
+      45.602887072977836,
+      72,
+      0.5356073479835443,
+      null
+    ],
+    [
+      45.223301806864555,
+      46.46486369651299,
+      85,
+      0.6062992125984252,
+      null
+    ],
+    [
+      46.01451961081963,
+      46.46486369651299,
+      73,
+      0.5275590551181102,
+      null
+    ],
+    [
+      46.465420642313774,
+      48.31734553855401,
+      69,
+      0.7086614173228346,
+      null
+    ],
+    [
+      46.910408893046196,
+      47.467347064432914,
+      73,
+      0.5590551181102362,
+      null
+    ],
+    [
+      47.37601127068801,
+      47.95380601285115,
+      77,
+      0.6099281533965915,
+      null
+    ],
+    [
+      47.80543986838799,
+      48.30533687156182,
+      49,
+      0.5433070866141733,
+      null
+    ],
+    [
+      48.37176519652462,
+      48.95226406273777,
+      67,
+      0.46617287397384644,
+      null
+    ],
+    [
+      48.52956379369724,
+      50.021665876796725,
+      55,
+      0.5475059367356984,
+      null
+    ],
+    [
+      48.720229684117186,
+      49.25412347316861,
+      72,
+      0.47757977851497846,
+      null
+    ],
+    [
+      49.188416400370414,
+      49.69734660666924,
+      74,
+      0.5433070866141733,
+      null
+    ],
+    [
+      49.20312297445741,
+      49.62692664777178,
+      75,
+      0.4922729055947206,
+      null
+    ],
+    [
+      49.60344020408135,
+      50.10734645408135,
+      71,
+      0.48031496062992124,
+      null
+    ],
+    [
+      49.63474716593674,
+      50.1573456911419,
+      72,
+      0.46522789307701307,
+      null
+    ],
+    [
+      50.12615567271509,
+      50.98529399471056,
+      67,
+      0.5152139067649841,
+      null
+    ],
+    [
+      50.500042834696586,
+      50.78734675925713,
+      71,
+      0.5275590551181102,
+      null
+    ],
+    [
+      50.50984866809358,
+      51.04334388133187,
+      72,
+      0.5080582310012945,
+      null
+    ],
+    [
+      50.982483783182914,
+      51.69734660666924,
+      74,
+      0.5433070866141733,
+      null
+    ],
+    [
+      50.99662989788694,
+      51.484523019653864,
+      75,
+      0.5144525566908318,
+      null
+    ],
+    [
+      51.42936030906182,
+      51.50936030906182,
+      71,
+      0.4881889763779528,
+      null
+    ],
+    [
+      51.46041233650301,
+      51.97734538596612,
+      72,
+      0.47374320916068835,
+      null
+    ],
+    [
+      51.97342596749967,
+      52.26367540060625,
+      52,
+      0.4903132915496826,
+      null
+    ],
+    [
+      52.151280184775764,
+      53.762646375662946,
+      52,
+      0.6442632140210411,
+      null
+    ],
+    [
+      52.41105696546462,
+      53.36662324641124,
+      67,
+      0.5961386252810636,
+      null
+    ],
+    [
+      52.49862758201104,
+      52.57862758201104,
+      80,
+      0.5748031496062992,
+      null
+    ],
+    [
+      52.87769023459893,
+      52.95769023459893,
+      71,
+      0.5275590551181102,
+      null
+    ],
+    [
+      52.89102745628139,
+      53.367344775614555,
+      72,
+      0.48001876250496067,
+      null
+    ],
+    [
+      53.294285693583305,
+      53.85734645408135,
+      79,
+      0.5433070866141733,
+      null
+    ],
+    [
+      53.39064797974103,
+      54.26187540060626,
+      67,
+      0.5904405938652088,
+      null
+    ],
+    [
+      53.393345752177055,
+      53.76734630149346,
+      68,
+      0.5826771653543307,
+      null
+    ],
+    [
+      53.79747630763573,
+      54.26187540060626,
+      52,
+      0.5157573819160461,
+      null
+    ],
+    [
+      54.19264308494073,
+      54.51734630149346,
+      79,
+      0.5118110236220472,
+      null
+    ],
+    [
+      54.29131785911065,
+      54.51734630149346,
+      80,
+      0.5748031496062992,
+      null
+    ],
+    [
+      54.362774176993376,
+      55.58669671579899,
+      67,
+      0.5949067028430034,
+      null
+    ],
+    [
+      54.63673869651299,
+      55.16734782737237,
+      72,
+      0.5196850393700787,
+      null
+    ],
+    [
+      55.18787852805596,
+      55.367344775614555,
+      68,
+      0.5748031496062992,
+      null
+    ],
+    [
+      55.564227162526514,
+      56.01626587679672,
+      53,
+      0.645764713916253,
+      null
+    ],
+    [
+      55.94808284324151,
+      56.867344775614555,
+      70,
+      0.5196850393700787,
+      null
+    ],
+    [
+      56.01626587679672,
+      56.82896428949514,
+      53,
+      0.5967718958854675,
+      null
+    ],
+    [
+      56.444949218113074,
+      56.88701417611645,
+      72,
+      0.4571490646229954,
+      null
+    ],
+    [
+      56.89386885764858,
+      57.81990138572198,
+      69,
+      0.5075394414423958,
+      null
+    ],
+    [
+      56.97706701762546,
+      57.81990138572198,
+      70,
+      0.47125086610711464,
+      null
+    ],
+    [
+      57.3746332237355,
+      57.9912459221482,
+      65,
+      0.5123147368431091,
+      null
+    ],
+    [
+      57.77387706321221,
+      59.32734767478448,
+      70,
+      0.4881889763779528,
+      null
+    ],
+    [
+      58.18643275779229,
+      59.207344928202446,
+      73,
+      0.5039370078740157,
+      null
+    ],
+    [
+      58.60174266379815,
+      58.68174266379815,
+      81,
+      0.49606299212598426,
+      null
+    ],
+    [
+      58.6750088981881,
+      59.50334614890557,
+      69,
+      0.4867119841922925,
+      null
+    ],
+    [
+      58.76676512724626,
+      59.47734538596612,
+      70,
+      0.49783377126445927,
+      null
+    ]
+  ],
+  "best_grid_resolution": 0.25,
+  "activated_modules": {
+    "spleeter": false,
+    "hpss": false,
+    "torchcrepe": false,
+    "pyin": true,
+    "basic_pitch_ensemble": true,
+    "butterworth_filter": true,
+    "spectral_gating": true
+  },
+  "activation_reasons": {
+    "butterworth_filter": "Always active as baseline preprocessing",
+    "spleeter": "Bypassed (not requested or vocals not detected)",
+    "hpss": "Bypassed (vocals not detected)",
+    "spectral_gating": "Active (Noise floor -10.8 dB > threshold -55.0 dB)",
+    "basic_pitch_ensemble": "Active (Basic Pitch ensembled successfully)",
+    "pyin": "pYIN refined 23 notes and improved similarity to 0.7237",
+    "torchcrepe": "Bypassed (Torchcrepe failed or unavailable, pYIN ran)"
+  }
+}

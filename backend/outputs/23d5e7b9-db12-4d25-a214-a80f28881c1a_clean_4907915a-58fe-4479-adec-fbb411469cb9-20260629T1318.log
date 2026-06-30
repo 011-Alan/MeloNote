@@ -1,0 +1,34 @@
+2026-06-29 13:18:40,004 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:560  | 1 sheet in C:\ReactNative\music-app\MeloNote\backend\temp\23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9.jpeg
+2026-06-29 13:18:40,381 INFO []                 Book.java:2565 | Stored /book.xml
+2026-06-29 13:18:40,383 INFO []                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9.omr
+2026-06-29 13:18:40,398 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-06-29 13:18:40,402 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]       StepMonitoring.java:98   | LOAD
+2026-06-29 13:18:40,664 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]            SheetStub.java:1278 | Loaded image #1 1080x1258 from C:\ReactNative\music-app\MeloNote\backend\temp\23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9.jpeg
+2026-06-29 13:18:40,672 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]       StepMonitoring.java:98   | BINARY
+2026-06-29 13:18:41,032 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]       StepMonitoring.java:98   | SCALE
+2026-06-29 13:18:41,076 WARN [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]            SheetStub.java:411  | 23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9
+
+ With a too low interline value of 8 pixels,
+ either this sheet contains no multi-line staves,
+ or the picture resolution is too low (try 300 DPI).
+
+ This interline value is NOT RELIABLE!
+2026-06-29 13:18:41,078 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:543  | Created scores: []
+2026-06-29 13:18:41,078 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]            SheetStub.java:1194 | Sheet 23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9 flagged as invalid.
+2026-06-29 13:18:41,081 WARN [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:2044 | Error processing stub
+2026-06-29 13:18:41,082 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:2584 | Book{23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9} storing
+2026-06-29 13:18:41,122 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:2565 | Stored /book.xml
+2026-06-29 13:18:41,213 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-06-29 13:18:41,869 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-06-29 13:18:41,871 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9.omr
+2026-06-29 13:18:41,886 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]            SheetStub.java:1655 | Sheet disposed
+2026-06-29 13:18:41,923 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:2050 | End of Stub#1
+2026-06-29 13:18:41,924 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:2057 | End of Book{23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9}
+2026-06-29 13:18:41,926 INFO [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                 Book.java:596  | Could not export since transcription did not complete successfully
+2026-06-29 13:18:41,927 WARN [23d5e7b9-db12-4d25-a214-a80f28881c1a_clean_4907915a-58fe-4479-adec-fbb411469cb9]                  CLI.java:956  | Exception occurred java.lang.Exception: Error in export
+java.lang.Exception: Error in export
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:930)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:513)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:361)
+	at org.audiveris.omr.Main.main(Main.java:263)
+	at Audiveris.main(Audiveris.java:50)

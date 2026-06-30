@@ -1,0 +1,4758 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+        color: #18181b;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        width: 100%;
+        overflow-x: hidden;
+      }
+      .selected-bar .layer path,
+      .selected-bar .layer line,
+      .selected-bar .layer rect:not(.bar-click-bg),
+      .selected-bar .layer polygon,
+      .selected-bar .layer ellipse,
+      .selected-bar .layer use,
+      .selected-bar .layer g,
+      .selected-bar .ledgerLines path,
+      .selected-bar .ledgerLines line,
+      .selected-bar [class*="ledgerLines"] path,
+      .selected-bar [class*="ledgerLines"] line {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+        color: #8b5cf6 !important;
+      }
+
+      .player-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: #ffffff;
+        box-sizing: border-box;
+      }
+
+      .player-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 0 4px;
+        box-sizing: border-box;
+      }
+
+      .tempo-control {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .tempo-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tempo-control label {
+        font-size: 14px;
+        color: #71717a;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .detected-tempo-text {
+        font-size: 13px;
+        color: #71717a;
+        font-weight: 500;
+      }
+
+      .orig-tempo-btn {
+        background: #f4f4f5;
+        color: #18181b;
+        border: 1px solid #e4e4e7;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .tempo-control input[type="range"] {
+        width: 100%;
+        height: 6px;
+        color: #454545;
+        background: #e4e4e7;
+        border-radius: 3px;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      .tempo-control input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid #ff9500;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+
+      .tempo-control input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+      }
+
+      .tempo-control input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid #ff9500;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+
+      .tempo-control input[type="range"]::-moz-range-thumb:hover {
+        transform: scale(1.15);
+      }
+
+      .player-btn {
+        background: #f4f4f5;
+        color: #18181b;
+        border: 1px solid #e4e4e7;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0;
+      }
+
+      .player-btn:hover {
+        background: #ff9500;
+        border-color: #ff9500;
+        color: #ffffff;
+        transform: scale(1.05);
+      }
+
+      .player-btn:active {
+        transform: scale(0.95);
+      }
+
+      .play-btn {
+        background: #ff9500;
+        border-color: #ff9500;
+        color: #ffffff;
+        width: 46px;
+        height: 46px;
+        box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3);
+      }
+
+      .play-btn:hover {
+        background: #ffa82e;
+        border-color: #ffa82e;
+        color: #ffffff;
+        transform: scale(1.08);
+      }
+
+      #score-wrap {
+        width: 100%;
+        max-height: 1000px;
+        max-width: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 15px 30px;
+        box-sizing: border-box;
+        border: 1px solid #e4e4e7;
+        cursor: grab;
+      }
+
+      #score {
+        min-height: 380px;
+        width: 100%;
+        position: relative;
+      }
+
+      .player-footer {
+        display: none !important;
+      }
+
+      .timeline-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+      }
+
+      .controls-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+      }
+
+      .progress-bar-container {
+        flex: 1;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .progress-bar-bg {
+        width: 100%;
+        height: 6px;
+        background: #e4e4e7;
+        border-radius: 3px;
+        position: relative;
+      }
+
+      .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: #ff9500;
+        border-radius: 3px;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .progress-bar-knob {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid #ff9500;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        left: 0%;
+        cursor: pointer;
+      }
+
+      .time-text {
+        font-size: 14px;
+        font-family: monospace;
+        color: #71717a;
+        white-space: nowrap;
+        min-width: 80px;
+        text-align: right;
+        font-weight: 600;
+      }
+
+      #error {
+        display: none;
+        margin: 24px;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid #d4d4d8;
+        background: #fafafa;
+        color: #991b1b;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Note highlight styling */
+      @keyframes note-jump {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      .active-note {
+        animation: note-jump 0.35s ease-out;
+        transform-origin: center;
+      }
+
+      .active-note,
+      .active-note * {
+        fill: #ff9500 !important;
+        stroke: #ff9500 !important;
+        transition: fill 0.2s, stroke 0.2s;
+      }
+
+      /* Violet selections and handles */
+      .selected-staff,
+      .selected-staff * {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+      }
+      #score svg {
+        overflow: visible !important;
+      }
+      /* Staff lines (5 horizontal paths directly under .staff) get a subtle purple tint */
+      .selected-bar > path {
+        stroke: #8b5cf6 !important;
+        filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.5)) !important;
+      }
+      /* All actual musical content inside .layer gets full purple highlight */
+      .selected-bar .layer line,
+      .selected-bar .layer path,
+      .selected-bar .layer rect:not(.bar-click-bg),
+      .selected-bar .layer polygon,
+      .selected-bar .layer ellipse,
+      .selected-bar .layer use,
+      .selected-bar .ledgerLines path,
+      .selected-bar .ledgerLines line,
+      .selected-bar [class*="ledgerLines"] path,
+      .selected-bar [class*="ledgerLines"] line {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+        filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.8)) !important;
+      }
+      .selected-note,
+      .selected-note * {
+        fill: #8b5cf6 !important;
+        stroke: #8b5cf6 !important;
+      }
+      body.view-mode .staff-handle,
+      body.view-mode .insert-staff-btn {
+        display: none !important;
+      }
+      .staff-handle circle {
+        fill: #a1a1aa;
+        stroke: #71717a;
+        stroke-width: 180px;
+        transition: fill 0.2s, stroke 0.2s;
+      }
+      .staff-handle:hover circle,
+      .selected-handle circle {
+        fill: #8b5cf6 !important;
+        stroke: #7c3aed !important;
+      }
+      .insert-staff-btn {
+        cursor: pointer;
+        pointer-events: all !important;
+      }
+      .insert-staff-btn circle {
+        fill: #f97316 !important;
+        stroke: #ea580c !important;
+        stroke-width: 14px !important;
+        transition: fill 0.2s, stroke 0.2s;
+        pointer-events: all !important;
+      }
+      .insert-staff-btn:hover circle {
+        fill: #ea580c !important;
+        stroke: #c2410c !important;
+      }
+      .insert-staff-btn text {
+        fill: #ffffff !important;
+        stroke: none !important;
+        font-family: Arial, sans-serif !important;
+        font-weight: bold !important;
+        pointer-events: none !important;
+      }
+
+      /* Custom styling for measure numbering */
+      .measureLabel text,
+      .measureLabel,
+      .mNum text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        font-size: 300px !important;
+        font-style: italic !important;
+        font-weight: normal !important;
+        fill: #000000 !important;
+      }
+
+      /* Time signature shown only once at the beginning of the score */
+      .subsequent-music-system .meterSig {
+        display: none !important;
+      }
+
+      /* In single staff mode, hide clefs on subsequent staves/systems */
+      body.no-bass-staff .subsequent-music-system .clef {
+        display: none !important;
+      }
+
+      /* Move tempo marking slightly upward */
+      g.tempo {
+        transform: translateY(-450px) !important;
+      }
+      
+      /* Dimming of non-edited staves in edit mode */
+      #score-wrap.editing-mode svg .staff:not(.selected-bar) {
+        opacity: 0.15 !important;
+        transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #score-wrap.editing-mode svg .staff.selected-bar {
+        opacity: 1 !important;
+        transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      /* Modal backdrop – covers the whole viewport and blocks sheet interaction */
+      .modal-backdrop {
+        display: none !important;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 100%;
+        z-index: 9998;
+        background: rgba(0, 0, 0, 0.45);
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-backdrop.visible {
+        display: none !important;
+      }
+
+      /* Glassmorphic note/rest editor popup – centered inside backdrop */
+      .editor-popup {
+        position: relative;
+        z-index: 9999;
+        width: min(340px, 90vw);
+        max-height: 80vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px) saturate(200%);
+        -webkit-backdrop-filter: blur(20px) saturate(200%);
+        border: 1px solid rgba(228, 228, 231, 0.9);
+        border-radius: 18px;
+        padding: 14px;
+        box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.22), 0 8px 16px -6px rgba(0, 0, 0, 0.1);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transform: scale(0.94);
+        opacity: 0;
+        transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 180ms ease;
+      }
+      .modal-backdrop.visible .editor-popup {
+        transform: scale(1);
+        opacity: 1;
+      }
+      .popup-close-btn {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        background: none;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #a1a1aa;
+        cursor: pointer;
+        z-index: 10;
+      }
+      .popup-close-btn:hover {
+        color: #ef4444;
+      }
+      .popup-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #71717a;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: center;
+        user-select: none;
+      }
+      .bar-preview-container {
+        flex-shrink: 0;
+        width: 100%;
+        height: 90px;
+        background: #ffffff;
+        border: 1px solid rgba(228, 228, 231, 0.8);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+      }
+      #bar-preview-svg-wrap {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #bar-preview-svg-wrap svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .bar-preview-container svg .staff {
+        opacity: 1 !important;
+        pointer-events: none !important;
+        cursor: default !important;
+      }
+      .bar-preview-container svg .staff.selected-bar {
+        fill: none !important;
+      }
+      .popup-sections-scroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding-right: 2px;
+      }
+      .popup-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .popup-section {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .section-label {
+        font-size: 9px;
+        font-weight: 700;
+        color: #3f3f46;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+        user-select: none;
+      }
+      .button-row {
+        display: flex;
+        gap: 4px;
+      }
+      .editor-btn {
+        flex: 1;
+        background: rgba(244, 244, 245, 0.8);
+        border: 1px solid rgba(228, 228, 231, 0.8);
+        color: #18181b;
+        padding: 6px 2px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 120ms ease;
+        text-align: center;
+        outline: none;
+        user-select: none;
+      }
+      .editor-btn:hover {
+        background: #8b5cf6;
+        border-color: #8b5cf6;
+        color: #ffffff;
+        transform: translateY(-1px);
+      }
+      .editor-btn:active {
+        transform: translateY(0);
+      }
+      .editor-btn.rest-btn:hover {
+        background: #ec4899;
+        border-color: #ec4899;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="player-container">
+      <div class="player-header">
+        <div class="tempo-control">
+          <div class="tempo-row">
+            <label>Tempo: <input type="number" id="tempo-val-input" min="30" max="300" value="120" style="background: #f4f4f5; color: #18181b; border: 1px solid #e4e4e7; border-radius: 6px; width: 64px; text-align: center; font-size: 14px; margin: 0 4px; padding: 2px 4px; outline: none;" onchange="window.handleTempoInputChange(this.value)"><span id="tempo-val" style="display: none;">120</span> BPM</label>
+            <span id="detected-tempo-text" class="detected-tempo-text">Detected: 120 BPM</span>
+            <button id="btn-use-original" class="orig-tempo-btn" onclick="window.useOriginalTempo(true)">Use Original</button>
+          </div>
+          <input type="range" id="tempo-range" min="30" max="300" value="120" oninput="window.handleTempoSliderChange(Number(this.value))">
+        </div>
+      </div>
+
+      <div id="score-wrap">
+        <div id="score-scale-wrapper" style="position: relative; overflow: visible; margin-left: auto; margin-right: auto;">
+          <div id="score"></div>
+        </div>
+      </div>
+
+      <div class="player-footer">
+        <div class="timeline-row">
+          <div class="progress-bar-container" onclick="window.onProgressBarClick(event)">
+            <div class="progress-bar-bg">
+              <div id="progress-bar-fill" class="progress-bar-fill"></div>
+              <div id="progress-bar-knob" class="progress-bar-knob"></div>
+            </div>
+          </div>
+          <div id="time-text" class="time-text">0:00 / 0:00</div>
+        </div>
+
+        <div class="controls-row">
+          <button id="btn-restart" class="player-btn" onclick="window.restartPlayback()" title="Restart from beginning">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+            </svg>
+          </button>
+          <button id="btn-play" class="player-btn play-btn" onclick="window.togglePlay()" title="Play/Pause">
+            <!-- Play Icon -->
+            <svg id="play-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            <!-- Pause Icon -->
+            <svg id="pause-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="display: none;">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="error"></div>
+    <div id="debug-info" style="margin: 12px; padding: 12px; border-radius: 12px; border: 2px solid #ef4444; background: #fef2f2; color: #991b1b; font-family: monospace; font-size: 11px; white-space: pre-wrap; word-break: break-all; overflow-y: auto; max-height: 200px; display: none;"></div>
+
+    <!-- Verovio WebAssembly script will be loaded dynamically with fallback URLs -->
+    <script>
+      console.log("[WEBVIEW HTML LOADED]");
+      console.log("HTML LOADED");
+      function sendLoadedMessage() {
+        if (window.ReactNativeWebView) {
+          console.log("Posting HTML LOADED to ReactNativeWebView");
+          window.ReactNativeWebView.postMessage("HTML LOADED");
+          return true;
+        }
+        return false;
+      }
+      if (!sendLoadedMessage()) {
+        const intervalId = setInterval(function() {
+          if (sendLoadedMessage()) {
+            clearInterval(intervalId);
+          }
+        }, 50);
+        setTimeout(function() { clearInterval(intervalId); }, 5000);
+      }
+      window.parent?.postMessage("HTML LOADED", "*");
+
+      window.onerror = function(message, source, lineno, colno, error) {
+        const debugDiv = document.getElementById('debug-info');
+        if (debugDiv) {
+          debugDiv.style.display = 'block';
+          debugDiv.textContent += '\n\n=== UNHANDLED ERROR ===\n' + message + ' at ' + source + ':' + lineno + ':' + colno + '\n' + (error ? error.stack : '') + '\n';
+        }
+        
+        // Fullscreen error display (TEST 5)
+        const errOverlay = document.createElement('div');
+        errOverlay.style.position = 'fixed';
+        errOverlay.style.top = '0';
+        errOverlay.style.left = '0';
+        errOverlay.style.width = '100%';
+        errOverlay.style.height = '100%';
+        errOverlay.style.backgroundColor = '#fee2e2';
+        errOverlay.style.color = '#991b1b';
+        errOverlay.style.padding = '24px';
+        errOverlay.style.boxSizing = 'border-box';
+        errOverlay.style.zIndex = '999999';
+        errOverlay.style.overflow = 'auto';
+        errOverlay.innerHTML = "<h1>UNHANDLED ERROR</h1><pre>" + message + " at " + source + ":" + lineno + ":" + colno + "\n" + (error ? error.stack : '') + "</pre>";
+        document.body.appendChild(errOverlay);
+        
+        return false;
+      };
+
+      // TEST 6: typeof verovio status logging
+      function updateVerovioStatus() {
+        const statusDiv = document.getElementById('verovio-status-overlay');
+        const statusStr = "typeof verovio: " + (typeof verovio);
+        if (statusDiv && statusDiv.textContent !== statusStr) {
+          statusDiv.textContent = statusStr;
+        }
+        console.log(statusStr);
+      }
+      setInterval(updateVerovioStatus, 500);
+
+      const sourceNotes = [{"letter":"r","duration":"wr","absoluteIndex":-1,"pitch":"rest","beats":4},{"letter":"r","duration":"w","absoluteIndex":1,"pitch":"E4","beats":8,"pitch_beats":[8]},{"letter":"r","duration":"wr","absoluteIndex":-1,"pitch":"rest","beats":4},{"letter":"r","duration":"16r","absoluteIndex":-1,"pitch":"rest","beats":0.25},{"letter":"r","duration":"q","absoluteIndex":4,"pitch":"E4","beats":1,"pitch_beats":[2]},{"letter":"r","duration":"hd","absoluteIndex":5,"pitch":"D4","beats":3,"pitch_beats":[4]},{"letter":"r","duration":"w","absoluteIndex":6,"pitch":"E4","beats":8,"pitch_beats":[8]},{"letter":"r","duration":"8dr","absoluteIndex":-1,"pitch":"rest","beats":0.75}];
+      let timeSignature = "4/4";
+      let originalTempo = 110;
+      let musicxmlBase64 = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzY29yZS1wYXJ0d2lzZSBQVUJMSUMgIi0vL1JlY29yZGFyZS8vRFREIE11c2ljWE1MIDQuMCBQYXJ0d2lzZS8vRU4iICJodHRwOi8vd3d3Lm11c2ljeG1sLm9yZy9kdGRzL3BhcnR3aXNlLmR0ZCI+CjxzY29yZS1wYXJ0d2lzZSB2ZXJzaW9uPSI0LjAiPgogIDx3b3JrPjx3b3JrLXRpdGxlPlRyYW5zY3JpYmVkIFNjb3JlPC93b3JrLXRpdGxlPjwvd29yaz4KICA8cGFydC1saXN0PgogICAgPHNjb3JlLXBhcnQgaWQ9IlAxIj48cGFydC1uYW1lPlBpYW5vPC9wYXJ0LW5hbWU+PC9zY29yZS1wYXJ0PgogIDwvcGFydC1saXN0PgogIDxwYXJ0IGlkPSJQMSI+CiAgICA8bWVhc3VyZSBudW1iZXI9IjEiPgogICAgICA8YXR0cmlidXRlcz4KICAgICAgICA8ZGl2aXNpb25zPjQ8L2RpdmlzaW9ucz4KICAgICAgICA8a2V5PjxmaWZ0aHM+MDwvZmlmdGhzPjxtb2RlPm1ham9yPC9tb2RlPjwva2V5PgogICAgICAgIDx0aW1lPjxiZWF0cz40PC9iZWF0cz48YmVhdC10eXBlPjQ8L2JlYXQtdHlwZT48L3RpbWU+CiAgICAgICAgPHN0YXZlcz4yPC9zdGF2ZXM+CiAgICAgICAgPGNsZWYgbnVtYmVyPSIxIj48c2lnbj5HPC9zaWduPjxsaW5lPjI8L2xpbmU+PC9jbGVmPgogICAgICAgIDxjbGVmIG51bWJlcj0iMiI+PHNpZ24+Rjwvc2lnbj48bGluZT40PC9saW5lPjwvY2xlZj4KICAgICAgPC9hdHRyaWJ1dGVzPgogICAgICA8ZGlyZWN0aW9uIHBsYWNlbWVudD0iYWJvdmUiPgogICAgICAgIDxkaXJlY3Rpb24tdHlwZT4KICAgICAgICAgIDxtZXRyb25vbWU+PGJlYXQtdW5pdD5xdWFydGVyPC9iZWF0LXVuaXQ+PHBlci1taW51dGU+MTEwPC9wZXItbWludXRlPjwvbWV0cm9ub21lPgogICAgICAgIDwvZGlyZWN0aW9uLXR5cGU+CiAgICAgICAgPHNvdW5kIHRlbXBvPSIxMTAiLz4KICAgICAgPC9kaXJlY3Rpb24+CiAgICAgIDxub3RlPgogICAgICAgIDxyZXN0Lz4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgIDwvbm90ZT4KICAgICAgPGJhY2t1cD4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICA8L2JhY2t1cD4KICAgICAgPG5vdGU+CiAgICAgICAgPHJlc3QgbWVhc3VyZT0ieWVzIi8+CiAgICAgICAgPGR1cmF0aW9uPjE2PC9kdXJhdGlvbj4KICAgICAgICA8dm9pY2U+NTwvdm9pY2U+CiAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgPHN0YWZmPjI8L3N0YWZmPgogICAgICA8L25vdGU+CiAgICA8L21lYXN1cmU+CiAgICA8bWVhc3VyZSBudW1iZXI9IjIiPgogICAgICA8bm90ZSBpZD0ibjAiPgogICAgICAgIDxwaXRjaD4KICAgICAgICAgIDxzdGVwPkU8L3N0ZXA+CiAgICAgICAgICA8b2N0YXZlPjQ8L29jdGF2ZT4KICAgICAgICA8L3BpdGNoPgogICAgICAgIDxkdXJhdGlvbj4xNjwvZHVyYXRpb24+CiAgICAgICAgPHRpZSB0eXBlPSJzdGFydCIvPgogICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgPG5vdGF0aW9ucz4KICAgICAgICAgIDx0aWVkIHR5cGU9InN0YXJ0Ii8+CiAgICAgICAgPC9ub3RhdGlvbnM+CiAgICAgIDwvbm90ZT4KICAgICAgPGJhY2t1cD4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICA8L2JhY2t1cD4KICAgICAgPG5vdGU+CiAgICAgICAgPHJlc3QgbWVhc3VyZT0ieWVzIi8+CiAgICAgICAgPGR1cmF0aW9uPjE2PC9kdXJhdGlvbj4KICAgICAgICA8dm9pY2U+NTwvdm9pY2U+CiAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgPHN0YWZmPjI8L3N0YWZmPgogICAgICA8L25vdGU+CiAgICA8L21lYXN1cmU+CiAgICA8bWVhc3VyZSBudW1iZXI9IjMiPgogICAgICA8bm90ZT4KICAgICAgICA8dGllIHR5cGU9InN0b3AiLz4KICAgICAgICA8cGl0Y2g+CiAgICAgICAgICA8c3RlcD5FPC9zdGVwPgogICAgICAgICAgPG9jdGF2ZT40PC9vY3RhdmU+CiAgICAgICAgPC9waXRjaD4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgPG5vdGF0aW9ucz4KICAgICAgICAgIDx0aWVkIHR5cGU9InN0b3AiLz4KICAgICAgICA8L25vdGF0aW9ucz4KICAgICAgPC9ub3RlPgogICAgICA8YmFja3VwPgogICAgICAgIDxkdXJhdGlvbj4xNjwvZHVyYXRpb24+CiAgICAgIDwvYmFja3VwPgogICAgICA8bm90ZT4KICAgICAgICA8cmVzdCBtZWFzdXJlPSJ5ZXMiLz4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICAgIDx2b2ljZT41PC92b2ljZT4KICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICA8c3RhZmY+Mjwvc3RhZmY+CiAgICAgIDwvbm90ZT4KICAgIDwvbWVhc3VyZT4KICAgIDxtZWFzdXJlIG51bWJlcj0iNCI+CiAgICAgIDxub3RlPgogICAgICAgIDxyZXN0Lz4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgIDwvbm90ZT4KICAgICAgPGJhY2t1cD4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICA8L2JhY2t1cD4KICAgICAgPG5vdGU+CiAgICAgICAgPHJlc3QgbWVhc3VyZT0ieWVzIi8+CiAgICAgICAgPGR1cmF0aW9uPjE2PC9kdXJhdGlvbj4KICAgICAgICA8dm9pY2U+NTwvdm9pY2U+CiAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgPHN0YWZmPjI8L3N0YWZmPgogICAgICA8L25vdGU+CiAgICA8L21lYXN1cmU+CiAgICA8bWVhc3VyZSBudW1iZXI9IjUiPgogICAgICA8bm90ZT4KICAgICAgICA8cmVzdC8+CiAgICAgICAgPGR1cmF0aW9uPjE8L2R1cmF0aW9uPgogICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICA8dHlwZT4xNnRoPC90eXBlPgogICAgICAgIDxzdGFmZj4xPC9zdGFmZj4KICAgICAgPC9ub3RlPgogICAgICA8bm90ZSBpZD0ibjEiPgogICAgICAgIDxwaXRjaD4KICAgICAgICAgIDxzdGVwPkU8L3N0ZXA+CiAgICAgICAgICA8b2N0YXZlPjQ8L29jdGF2ZT4KICAgICAgICA8L3BpdGNoPgogICAgICAgIDxkdXJhdGlvbj40PC9kdXJhdGlvbj4KICAgICAgICA8dm9pY2U+MTwvdm9pY2U+CiAgICAgICAgPHR5cGU+cXVhcnRlcjwvdHlwZT4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgIDwvbm90ZT4KICAgICAgPG5vdGUgaWQ9Im4yIj4KICAgICAgICA8cGl0Y2g+CiAgICAgICAgICA8c3RlcD5EPC9zdGVwPgogICAgICAgICAgPG9jdGF2ZT40PC9vY3RhdmU+CiAgICAgICAgPC9waXRjaD4KICAgICAgICA8ZHVyYXRpb24+MTE8L2R1cmF0aW9uPgogICAgICAgIDx0aWUgdHlwZT0ic3RhcnQiLz4KICAgICAgICA8dm9pY2U+MTwvdm9pY2U+CiAgICAgICAgPHR5cGU+aGFsZjwvdHlwZT4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgPG5vdGF0aW9ucz4KICAgICAgICAgIDx0aWVkIHR5cGU9InN0YXJ0Ii8+CiAgICAgICAgPC9ub3RhdGlvbnM+CiAgICAgIDwvbm90ZT4KICAgICAgPGJhY2t1cD4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICA8L2JhY2t1cD4KICAgICAgPG5vdGU+CiAgICAgICAgPHJlc3QgbWVhc3VyZT0ieWVzIi8+CiAgICAgICAgPGR1cmF0aW9uPjE2PC9kdXJhdGlvbj4KICAgICAgICA8dm9pY2U+NTwvdm9pY2U+CiAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgPHN0YWZmPjI8L3N0YWZmPgogICAgICA8L25vdGU+CiAgICA8L21lYXN1cmU+CiAgICA8bWVhc3VyZSBudW1iZXI9IjYiPgogICAgICA8bm90ZT4KICAgICAgICA8dGllIHR5cGU9InN0b3AiLz4KICAgICAgICA8cGl0Y2g+CiAgICAgICAgICA8c3RlcD5EPC9zdGVwPgogICAgICAgICAgPG9jdGF2ZT40PC9vY3RhdmU+CiAgICAgICAgPC9waXRjaD4KICAgICAgICA8ZHVyYXRpb24+MTwvZHVyYXRpb24+CiAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgIDx0eXBlPjE2dGg8L3R5cGU+CiAgICAgICAgPHN0YWZmPjE8L3N0YWZmPgogICAgICAgIDxub3RhdGlvbnM+CiAgICAgICAgICA8dGllZCB0eXBlPSJzdG9wIi8+CiAgICAgICAgPC9ub3RhdGlvbnM+CiAgICAgIDwvbm90ZT4KICAgICAgPG5vdGUgaWQ9Im4zIj4KICAgICAgICA8cGl0Y2g+CiAgICAgICAgICA8c3RlcD5FPC9zdGVwPgogICAgICAgICAgPG9jdGF2ZT40PC9vY3RhdmU+CiAgICAgICAgPC9waXRjaD4KICAgICAgICA8ZHVyYXRpb24+MTU8L2R1cmF0aW9uPgogICAgICAgIDx0aWUgdHlwZT0ic3RhcnQiLz4KICAgICAgICA8dm9pY2U+MTwvdm9pY2U+CiAgICAgICAgPHR5cGU+aGFsZjwvdHlwZT4KICAgICAgICA8ZG90Lz4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgPG5vdGF0aW9ucz4KICAgICAgICAgIDx0aWVkIHR5cGU9InN0YXJ0Ii8+CiAgICAgICAgPC9ub3RhdGlvbnM+CiAgICAgIDwvbm90ZT4KICAgICAgPGJhY2t1cD4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICA8L2JhY2t1cD4KICAgICAgPG5vdGU+CiAgICAgICAgPHJlc3QgbWVhc3VyZT0ieWVzIi8+CiAgICAgICAgPGR1cmF0aW9uPjE2PC9kdXJhdGlvbj4KICAgICAgICA8dm9pY2U+NTwvdm9pY2U+CiAgICAgICAgPHR5cGU+d2hvbGU8L3R5cGU+CiAgICAgICAgPHN0YWZmPjI8L3N0YWZmPgogICAgICA8L25vdGU+CiAgICA8L21lYXN1cmU+CiAgICA8bWVhc3VyZSBudW1iZXI9IjciPgogICAgICA8bm90ZT4KICAgICAgICA8dGllIHR5cGU9InN0b3AiLz4KICAgICAgICA8cGl0Y2g+CiAgICAgICAgICA8c3RlcD5FPC9zdGVwPgogICAgICAgICAgPG9jdGF2ZT40PC9vY3RhdmU+CiAgICAgICAgPC9waXRjaD4KICAgICAgICA8ZHVyYXRpb24+MTc8L2R1cmF0aW9uPgogICAgICAgIDx2b2ljZT4xPC92b2ljZT4KICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgICAgPG5vdGF0aW9ucz4KICAgICAgICAgIDx0aWVkIHR5cGU9InN0b3AiLz4KICAgICAgICA8L25vdGF0aW9ucz4KICAgICAgPC9ub3RlPgogICAgICA8YmFja3VwPgogICAgICAgIDxkdXJhdGlvbj4xNjwvZHVyYXRpb24+CiAgICAgIDwvYmFja3VwPgogICAgICA8bm90ZT4KICAgICAgICA8cmVzdCBtZWFzdXJlPSJ5ZXMiLz4KICAgICAgICA8ZHVyYXRpb24+MTY8L2R1cmF0aW9uPgogICAgICAgIDx2b2ljZT41PC92b2ljZT4KICAgICAgICA8dHlwZT53aG9sZTwvdHlwZT4KICAgICAgICA8c3RhZmY+Mjwvc3RhZmY+CiAgICAgIDwvbm90ZT4KICAgIDwvbWVhc3VyZT4KICAgIDxtZWFzdXJlIG51bWJlcj0iOCI+CiAgICAgIDxub3RlPgogICAgICAgIDxyZXN0Lz4KICAgICAgICA8ZHVyYXRpb24+MzwvZHVyYXRpb24+CiAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgIDx0eXBlPmVpZ2h0aDwvdHlwZT4KICAgICAgICA8ZG90Lz4KICAgICAgICA8c3RhZmY+MTwvc3RhZmY+CiAgICAgIDwvbm90ZT4KICAgICAgPG5vdGU+CiAgICAgICAgPHJlc3QvPgogICAgICAgIDxkdXJhdGlvbj4xMjwvZHVyYXRpb24+CiAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgIDx0eXBlPmhhbGY8L3R5cGU+CiAgICAgICAgPGRvdC8+CiAgICAgICAgPHN0YWZmPjE8L3N0YWZmPgogICAgICA8L25vdGU+CiAgICAgIDxub3RlPgogICAgICAgIDxyZXN0Lz4KICAgICAgICA8ZHVyYXRpb24+MTwvZHVyYXRpb24+CiAgICAgICAgPHZvaWNlPjE8L3ZvaWNlPgogICAgICAgIDx0eXBlPjE2dGg8L3R5cGU+CiAgICAgICAgPHN0YWZmPjE8L3N0YWZmPgogICAgICA8L25vdGU+CiAgICAgIDxiYWNrdXA+CiAgICAgICAgPGR1cmF0aW9uPjE2PC9kdXJhdGlvbj4KICAgICAgPC9iYWNrdXA+CiAgICAgIDxub3RlPgogICAgICAgIDxyZXN0IG1lYXN1cmU9InllcyIvPgogICAgICAgIDxkdXJhdGlvbj4xNjwvZHVyYXRpb24+CiAgICAgICAgPHZvaWNlPjU8L3ZvaWNlPgogICAgICAgIDx0eXBlPndob2xlPC90eXBlPgogICAgICAgIDxzdGFmZj4yPC9zdGFmZj4KICAgICAgPC9ub3RlPgogICAgPC9tZWFzdXJlPgogIDwvcGFydD4KPC9zY29yZS1wYXJ0d2lzZT4=";
+      let selectedNoteId = "";
+      let selectedNoteIds = [];
+
+      // TEST 7: Decoded XML length logging and display
+      try {
+        const decodedXML = atob(musicxmlBase64);
+        console.log("Decoded XML length:", decodedXML.length);
+        window.initialXmlLength = decodedXML.length;
+        const xmlLenDiv = document.getElementById('xml-length-display');
+        if (xmlLenDiv) {
+          xmlLenDiv.textContent = "Decoded XML Length: " + decodedXML.length + " chars";
+        }
+      } catch (e) {
+        console.error("XML Decode error:", e);
+        const xmlLenDiv = document.getElementById('xml-length-display');
+        if (xmlLenDiv) {
+          xmlLenDiv.textContent = "Decoded XML Length: Error - " + e.message;
+        }
+      }
+
+      function getBeatsPerMeasure(timeSig) {
+        const parts = timeSig.split('/');
+        const num = parseInt(parts[0]) || 4;
+        const den = parseInt(parts[1]) || 4;
+        return (num / den) * 4.0;
+      }
+
+      function getNoteBeats(n) {
+        if (!n) return 1.0;
+        if (n.beats !== undefined) return n.beats;
+        const dur = n.duration;
+        if (dur.startsWith('w')) return 4.0;
+        if (dur.startsWith('h')) return dur.indexOf('d') !== -1 ? 3.0 : 2.0;
+        if (dur.startsWith('q')) return dur.indexOf('d') !== -1 ? 1.5 : 1.0;
+        if (dur.startsWith('8')) return dur.indexOf('d') !== -1 ? 0.75 : 0.5;
+        if (dur.startsWith('16')) return 0.25;
+        return 1.0;
+      }
+
+      function parseMusicXMLPlayback(xmlString) {
+        function pitchStringToMidi(pitchStr) {
+          const match = pitchStr.match(/^([A-G])([#b]?)(-?d+)$/);
+          if (!match) return 60; // middle C default
+          const step = match[1];
+          const acc = match[2] || '';
+          const octave = parseInt(match[3]) || 4;
+
+          if (step === 'F' && acc === 'b') {
+            return (octave + 1) * 12 + 4;
+          }
+          if (step === 'C' && acc === 'b') {
+            return octave * 12 + 11;
+          }
+          if (step === 'B' && acc === '#') {
+            return (octave + 2) * 12 + 0;
+          }
+          if (step === 'E' && acc === '#') {
+            return (octave + 1) * 12 + 5;
+          }
+
+          const stepToSemitone = {
+            'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11
+          };
+
+          let semitone = stepToSemitone[step];
+          if (acc === '#') {
+            semitone += 1;
+          } else if (acc === 'b') {
+            semitone -= 1;
+          }
+
+          return (octave + 1) * 12 + semitone;
+        }
+
+        function getKeySignatureAlterations(fifths) {
+          const sharps = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
+          const flats = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
+          const alters = {};
+          if (fifths > 0) {
+            for (let i = 0; i < Math.min(fifths, 7); i++) {
+              alters[sharps[i]] = 1;
+            }
+          } else if (fifths < 0) {
+            for (let i = 0; i < Math.min(Math.abs(fifths), 7); i++) {
+              alters[flats[i]] = -1;
+            }
+          }
+          return alters;
+        }
+
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+        const events = [];
+        
+        const parts = xmlDoc.getElementsByTagName("part");
+        for (let p = 0; p < parts.length; p++) {
+          const part = parts[p];
+          const measures = part.getElementsByTagName("measure");
+          let measureStartBeat = 0.0;
+          let divisions = 4;
+          let beatsPerMeasure = 4.0;
+          let activeAlterations = {};
+          
+          for (let m = 0; m < measures.length; m++) {
+            const measure = measures[m];
+            let currentBeat = 0.0;
+            let lastNoteStartBeat = 0.0;
+            let measureOverrides = {};
+            
+            // Check divisions
+            const divElements = measure.getElementsByTagName("divisions");
+            if (divElements.length > 0) {
+              divisions = parseInt(divElements[0].textContent) || 4;
+            }
+            
+            // Check time signature
+            const timeElements = measure.getElementsByTagName("time");
+            if (timeElements.length > 0) {
+              const beats = parseInt(timeElements[0].getElementsByTagName("beats")[0].textContent) || 4;
+              const beatType = parseInt(timeElements[0].getElementsByTagName("beat-type")[0].textContent) || 4;
+              beatsPerMeasure = (beats / beatType) * 4.0;
+            }
+
+            // Check key signature
+            const keyElements = measure.getElementsByTagName("key");
+            if (keyElements.length > 0) {
+              const fifthsElement = keyElements[0].getElementsByTagName("fifths")[0];
+              if (fifthsElement) {
+                const fifths = parseInt(fifthsElement.textContent) || 0;
+                activeAlterations = getKeySignatureAlterations(fifths);
+              }
+            }
+            
+            const children = measure.children;
+            for (let c = 0; c < children.length; c++) {
+              const child = children[c];
+              const tagName = child.tagName.toLowerCase();
+              
+              if (tagName === "note") {
+                const durationElement = child.getElementsByTagName("duration")[0];
+                const durVal = durationElement ? parseInt(durationElement.textContent) : 0;
+                const durBeats = durVal / divisions;
+                
+                const isChord = child.getElementsByTagName("chord").length > 0;
+                const isRest = child.getElementsByTagName("rest").length > 0;
+                const staffElement = child.getElementsByTagName("staff")[0];
+                const staffNum = staffElement ? parseInt(staffElement.textContent) : 1;
+                // Track voice for per-voice timing isolation
+                const voiceElement = child.getElementsByTagName("voice")[0];
+                const voiceNum = voiceElement ? parseInt(voiceElement.textContent) : 1;
+                
+                const idAttr = child.getAttribute("id");
+                const absIdx = idAttr ? parseInt(idAttr.replace("n", "")) : -1;
+
+                let skippedReason = null;
+                if (isNaN(durBeats) || durBeats <= 0) {
+                  skippedReason = "invalid duration";
+                }
+                if (!isRest) {
+                  const pitchElement = child.getElementsByTagName("pitch")[0];
+                  if (!pitchElement) {
+                    skippedReason = "missing pitch";
+                  } else {
+                    const stepEl = pitchElement.getElementsByTagName("step")[0];
+                    const octEl = pitchElement.getElementsByTagName("octave")[0];
+                    if (!stepEl || !octEl) {
+                      skippedReason = "missing pitch (step or octave)";
+                    }
+                  }
+                }
+                const auditStartBeat = measureStartBeat + (isChord ? lastNoteStartBeat - measureStartBeat : currentBeat);
+                if (auditStartBeat < 0) {
+                  skippedReason = "negative timing";
+                }
+                if (currentBeat + durBeats > beatsPerMeasure + 0.01 && !isChord) {
+                  console.log("[PLAYBACK AUDIT] Warning: Note measure overflow. Measure beats capacity: " + beatsPerMeasure + ", Current position: " + currentBeat + ", Note duration: " + durBeats);
+                }
+                if (skippedReason) {
+                  console.log("[PLAYBACK AUDIT] Note skipped. Reason: " + skippedReason + ", XML: " + (child.outerHTML ? child.outerHTML.substring(0, 150) : ""));
+                }
+                
+                let pitchStr = "rest";
+                if (!isRest) {
+                  const pitchElement = child.getElementsByTagName("pitch")[0];
+                  if (pitchElement) {
+                    const step = pitchElement.getElementsByTagName("step")[0].textContent;
+                    const octave = pitchElement.getElementsByTagName("octave")[0].textContent;
+                    
+                    // Look for explicit accidental tag inside note
+                    const accidentalElement = child.getElementsByTagName("accidental")[0];
+                    const explicitAcc = accidentalElement ? accidentalElement.textContent : null;
+                    
+                    let resolvedAcc = "";
+                    if (explicitAcc === "sharp") {
+                      resolvedAcc = "#";
+                      measureOverrides[step + octave] = "#";
+                    } else if (explicitAcc === "flat") {
+                      resolvedAcc = "b";
+                      measureOverrides[step + octave] = "b";
+                    } else if (explicitAcc === "natural") {
+                      resolvedAcc = "n";
+                      measureOverrides[step + octave] = "n";
+                    } else {
+                      // Check measure overrides
+                      if (measureOverrides[step + octave] !== undefined) {
+                        resolvedAcc = measureOverrides[step + octave];
+                      } else {
+                        // Check key signature
+                        const keyAlter = activeAlterations[step];
+                        if (keyAlter === 1) {
+                          resolvedAcc = "#";
+                        } else if (keyAlter === -1) {
+                          resolvedAcc = "b";
+                        } else {
+                          resolvedAcc = "";
+                        }
+                      }
+                    }
+                    
+                    const pitchAcc = resolvedAcc === "n" ? "" : resolvedAcc;
+                    pitchStr = step + pitchAcc + octave;
+                  }
+                }
+                
+                // Check if this note is a tie stop (continuation of a tied note)
+                let isTieStop = false;
+                const tieElements = child.getElementsByTagName("tie");
+                for (let t = 0; t < tieElements.length; t++) {
+                  if (tieElements[t].getAttribute("type") === "stop") {
+                    isTieStop = true;
+                    break;
+                  }
+                }
+                
+                let startBeat;
+                if (isChord) {
+                  startBeat = lastNoteStartBeat;
+                } else {
+                  startBeat = measureStartBeat + currentBeat;
+                  lastNoteStartBeat = startBeat;
+                  currentBeat += durBeats;
+                }
+                
+                if (!isRest && pitchStr !== "rest") {
+                  if (isTieStop) {
+                    let merged = false;
+                    for (let idx = events.length - 1; idx >= 0; idx--) {
+                      const prevEvent = events[idx];
+                      const prevMidi = prevEvent.pitch === "rest" ? -1 : pitchStringToMidi(prevEvent.pitch);
+                      const currMidi = pitchStr === "rest" ? -2 : pitchStringToMidi(pitchStr);
+                      if (prevMidi === currMidi && 
+                          prevEvent.staff === staffNum && 
+                          prevEvent.partIndex === p &&
+                          prevEvent.voice === voiceNum && 
+                          Math.abs(prevEvent.startBeat + prevEvent.durationBeats - startBeat) < 0.01) {
+                        prevEvent.durationBeats = Math.round((prevEvent.durationBeats + durBeats) * 1000) / 1000;
+                        merged = true;
+                        break;
+                      }
+                    }
+                    if (!merged) {
+                      events.push({
+                        startBeat: Math.round(startBeat * 1000) / 1000,
+                        durationBeats: Math.round(durBeats * 1000) / 1000,
+                        pitch: pitchStr,
+                        absoluteIndex: absIdx,
+                        staff: staffNum,
+                        partIndex: p,
+                        voice: voiceNum,
+                        measure: m + 1
+                      });
+                    }
+                  } else {
+                    events.push({
+                      startBeat: Math.round(startBeat * 1000) / 1000,
+                      durationBeats: Math.round(durBeats * 1000) / 1000,
+                      pitch: pitchStr,
+                      absoluteIndex: absIdx,
+                      staff: staffNum,
+                      partIndex: p,
+                      voice: voiceNum,
+                      measure: m + 1
+                    });
+                  }
+                } else {
+                  // It is a rest note! Push to events
+                  events.push({
+                    startBeat: Math.round(startBeat * 1000) / 1000,
+                    durationBeats: Math.round(durBeats * 1000) / 1000,
+                    pitch: "rest",
+                    absoluteIndex: absIdx,
+                    staff: staffNum,
+                    partIndex: p,
+                    voice: voiceNum,
+                    measure: m + 1
+                  });
+                }
+              } else if (tagName === "backup") {
+                const durationElement = child.getElementsByTagName("duration")[0];
+                const durVal = durationElement ? parseInt(durationElement.textContent) : 0;
+                currentBeat = Math.max(0.0, currentBeat - durVal / divisions);
+              } else if (tagName === "forward") {
+                const durationElement = child.getElementsByTagName("duration")[0];
+                const durVal = durationElement ? parseInt(durationElement.textContent) : 0;
+                currentBeat += durVal / divisions;
+              }
+            }
+            if (currentBeat === 0.0) {
+              events.push({
+                startBeat: Math.round(measureStartBeat * 1000) / 1000,
+                durationBeats: Math.round(beatsPerMeasure * 1000) / 1000,
+                pitch: "rest",
+                absoluteIndex: -1,
+                staff: 1,
+                partIndex: p,
+                voice: 1,
+                measure: m + 1
+              });
+              currentBeat = beatsPerMeasure;
+            }
+            measureStartBeat += beatsPerMeasure;
+          }
+        }
+        return events;
+      }
+      
+      function buildPlaybackSchedule(events) {
+        if (events.length === 0) return [];
+        
+        // Sort events by startBeat so we can look ahead reliably
+        const sorted = [...events].sort((a, b) => a.startBeat - b.startBeat || a.staff - b.staff);
+        
+        // Compute effectiveDuration for each note:
+        // Cap at the time until the next note in the same staff starts.
+        // This prevents one note's oscillator from bleeding into the next
+        // note's time slot in the same staff, which causes audible overlap
+        // even though the scheduler timer has already moved on.
+        sorted.forEach((ev, i) => {
+          let nextSameStaffBeat = Infinity;
+          for (let j = i + 1; j < sorted.length; j++) {
+            if (sorted[j].staff === ev.staff && sorted[j].startBeat > ev.startBeat + 0.001) {
+              nextSameStaffBeat = sorted[j].startBeat;
+              break;
+            }
+          }
+          const gap = nextSameStaffBeat === Infinity ? ev.durationBeats : (nextSameStaffBeat - ev.startBeat);
+          // effectiveDuration: the actual beat count this note should sound for.
+          // Capped at the gap to next same-staff note so oscillators don't bleed.
+          ev.effectiveDuration = Math.min(ev.durationBeats, gap);
+        });
+        
+        const uniqueStartBeats = Array.from(new Set(sorted.map(e => e.startBeat))).sort((a, b) => a - b);
+        const schedule = [];
+        let T = 0.0;
+        
+        for (let i = 0; i < uniqueStartBeats.length; i++) {
+          const targetBeat = uniqueStartBeats[i];
+          
+          if (targetBeat > T + 0.01) {
+            const gap = targetBeat - T;
+            schedule.push({
+              pitch: "rest",
+              beats: gap,
+              constituentNotes: []
+            });
+            T = targetBeat;
+          }
+          
+          const notesStarting = sorted.filter(e => Math.abs(e.startBeat - targetBeat) < 0.005);
+          
+          let tickDuration;
+          if (i < uniqueStartBeats.length - 1) {
+            tickDuration = uniqueStartBeats[i + 1] - targetBeat;
+          } else {
+            // For the last tick, use the longest individual note duration
+            tickDuration = Math.max(...notesStarting.map(n => n.effectiveDuration));
+          }
+          
+          schedule.push({
+            pitch: notesStarting.map(n => n.pitch).join(','),
+            beats: tickDuration,
+            // pitch_beats uses effectiveDuration so each note's oscillator
+            // is limited to its own time slot and never bleeds into the next
+            pitch_beats: notesStarting.map(n => n.effectiveDuration),
+            constituentNotes: notesStarting.map(n => ({
+              pitch: n.pitch,
+              absoluteIndex: n.absoluteIndex,
+              duration: n.effectiveDuration
+            }))
+          });
+          
+          T += tickDuration;
+        }
+        return schedule;
+      }
+
+      function printPlaybackDebugTable(events, activeTempo, beatsPerMeas) {
+        console.log("=== PLAYBACK SCHEDULE DEBUG OUTPUT ===");
+        console.log("Pitch    | Measure | Voice | Staff | StartBeat | EndBeat");
+        console.log("-".repeat(60));
+        
+        const table = [];
+        events.forEach(e => {
+          const endBeat = e.startBeat + e.durationBeats;
+          
+          console.log(
+            e.pitch.padEnd(8) + " | " + 
+            String(e.measure).padEnd(7) + " | " + 
+            String(e.voice).padEnd(5) + " | " + 
+            String(e.staff).padEnd(5) + " | " + 
+            e.startBeat.toFixed(3).padEnd(9) + " | " + 
+            endBeat.toFixed(3)
+          );
+          
+          table.push({
+            pitch: e.pitch,
+            measure: e.measure,
+            voice: e.voice,
+            staff: e.staff,
+            startBeat: e.startBeat.toFixed(3),
+            endBeat: endBeat.toFixed(3)
+          });
+        });
+        
+        const debugDiv = document.getElementById("debug-info");
+        if (debugDiv) {
+          debugDiv.style.display = "none";
+        }
+      }
+
+      function rebuildPlaybackSchedule() {
+        playbackNotes = [];
+        noteEvents = [];
+        if (musicxmlBase64) {
+          try {
+            const decodedXml = atob(musicxmlBase64);
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(decodedXml, "text/xml");
+            
+            // 1. Total rendered notes in score
+            const totalNotes = xmlDoc.getElementsByTagName("note").length;
+            console.log("[PLAYBACK AUDIT] Total rendered notes:", totalNotes);
+
+            const clefs = xmlDoc.getElementsByTagName("clef");
+            let hasBassStaff = false;
+            for (let i = 0; i < clefs.length; i++) {
+              const sign = clefs[i].getElementsByTagName("sign")[0]?.textContent;
+              if (sign === "F") {
+                hasBassStaff = true;
+                break;
+              }
+            }
+
+            // Extract the number of staves in each part to map local staff to absolute staff index
+            const parts = xmlDoc.getElementsByTagName("part");
+            const partStavesCounts = [];
+            for (let p = 0; p < parts.length; p++) {
+              const measure1 = parts[p].getElementsByTagName("measure")[0];
+              const stavesElem = measure1 ? measure1.getElementsByTagName("staves")[0] : null;
+              const count = stavesElem ? parseInt(stavesElem.textContent) : 1;
+              partStavesCounts.push(count);
+            }
+
+            const events = parseMusicXMLPlayback(decodedXml);
+            // 2. Total notes passed to playback engine (events count)
+            console.log("[PLAYBACK AUDIT] Total notes passed to playback engine:", events.length);
+            // 3. Generated playback events
+            console.log("[PLAYBACK AUDIT] Generated playback events:", JSON.stringify(events.slice(0, 15)));
+            
+            let maxMeasure = 0;
+            events.forEach(ev => {
+              if (ev.measure > maxMeasure) {
+                maxMeasure = ev.measure;
+              }
+            });
+            const beatsPerMeasure = getBeatsPerMeasure(timeSignature);
+            const totalBeats = maxMeasure * beatsPerMeasure;
+
+            const adjustedEvents = events.map(ev => {
+              const partIdx = ev.partIndex || 0;
+              const localStaff = ev.staff || 1;
+              
+              // Calculate absolute staff index S (1-indexed)
+              let absStaff = 0;
+              for (let p = 0; p < partIdx; p++) {
+                absStaff += partStavesCounts[p] || 1;
+              }
+              absStaff += localStaff;
+
+              // Compute playback offset: parts play sequentially (Pairs play sequentially, staves inside a Part play simultaneously)
+              const offset = partIdx * totalBeats;
+              
+              return {
+                ...ev,
+                staff: absStaff,
+                measure: partIdx * maxMeasure + ev.measure,
+                startBeat: ev.startBeat + offset
+              };
+            });
+
+            noteEvents = adjustedEvents;
+            printPlaybackDebugTable(adjustedEvents, originalTempo, beatsPerMeasure);
+            playbackNotes = buildPlaybackSchedule(adjustedEvents);
+            
+            // 4. Scheduled note count
+            console.log("[PLAYBACK AUDIT] Scheduled note count:", playbackNotes.length);
+            
+            // 5. First 10 scheduled notes
+            let cumulativeTime = 0.0;
+            const first10 = playbackNotes.slice(0, 10).map((note, index) => {
+              const durSec = getDurationInSec(note);
+              const startTime = cumulativeTime;
+              cumulativeTime += durSec;
+              return {
+                index,
+                pitch: note.pitch,
+                startTime: startTime.toFixed(3) + "s",
+                duration: durSec.toFixed(3) + "s"
+              };
+            });
+            console.log("[PLAYBACK AUDIT] First 10 scheduled notes:", JSON.stringify(first10, null, 2));
+
+            // 7. Verify playback timeline length
+            const totalDurationSec = getTotalDuration();
+            console.log("[PLAYBACK AUDIT] Playback timeline length:", totalDurationSec.toFixed(3) + "s");
+            
+            console.log("REBUILT PLAYBACK SCHEDULE:", playbackNotes.length, "notes. hasBassStaff:", hasBassStaff, "totalBeats:", totalBeats);
+          } catch (e) {
+            console.error("Error parsing MusicXML for playback:", e);
+          }
+        }
+
+        if (playbackNotes.length === 0) {
+          // Fallback to legacy formatting if XML parsing fails
+          let arr = [];
+          if (Array.isArray(sourceNotes)) {
+            arr = sourceNotes;
+          } else if (sourceNotes && Array.isArray(sourceNotes.notes)) {
+            arr = sourceNotes.notes;
+          }
+          playbackNotes = arr.map(n => ({
+            pitch: n.pitch,
+            beats: typeof getNoteBeats === 'function' ? getNoteBeats(n) : 1.0,
+            constituentNotes: n.pitch !== 'rest' ? n.pitch.split(',').map(p => ({
+              pitch: p,
+              absoluteIndex: n.absoluteIndex,
+              duration: typeof getNoteBeats === 'function' ? getNoteBeats(n) : 1.0
+            })) : []
+          }));
+        }
+      }
+
+      // Playback state variables
+      let tempo = Math.round(originalTempo);
+
+      // Initialize playback schedule
+      let playbackNotes = [];
+      let noteEvents = [];
+      rebuildPlaybackSchedule();
+
+      // Playback state variables
+      let currentNoteIndex = 0;
+      let isPlaying = false;
+      let noteStartTimestamp = 0;
+      let elapsedInCurrentNote = 0.0;
+      let timerId = null;
+      let audioCtx = null;
+      let activeOscillators = [];
+      let activeHighlightTimeouts = [];
+      let schedulerStartTime = 0;
+      let expectedElapsedTime = 0.0;
+
+      function clearAllHighlights() {
+        const prev = document.querySelectorAll('.active-note');
+        prev.forEach(el => el.classList.remove('active-note'));
+        activeHighlightTimeouts.forEach(tId => clearTimeout(tId));
+        activeHighlightTimeouts = [];
+      }
+
+      window.highlightCurrentNote = function(nominalTime) {
+        // 1. Clear previous highlights
+        const prev = document.querySelectorAll('.active-note');
+        prev.forEach(el => el.classList.remove('active-note'));
+        
+        if (noteEvents.length === 0) return;
+        
+        // 2. Find active note events at nominalTime
+        const activeEvents = noteEvents.filter(ev => {
+          const startTimeSec = ev.startBeat * (60.0 / originalTempo);
+          const endTimeSec = (ev.startBeat + ev.durationBeats) * (60.0 / originalTempo);
+          // Epsilon of 10ms for boundary
+          return nominalTime >= startTimeSec - 0.01 && nominalTime < endTimeSec - 0.01;
+        });
+        
+        // 3. Highlight them
+        activeEvents.forEach(ev => {
+          if (ev.pitch === 'rest') return;
+          const absIdx = ev.absoluteIndex;
+          if (absIdx >= 0) {
+            const query = '[id="n' + absIdx + '"]';
+            const elements = document.querySelectorAll(query);
+            elements.forEach(el => {
+              el.classList.add('active-note');
+              if (typeof el.scrollIntoView === 'function') {
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+              }
+            });
+          }
+        });
+      };
+
+      function midiToFreq(midi) {
+        return 440 * Math.pow(2, (midi - 69) / 12);
+      }
+
+      function initAudio() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      }
+
+      function stopAllOscillators() {
+        activeOscillators.forEach(osc => {
+          try {
+            osc.stop();
+          } catch (e) {}
+        });
+        activeOscillators = [];
+      }
+
+      function playSingleNoteSound(freq, durationSec) {
+        console.log("[PLAYBACK AUDIT] Synthesizer received note event. Frequency: " + freq + ", Duration: " + durationSec + "s");
+        initAudio();
+        if (audioCtx) {
+          console.log("[PLAYBACK AUDIT] AudioContext State: " + audioCtx.state);
+        } else {
+          console.log("[PLAYBACK AUDIT] AudioContext is null");
+        }
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.type = 'triangle'; // Piano-like warm tone
+        
+        const now = audioCtx.currentTime;
+        const scheduleTime = now + 0.02; // 20ms look-ahead buffer
+        
+        osc.frequency.setValueAtTime(freq, scheduleTime);
+
+        gainNode.gain.setValueAtTime(0, scheduleTime);
+        
+        // Dynamic ADSR Envelope to prevent out-of-order scheduling errors for short notes
+        const attack = Math.min(0.05, durationSec * 0.1);
+        const decay = Math.min(0.1, durationSec * 0.2);
+        const release = Math.min(0.05, durationSec * 0.1);
+        const sustainStart = attack + decay;
+        const sustainEnd = Math.max(sustainStart, durationSec - release);
+
+        gainNode.gain.linearRampToValueAtTime(0.2, scheduleTime + attack); // Attack
+        gainNode.gain.exponentialRampToValueAtTime(0.1, scheduleTime + sustainStart); // Decay
+        gainNode.gain.setValueAtTime(0.1, scheduleTime + sustainEnd); // Sustain
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, scheduleTime + durationSec); // Release
+
+        osc.start(scheduleTime);
+        osc.stop(scheduleTime + durationSec);
+
+        activeOscillators.push(osc);
+
+        setTimeout(() => {
+          const idx = activeOscillators.indexOf(osc);
+          if (idx > -1) {
+            activeOscillators.splice(idx, 1);
+          }
+        }, durationSec * 1000 + 100);
+      }
+
+      function playNextTick() {
+        if (!isPlaying) return;
+
+        if (currentNoteIndex >= playbackNotes.length) {
+          isPlaying = false;
+          currentNoteIndex = 0;
+          elapsedInCurrentNote = 0.0;
+          stopAllOscillators();
+          clearAllHighlights();
+          updatePlayButtonUI();
+          updateProgressUI(0);
+          return;
+        }
+
+        const note = playbackNotes[currentNoteIndex];
+        const fullDurationSec = getDurationInSec(note);
+        const durationSec = fullDurationSec - elapsedInCurrentNote;
+
+        if (note && note.pitch !== 'rest' && durationSec > 0) {
+          console.log("[PLAYBACK AUDIT] playNextTick playing notes: " + note.pitch + ", durSec: " + durationSec);
+          const pitches = note.pitch.split(',');
+          const pitchBeats = note.pitch_beats || [];
+          pitches.forEach((p, pIdx) => {
+            const parsed = parseNoteString(p);
+            if (parsed) {
+              const b = (pitchBeats[pIdx] !== undefined) ? pitchBeats[pIdx] : getNoteDurationInBeats(note);
+              const fullPitchDurSec = b * (60.0 / tempo);
+              // Respect elapsed time inside note when starting/scrubbing, otherwise play full pitch duration
+              const pitchDurSec = Math.max(0.0, fullPitchDurSec - elapsedInCurrentNote);
+              playSingleNoteSound(midiToFreq(parsed.midi), pitchDurSec * 0.85);
+            }
+          });
+        }
+
+        highlightNoteForDur(note, currentNoteIndex, fullDurationSec);
+        noteStartTimestamp = Date.now() - (elapsedInCurrentNote * 1000);
+
+        expectedElapsedTime += durationSec;
+        
+        const elapsedMs = Date.now() - schedulerStartTime;
+        const expectedMs = expectedElapsedTime * 1000;
+        const driftMs = elapsedMs - (expectedMs - durationSec * 1000);
+        
+        const nextDelayMs = Math.max(0, durationSec * 1000 - driftMs);
+
+        timerId = setTimeout(() => {
+          currentNoteIndex++;
+          elapsedInCurrentNote = 0.0;
+          playNextTick();
+        }, nextDelayMs);
+      }
+
+      function getNoteDurationInBeats(note) {
+        if (!note) return 1.0;
+        if (note.beats !== undefined) return note.beats;
+        const dur = note.duration;
+        if (dur.startsWith('w')) return 4.0;
+        if (dur.startsWith('h')) return dur.indexOf('d') !== -1 ? 3.0 : 2.0;
+        if (dur.startsWith('q')) return dur.indexOf('d') !== -1 ? 1.5 : 1.0;
+        if (dur.startsWith('8')) return dur.indexOf('d') !== -1 ? 0.75 : 0.5;
+        if (dur.startsWith('16')) return 0.25;
+        return 1.0;
+      }
+
+      function getDurationInSec(note) {
+        return getNoteDurationInBeats(note) * (60.0 / tempo);
+      }
+
+      function getTotalDuration() {
+        let totalBeats = 0.0;
+        playbackNotes.forEach(note => {
+          totalBeats += getNoteDurationInBeats(note);
+        });
+        return totalBeats * (60.0 / tempo);
+      }
+
+      function getCurrentPlaybackTime() {
+        let elapsedBeforeCurrent = 0.0;
+        for (let i = 0; i < currentNoteIndex; i++) {
+          elapsedBeforeCurrent += getDurationInSec(playbackNotes[i]);
+        }
+        if (!isPlaying) {
+          return elapsedBeforeCurrent + elapsedInCurrentNote;
+        }
+        const elapsedInNote = (Date.now() - noteStartTimestamp) / 1000;
+        const currentDur = getDurationInSec(playbackNotes[currentNoteIndex]);
+        return elapsedBeforeCurrent + Math.min(currentDur, elapsedInNote);
+      }
+
+      function formatTime(sec) {
+        if (isNaN(sec) || sec < 0) sec = 0;
+        const mins = Math.floor(sec / 60);
+        const secs = Math.floor(sec % 60);
+        return mins + ':' + (secs < 10 ? '0' : '') + secs;
+      }
+
+      function highlightNoteForDur(note, index, defaultDurSec) {
+        // Rely on window.highlightCurrentNote(nominalTime) called by updateProgressUI on every frame.
+      }
+
+      let lastMessageTime = 0;
+      function updateProgressUI(currentTime) {
+        const total = getTotalDuration();
+        const progressPercent = total > 0 ? (currentTime / total) * 100 : 0;
+        
+        const fill = document.getElementById('progress-bar-fill');
+        const knob = document.getElementById('progress-bar-knob');
+        const timeText = document.getElementById('time-display');
+        
+        if (fill) fill.style.width = progressPercent + '%';
+        if (knob) knob.style.left = progressPercent + '%';
+        if (timeText) timeText.textContent = formatTime(currentTime) + ' / ' + formatTime(total);
+
+        // Update highlight based on nominalTime
+        const speed = tempo / originalTempo;
+        const nominalTime = currentTime * speed;
+        window.highlightCurrentNote(nominalTime);
+
+        const now = Date.now();
+        if (now - lastMessageTime > 33 || !isPlaying) {
+          lastMessageTime = now;
+          sendResponse({
+            type: 'PLAYBACK_PROGRESS',
+            currentTime: currentTime,
+            duration: total,
+            isPlaying: isPlaying
+          });
+        }
+      }
+
+      function runProgressAnimation() {
+        if (!isPlaying) return;
+        updateProgressUI(getCurrentPlaybackTime());
+        requestAnimationFrame(runProgressAnimation);
+      }
+
+      window.togglePlay = function() {
+        initAudio();
+        if (isPlaying) {
+          pausePlayback();
+        } else {
+          startPlayback();
+        }
+      };
+
+      function startPlayback() {
+        console.log("[PLAYBACK AUDIT] Transport start (startPlayback) called. isPlaying: " + isPlaying + ", currentNoteIndex: " + currentNoteIndex + ", playbackNotes length: " + playbackNotes.length);
+        if (isPlaying) return;
+        initAudio();
+        isPlaying = true;
+        updatePlayButtonUI();
+        
+        if (currentNoteIndex >= playbackNotes.length) {
+          currentNoteIndex = 0;
+        }
+        
+        schedulerStartTime = Date.now();
+        expectedElapsedTime = 0.0;
+        
+        runProgressAnimation();
+        playNextTick();
+
+        sendResponse({
+          type: 'PLAYBACK_STATE',
+          isPlaying: true,
+          currentTime: getCurrentPlaybackTime(),
+          duration: getTotalDuration()
+        });
+      }
+
+      function pausePlayback() {
+        if (!isPlaying) return;
+        const elapsedInNote = (Date.now() - noteStartTimestamp) / 1000;
+        const currentDur = getDurationInSec(playbackNotes[currentNoteIndex]);
+        elapsedInCurrentNote = Math.min(currentDur, elapsedInNote);
+
+        isPlaying = false;
+        updatePlayButtonUI();
+        stopAllOscillators();
+        
+        // Clear timer timeouts
+        if (timerId) {
+          clearTimeout(timerId);
+          timerId = null;
+        }
+
+        // Force one final progress UI update to highlight the paused note
+        updateProgressUI(getCurrentPlaybackTime());
+
+        sendResponse({
+          type: 'PLAYBACK_STATE',
+          isPlaying: false,
+          currentTime: getCurrentPlaybackTime(),
+          duration: getTotalDuration()
+        });
+      }
+
+      window.restartPlayback = function() {
+        const wasPlaying = isPlaying;
+
+        pausePlayback();
+
+        currentNoteIndex = 0;
+        elapsedInCurrentNote = 0.0;
+        expectedElapsedTime = 0.0;
+        schedulerStartTime = 0;
+
+        clearAllHighlights();
+        updateProgressUI(0);
+
+        if (wasPlaying || true) {
+          startPlayback();
+        }
+      };
+
+      window.onProgressBarClick = function(event) {
+        if (playbackNotes.length === 0) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+        
+        const totalDur = getTotalDuration();
+        const targetTime = ratio * totalDur;
+        
+        window.seekToTime(targetTime);
+      };
+
+      window.seekToTime = function(targetTime) {
+        if (playbackNotes.length === 0) return;
+        
+        const totalDur = getTotalDuration();
+        const clampedTime = Math.max(0, Math.min(totalDur, targetTime));
+        
+        let accumulatedTime = 0.0;
+        let targetIndex = 0;
+        let elapsedInNote = 0.0;
+        for (let i = 0; i < playbackNotes.length; i++) {
+          const noteDur = getDurationInSec(playbackNotes[i]);
+          if (accumulatedTime + noteDur > clampedTime) {
+            targetIndex = i;
+            elapsedInNote = clampedTime - accumulatedTime;
+            break;
+          }
+          accumulatedTime += noteDur;
+          targetIndex = i;
+        }
+        
+        const wasPlaying = isPlaying;
+        pausePlayback();
+        
+        currentNoteIndex = targetIndex;
+        elapsedInCurrentNote = elapsedInNote;
+        clearAllHighlights();
+        
+        const note = playbackNotes[currentNoteIndex];
+        if (note) {
+          const durationSec = getDurationInSec(note);
+          highlightNoteForDur(note, currentNoteIndex, durationSec);
+        }
+        
+        updateProgressUI(clampedTime);
+        
+        if (wasPlaying) {
+          startPlayback();
+        }
+      };
+
+      window.setTempo = function(newTempo, isUserInitiated) {
+        const wasPlaying = isPlaying;
+        if (isPlaying) {
+          pausePlayback();
+        }
+        const oldTempo = tempo;
+        tempo = newTempo;
+        const label = document.getElementById('tempo-val');
+        if (label) label.textContent = Math.round(newTempo);
+        const input = document.getElementById('tempo-val-input');
+        if (input) input.value = Math.round(newTempo);
+        const slider = document.getElementById('tempo-range');
+        if (slider) slider.value = Math.round(newTempo);
+        
+        try {
+          let xml = atob(musicxmlBase64);
+          xml = xml.replace(
+            /<per-minute>[0-9.]+<\/per-minute>/g, '<per-minute>' + Math.round(newTempo) + '</per-minute>');
+          xml = xml.replace(/tempo="[0-9.]+"/g, 'tempo="' + Math.round(newTempo) + '"');
+          musicxmlBase64 = btoa(xml);
+          renderScore();
+        } catch (e) {
+          console.error("Failed to update tempo in MusicXML SVG:", e);
+        }
+
+        if (isUserInitiated) {
+          // Reset playback position to 0 on tempo change
+          currentNoteIndex = 0;
+          elapsedInCurrentNote = 0.0;
+          expectedElapsedTime = 0.0;
+          schedulerStartTime = 0;
+          clearAllHighlights();
+          updateProgressUI(0);
+
+          sendResponse({
+            type: 'TEMPO_CHANGE',
+            tempo: newTempo,
+            rate: newTempo / originalTempo
+          });
+        } else {
+          // Programmatic tempo sync: scale elapsedInCurrentNote if playing/paused
+          if (oldTempo > 0 && newTempo > 0) {
+            elapsedInCurrentNote = elapsedInCurrentNote * (oldTempo / newTempo);
+          }
+          if (wasPlaying) {
+            startPlayback();
+          }
+        }
+      };
+
+      window.useOriginalTempo = function(isUserInitiated) {
+        window.setTempo(originalTempo, isUserInitiated);
+        const slider = document.getElementById('tempo-range');
+        if (slider) slider.value = Math.round(originalTempo);
+      };
+
+      window.handleTempoInputChange = function(valStr) {
+        if (!valStr || valStr.trim() === '') return;
+        let val = parseInt(valStr);
+        if (isNaN(val)) return;
+        if (val > 300) {
+          val = 300;
+        } else if (val < 30) {
+          val = 30;
+        }
+        const input = document.getElementById('tempo-val-input');
+        if (input) input.value = val;
+        const slider = document.getElementById('tempo-range');
+        if (slider) slider.value = val;
+        window.setTempo(val, true);
+      };
+
+      window.handleTempoSliderChange = function(val) {
+        const input = document.getElementById('tempo-val-input');
+        if (input) input.value = val;
+        window.setTempo(val, true);
+      };
+
+      function updatePlayButtonUI() {
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        if (isPlaying) {
+          if (playIcon) playIcon.style.display = 'none';
+          if (pauseIcon) pauseIcon.style.display = 'block';
+        } else {
+          if (playIcon) playIcon.style.display = 'block';
+          if (pauseIcon) pauseIcon.style.display = 'none';
+        }
+      }
+
+      function parseNoteString(noteStr) {
+        const normalized = noteStr.trim();
+        const match = normalized.match(/^([A-Ga-g])([#bn]?)(-\d+|\d+)?$/);
+        if (!match) return null;
+        const letter = match[1].toLowerCase();
+        const accidental = match[2] || '';
+        const octave = match[3] !== undefined ? Number(match[3]) : 4;
+        
+        if (letter === 'f' && accidental === 'b') {
+          // Fb is E
+          return { letter, accidental, octave, midi: (octave + 1) * 12 + 4 };
+        }
+        if (letter === 'c' && accidental === 'b') {
+          // Cb is B of previous octave
+          return { letter, accidental, octave, midi: octave * 12 + 11 };
+        }
+        if (letter === 'b' && accidental === '#') {
+          // B# is C of next octave
+          return { letter, accidental, octave, midi: (octave + 2) * 12 + 0 };
+        }
+        if (letter === 'e' && accidental === '#') {
+          // E# is F
+          return { letter, accidental, octave, midi: (octave + 1) * 12 + 5 };
+        }
+        
+        const offsets = { c:0, 'c#':1, db:1, d:2, 'd#':3, eb:3, e:4, f:5, 'f#':6, gb:6, g:7, 'g#':8, ab:8, a:9, 'a#':10, bb:10, b:11 };
+        const lookupAcc = accidental === 'n' ? '' : accidental;
+        const keyName = match[1].toLowerCase() + lookupAcc;
+        const offset = offsets[keyName] || 0;
+        const midi = (octave + 1) * 12 + offset;
+        
+        return { letter, accidental, octave, midi };
+      }
+
+      function showError(message) {
+        const error = document.getElementById('error');
+        const score = document.getElementById('score');
+        score.innerHTML = '';
+        error.style.display = 'block';
+        error.innerHTML = '<h3 style="margin-top: 0; color: #dc2626;">Sheet Rendering Failed</h3><p>Reason:<br/><code style="background: #fee2e2; padding: 2px 4px; borderRadius: 4px;">' + message + '</code></p>';
+      }
+
+      let vrvToolkit = null;
+      let verovioLoaded = false;
+
+      // Helper to get exact top and bottom Y coordinates of staff lines
+      // Returns the Y range of the 5 staff lines ONLY.
+      // Uses direct path children of staffEl so ledger lines inside .layer are excluded.
+      function getStaffLinesYRange(staffEl) {
+        // Prefer direct path children (the 5 staff lines)
+        // Fallback to all descendant paths only if no direct paths found
+        const directPaths = Array.from(staffEl.childNodes).filter(node => node.nodeName.toLowerCase() === 'path');
+        const pathsToUse = directPaths.length > 0 ? directPaths : Array.from(staffEl.querySelectorAll('path'));
+        let minY = Infinity;
+        let maxY = -Infinity;
+        pathsToUse.forEach(p => {
+          const d = p.getAttribute('d') || '';
+          // Match simple horizontal lines: M x1 y1 L x2 y2 (where y1 === y2)
+          const match = d.match(/^Ms*([-d.]+)[, ]s*([-d.]+)s+Ls*([-d.]+)[, ]s*([-d.]+)s*$/i);
+          if (match) {
+            const y1 = parseFloat(match[2]);
+            const y2 = parseFloat(match[4]);
+            if (Math.abs(y1 - y2) < 1) { // horizontal line (y1 === y2)
+              if (y1 < minY) minY = y1;
+              if (y1 > maxY) maxY = y1;
+            }
+          }
+        });
+        return { minY, maxY };
+      }
+
+      // Returns the X span of the staff lines for this measure (left barline to right barline).
+      // Uses direct path children of staffEl to avoid picking up note/ledger/symbol paths.
+      function getStaffLinesXRange(staffEl) {
+        const directPaths = Array.from(staffEl.childNodes).filter(node => node.nodeName.toLowerCase() === 'path');
+        const pathsToUse = directPaths.length > 0 ? directPaths : Array.from(staffEl.querySelectorAll('path'));
+        let minX = Infinity;
+        let maxX = -Infinity;
+        pathsToUse.forEach(p => {
+          const d = p.getAttribute('d') || '';
+          const match = d.match(/^Ms*([-d.]+)[, ]s*([-d.]+)s+Ls*([-d.]+)[, ]s*([-d.]+)s*$/i);
+          if (match) {
+            const x1 = parseFloat(match[1]);
+            const x2 = parseFloat(match[3]);
+            const y1 = parseFloat(match[2]);
+            const y2 = parseFloat(match[4]);
+            if (Math.abs(y1 - y2) < 1) { // horizontal = staff line
+              if (x1 < minX) minX = x1;
+              if (x2 > maxX) maxX = x2;
+            }
+          }
+        });
+        return { minX, maxX };
+      }
+
+      // Reliably determines where actual measure content starts (after clef/keySig/meterSig).
+      // Uses direct x-attribute parsing on <use> elements — no getBBox() needed.
+      //
+      // Returns the x coordinate where the selection rect should begin,
+      // or null if this is NOT a first-in-system measure (no headers to skip).
+      function getContentStartX(staffEl) {
+        // First: check if this staff has ANY header elements with <use> children.
+        // Only first-in-system measures have clef/keySig/meterSig with real content.
+        let hasHeaders = false;
+        let headerMaxX = -Infinity;
+        const headerReport = {};
+        ['.clef', '.keySig', '.meterSig'].forEach(sel => {
+          const el = staffEl.querySelector(sel);
+          const cls = sel.replace('.', '');
+          if (!el) { headerReport[cls] = 'element_not_found'; return; }
+          const uses = el.querySelectorAll('use');
+          headerReport[cls] = { useCount: uses.length, xValues: [] };
+          uses.forEach(u => {
+            const xAttr = parseFloat(u.getAttribute('x') || '-Infinity');
+            headerReport[cls].xValues.push(xAttr);
+            if (!isNaN(xAttr) && isFinite(xAttr)) {
+              hasHeaders = true;
+              if (xAttr > headerMaxX) headerMaxX = xAttr;
+            }
+          });
+        });
+
+        console.log('[SEL-DBG] getContentStartX called for staff:', staffEl.getAttribute('data-bar-id') || staffEl.id || '(no id)');
+        console.log('[SEL-DBG] HEADER ELEMENTS FOUND:', JSON.stringify(headerReport));
+        console.log('[SEL-DBG] hasHeaders:', hasHeaders, '| headerMaxX:', headerMaxX);
+
+        // If no header elements found: this is a non-first-in-system measure.
+        // Return null so caller uses the staff line's minX (the barline position).
+        if (!hasHeaders) {
+          console.log('[SEL-DBG] getContentStartX returning null (no headers = non-first measure)');
+          return null;
+        }
+
+        // This IS a first-in-system measure. Find where actual content begins.
+        // Prefer: the leftmost <use> x inside .layer (first note/rest position).
+        const layerEl = staffEl.querySelector('.layer');
+        if (layerEl) {
+          let layerMinX = Infinity;
+          const layerUseXs = [];
+          layerEl.querySelectorAll('use').forEach(u => {
+            const xAttr = parseFloat(u.getAttribute('x') || 'Infinity');
+            layerUseXs.push(xAttr);
+            if (!isNaN(xAttr) && xAttr < layerMinX) layerMinX = xAttr;
+          });
+          console.log('[SEL-DBG] .layer <use> x values:', JSON.stringify(layerUseXs), '| layerMinX:', layerMinX);
+          if (layerMinX !== Infinity) {
+            console.log('[SEL-DBG] getContentStartX returning layerMinX:', layerMinX);
+            return layerMinX;
+          }
+        } else {
+          console.log('[SEL-DBG] .layer element not found in this staff');
+        }
+
+        // Fallback: use header rightmost x + gap (header symbol width is typically ~500 units)
+        const fallback = headerMaxX + 500;
+        console.log('[SEL-DBG] getContentStartX returning headerMaxX+500 fallback:', fallback);
+        return fallback;
+      }
+
+
+      // Legacy: kept for backward compatibility with any callers.
+      // New code should use getContentStartX() instead.
+      function getHeaderRightEdge(staffEl) {
+        let maxRight = -Infinity;
+        const headerSelectors = ['.clef', '.keySig', '.meterSig'];
+        headerSelectors.forEach(selector => {
+          const el = staffEl.querySelector(selector);
+          if (!el) return;
+          // First try reading x attr from <use> elements (reliable, no getBBox)
+          el.querySelectorAll('use').forEach(u => {
+            const xAttr = parseFloat(u.getAttribute('x') || '-Infinity');
+            if (!isNaN(xAttr) && xAttr > maxRight) maxRight = xAttr;
+          });
+          // Also try getBBox as secondary source
+          try {
+            const bbox = el.getBBox();
+            const rightEdge = bbox.x + bbox.width;
+            if (rightEdge > maxRight) maxRight = rightEdge;
+          } catch (e) { /* ignore */ }
+        });
+        return maxRight;
+      }
+
+      function ensureSelectionMetadata(root) {
+        if (!root) return;
+        const measures = root.querySelectorAll('.measure');
+        const numMeasures = measures.length;
+        measures.forEach((measureEl, mIdx) => {
+          if (!measureEl.getAttribute('n')) {
+            measureEl.setAttribute('n', String(mIdx + 1));
+          }
+          const staves = measureEl.querySelectorAll('.staff');
+          staves.forEach((staffEl, sIdx) => {
+            if (!staffEl.getAttribute('n')) {
+              staffEl.setAttribute('n', String(sIdx + 1));
+            }
+          });
+        });
+
+        // Get part staves counts and measures count from MusicXML
+        let partStavesCounts = [];
+        measuresPerPart = 0;
+        try {
+          const xmlText = atob(musicxmlBase64);
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+          const xmlParts = xmlDoc.getElementsByTagName("part");
+          for (let i = 0; i < xmlParts.length; i++) {
+            const part = xmlParts[i];
+            const measure1 = part.getElementsByTagName("measure")[0];
+            const stavesElem = measure1 ? measure1.getElementsByTagName("staves")[0] : null;
+            const count = stavesElem ? parseInt(stavesElem.textContent) : 1;
+            partStavesCounts.push(count);
+          }
+          const totalMeasures = xmlDoc.getElementsByTagName("measure").length;
+          measuresPerPart = xmlParts.length > 0 ? (totalMeasures / xmlParts.length) : 0;
+        } catch (e) {
+          console.error("Error parsing MusicXML for staff counts:", e);
+        }
+        globalPartStavesCounts = partStavesCounts;
+
+        const systems = root.querySelectorAll('.system');
+        console.log("System count:", systems.length);
+        console.log("Measure count:", measures.length);
+
+        systems.forEach((systemEl, sysIdx) => {
+          // Find staves in the first measure of this system
+          const systemMeasures = systemEl.querySelectorAll('.measure');
+          if (systemMeasures.length === 0) return;
+          
+          const firstMeasure = systemMeasures[0];
+          const xmlMeasureNum = parseInt(firstMeasure.getAttribute('n') || '1');
+          console.log("System " + (sysIdx + 1) + " -> Measure " + xmlMeasureNum);
+
+          const staves = firstMeasure.querySelectorAll('.staff');
+
+          // Staff grouping structure logging (on the first system)
+          if (sysIdx === 0) {
+            console.log("Staff count:", staves.length);
+            console.log("Staff grouping structure:");
+            let staffIndex = 0;
+            partStavesCounts.forEach((count, pIdx) => {
+              console.log("  Part " + (pIdx + 1) + " contains " + count + " staves");
+              for (let i = 0; i < count; i++) {
+                const sEl = staves[staffIndex];
+                if (sEl) {
+                  console.log("    SVG Staff " + (staffIndex + 1) + " (class: " + sEl.getAttribute("class") + ")");
+                }
+                staffIndex++;
+              }
+            });
+          }
+          
+          if (staves.length > 0) {
+            const staffRanges = Array.from(staves).map(staff => getStaffLinesYRange(staff));
+            
+            let currentCounts = [...partStavesCounts];
+            if (currentCounts.length === 0) {
+              for (let i = 0; i < staves.length; i++) {
+                currentCounts.push(1);
+              }
+            }
+            console.log("DEBUG RANGES: currentCounts =", JSON.stringify(currentCounts));
+            
+            let staffIdx = 0;
+            const partRanges = [];
+            currentCounts.forEach((count, pIdx) => {
+               let partMinY = Infinity;
+               let partMaxY = -Infinity;
+               for (let i = 0; i < count; i++) {
+                 const range = staffRanges[staffIdx];
+                 if (range) {
+                   if (range.minY < partMinY) partMinY = range.minY;
+                   if (range.maxY > partMaxY) partMaxY = range.maxY;
+                 }
+                 staffIdx++;
+               }
+               if (partMinY !== Infinity && partMaxY !== -Infinity) {
+                 partRanges.push({ minY: partMinY, maxY: partMaxY, count: count });
+               }
+            });
+            
+            // Find system connector paths (vertical lines outside measures/staves)
+            const allPaths = systemEl.querySelectorAll('path');
+            const systemPaths = Array.from(allPaths).filter(p => !p.closest('.measure') && !p.closest('.staff'));
+            
+            systemPaths.forEach((pathEl, idx) => {
+              const d = pathEl.getAttribute('d') || '';
+              const match = d.match(/M\s*([-\d.]+)[, ]\s*([-\d.]+)\s+L\s*([-\d.]+)[, ]\s*([-\d.]+)/i);
+              if (match) {
+                const x1 = parseFloat(match[1]);
+                const y1 = parseFloat(match[2]);
+                const x2 = parseFloat(match[3]);
+                const y2 = parseFloat(match[4]);
+                
+                // If it's a vertical line (system connector)
+                if (Math.abs(x1 - x2) < 5) {
+                  const x = (x1 + x2) / 2;
+                  const ns = 'http://www.w3.org/2000/svg';
+                  
+                  partRanges.forEach(range => {
+                    if (range.count > 1) { // Only draw connector if it's a grand staff pair (count > 1)
+                      const newPath = document.createElementNS(ns, 'path');
+                      Array.from(pathEl.attributes).forEach(attr => {
+                        newPath.setAttribute(attr.name, attr.value);
+                      });
+                      newPath.setAttribute('d', "M" + x + " " + range.minY + " L" + x + " " + range.maxY);
+                      pathEl.parentNode.insertBefore(newPath, pathEl);
+                    }
+                  });
+                  
+                  // Remove original system-wide path
+                  pathEl.parentNode.removeChild(pathEl);
+                }
+              }
+            });
+          }
+
+          // Inject measure numbers above the top staff of each part in the first measure of this system
+          let currentStaffIndex = 0;
+          partStavesCounts.forEach((count, pIdx) => {
+            const partStartMeasureNum = pIdx * (measuresPerPart || 4) + xmlMeasureNum;
+            const staffEl = staves[currentStaffIndex];
+            
+            if (staffEl) {
+              let label = staffEl.querySelector('.measureLabel');
+              if (!label) {
+                label = firstMeasure.querySelector('.measureLabel.part-' + pIdx);
+              }
+              
+              if (!label) {
+                let bbox;
+                try {
+                  bbox = staffEl.getBBox();
+                } catch (e) {
+                  bbox = { x: 0, y: 0 };
+                }
+                const ns = 'http://www.w3.org/2000/svg';
+                label = document.createElementNS(ns, 'g');
+                label.setAttribute('class', 'measureLabel mNum part-' + pIdx);
+                const text = document.createElementNS(ns, 'text');
+                text.setAttribute('x', String(bbox.x));
+                text.setAttribute('y', String(bbox.y - 180));
+                text.textContent = String(partStartMeasureNum);
+                label.appendChild(text);
+                firstMeasure.appendChild(label);
+              } else {
+                const textEl = label.querySelector('text');
+                if (textEl) {
+                  textEl.textContent = String(partStartMeasureNum);
+                }
+                label.setAttribute('class', 'measureLabel mNum part-' + pIdx);
+              }
+            }
+            currentStaffIndex += count;
+          });
+
+          // Clean up any extra or duplicate measure labels on the first measure
+          const allFirstMeasureLabels = firstMeasure.querySelectorAll('.measureLabel, .mNum');
+          allFirstMeasureLabels.forEach(lbl => {
+            let isPartLabel = false;
+            partStavesCounts.forEach((_, pIdx) => {
+              if (lbl.classList.contains('part-' + pIdx)) {
+                isPartLabel = true;
+              }
+            });
+            if (!isPartLabel) {
+              lbl.parentNode.removeChild(lbl);
+            }
+          });
+
+          // Remove measure labels from all subsequent measures in this system
+          for (let i = 1; i < systemMeasures.length; i++) {
+            const otherMeasure = systemMeasures[i];
+            const labels = otherMeasure.querySelectorAll('.measureLabel, .mNum');
+            labels.forEach(lbl => {
+              lbl.parentNode.removeChild(lbl);
+            });
+          }
+        });
+      }
+
+
+      function renderScore() {
+        console.log("[RENDER] START");
+        console.log("[INSERT STAFF] renderScore() executed");
+        console.log("ACTIVE RENDERSCORE FILE");
+        console.log("ACTIVE RENDERSCORE FILE: src/components/sheetMusicShared.ts");
+        console.log("RENDER SCORE CALLED", {
+          selectedStaffNum, selectedMeasureNum, selectedBarId, selectedNoteId
+        });
+        window.ReactNativeWebView?.postMessage("RENDER SCORE CALLED");
+        window.parent?.postMessage("RENDER SCORE CALLED", "*");
+
+        console.log("Verovio available:", typeof verovio);
+        if (!verovioLoaded) {
+          console.log("Verovio WebAssembly toolkit is not fully initialized yet. Skipping render.");
+          return;
+        }
+        try {
+          console.log("Starting render");
+          if (typeof verovio === 'undefined') {
+            throw new Error('Verovio WebAssembly toolkit failed to initialize.');
+          }
+          if (!vrvToolkit) {
+            vrvToolkit = new verovio.toolkit();
+          }
+
+          let musicxml = atob(musicxmlBase64);
+          if (!musicxml) {
+            showError("No MusicXML score data provided.");
+            return;
+          }
+
+          try {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(musicxml, "text/xml");
+
+            // MusicXML Notes Audit
+            try {
+              const divisionsEl = xmlDoc.getElementsByTagName("divisions")[0];
+              const divisions = divisionsEl ? parseInt(divisionsEl.textContent, 10) : 4;
+              console.log("[AUDIT] Divisions declared:", divisions);
+              
+              const expectedDurations = {
+                "whole": { dotted: divisions * 6, normal: divisions * 4 },
+                "half": { dotted: divisions * 3, normal: divisions * 2 },
+                "quarter": { dotted: divisions * 1.5, normal: divisions * 1 },
+                "eighth": { dotted: divisions * 0.75, normal: divisions * 0.5 },
+                "16th": { dotted: divisions * 0.375, normal: divisions * 0.25 }
+              };
+
+              const notes = xmlDoc.getElementsByTagName("note");
+              console.log("[AUDIT] Starting MusicXML notes audit. Count:", notes.length);
+              let mismatchCount = 0;
+
+              for (let i = 0; i < notes.length; i++) {
+                const noteEl = notes[i];
+                
+                // 1. Pitch
+                let pitch = "rest";
+                const restEl = noteEl.getElementsByTagName("rest");
+                if (restEl.length === 0) {
+                  const stepEl = noteEl.getElementsByTagName("step")[0];
+                  const octEl = noteEl.getElementsByTagName("octave")[0];
+                  const alterEl = noteEl.getElementsByTagName("alter")[0];
+                  if (stepEl && octEl) {
+                    let step = stepEl.textContent;
+                    let oct = octEl.textContent;
+                    let alter = "";
+                    if (alterEl) {
+                      const altVal = alterEl.textContent;
+                      if (altVal === "1") alter = "#";
+                      else if (altVal === "-1") alter = "b";
+                    }
+                    pitch = step + alter + oct;
+                  }
+                }
+
+                // 2. Duration
+                const durEl = noteEl.getElementsByTagName("duration")[0];
+                const duration = durEl ? parseInt(durEl.textContent, 10) : 0;
+
+                // 3. Type
+                const typeEl = noteEl.getElementsByTagName("type")[0];
+                const type = typeEl ? typeEl.textContent : "";
+
+                // 4. Dot
+                const dotEl = noteEl.getElementsByTagName("dot");
+                const dot = dotEl.length > 0;
+
+                // Log every note
+                console.log(
+                  "[AUDITED NOTE] pitch=" + pitch + " duration=" + duration + " type=" + type + " dot=" + dot
+                );
+
+                // Verify duration matches the declared MusicXML type
+                const expectedEntry = expectedDurations[type];
+                let isMismatch = false;
+                let expected = -1;
+                if (expectedEntry) {
+                  expected = dot ? expectedEntry.dotted : expectedEntry.normal;
+                  if (duration !== expected) {
+                    isMismatch = true;
+                  }
+                } else if (type) {
+                  isMismatch = true; // Unknown/unsupported non-empty type
+                }
+
+                if (isMismatch) {
+                  mismatchCount++;
+                  console.log(
+                    "[DURATION MISMATCH] pitch=" + pitch + " type=" + type + " dot=" + dot + " actual_duration=" + duration + " expected_duration=" + expected
+                  );
+                }
+              }
+              console.log("[AUDIT] MusicXML notes audit complete. Mismatches found:", mismatchCount);
+            } catch (auditErr) {
+              console.error("[AUDIT ERROR]", auditErr);
+            }
+
+            // Feature 1: Remove automatic staff labels ("Music 1", "Music 2", etc.)
+            const partNames = xmlDoc.getElementsByTagName("part-name");
+            for (let i = 0; i < partNames.length; i++) {
+              partNames[i].textContent = "";
+            }
+            const partAbbrs = xmlDoc.getElementsByTagName("part-abbreviation");
+            for (let i = 0; i < partAbbrs.length; i++) {
+              partAbbrs[i].textContent = "";
+            }
+
+            // Check if there is any Bass staff in the score (to differentiate Grand Staff vs Single Staff)
+            let hasBassClef = false;
+            const clefs = xmlDoc.getElementsByTagName("clef");
+            for (let i = 0; i < clefs.length; i++) {
+              const sign = clefs[i].getElementsByTagName("sign")[0]?.textContent;
+              if (sign === "F") {
+                hasBassClef = true;
+                break;
+              }
+            }
+
+            // Set class on body to coordinate CSS rules for clefs
+            if (hasBassClef) {
+              document.body.classList.remove('no-bass-staff');
+              document.body.classList.add('has-bass-staff');
+            } else {
+              document.body.classList.remove('has-bass-staff');
+              document.body.classList.add('no-bass-staff');
+            }
+
+            // Feature 3: Time signature shown only once at the beginning of the score
+            // Remove <time> elements from all parts except the first part
+            const parts = xmlDoc.getElementsByTagName("part");
+            for (let i = 1; i < parts.length; i++) {
+              const part = parts[i];
+              const times = part.getElementsByTagName("time");
+              while (times.length > 0) {
+                times[0].parentNode.removeChild(times[0]);
+              }
+            }
+
+            // Serialize back to string
+            const serializer = new XMLSerializer();
+            musicxml = serializer.serializeToString(xmlDoc);
+          } catch (e) {
+            console.error("Error preprocessing MusicXML inside renderScore:", e);
+          }
+
+          // Dynamically compute pageWidth based on number of measures
+          const numMeasures = (musicxml.match(/<measure/g) || []).length || 4;
+          const minMeasureWidth = 3200; // Increased to make measures wider and use available horizontal space
+          const containerWidth = window.innerWidth * 3.33; 
+          const calculatedWidth = (typeof measuresPerSystem !== 'undefined' && measuresPerSystem > 0)
+            ? (measuresPerSystem * 3000)
+            : Math.max(containerWidth, numMeasures * minMeasureWidth);
+          const breaksOption = (typeof measuresPerSystem !== 'undefined' && measuresPerSystem > 0)
+            ? 'auto'
+            : 'none';
+
+          vrvToolkit.setOptions({
+            pageWidth: Math.round(calculatedWidth),
+            pageHeight: 20000,
+            scale: 45, // Keeps staff height smaller vertically
+            spacingLinear: 0.88, // Stretches horizontal spacing between notes
+            adjustPageHeight: true,
+            breaks: breaksOption,
+            svgAdditionalAttribute: ['note@pname', 'note@oct']
+          });
+
+          const xml = musicxml;
+          console.log(
+            "[WEBVIEW XML LENGTH]",
+            xml.length
+          );
+          console.log(
+            "[WEBVIEW XML PREVIEW]",
+            xml.substring(0,300)
+          );
+
+          // Compare initial vs current XML length
+          const initialLen = window.initialXmlLength || 0;
+          console.log("[WEBVIEW XML COMPARISON]", {
+            initialLength: initialLen,
+            currentLength: xml.length,
+            isStale: xml.length === initialLen,
+            isUpdated: xml.length !== initialLen
+          });
+
+          let loadSuccess = false;
+          try {
+            vrvToolkit.loadData(xml);
+            loadSuccess = true;
+            console.log("[WEBVIEW TOOLKIT LOAD SUCCESS]");
+          } catch (err) {
+            console.error("[WEBVIEW TOOLKIT LOAD FAILURE]", err);
+          }
+
+          try {
+            console.log("[WEBVIEW TOOLKIT LOG]", vrvToolkit.getLog());
+          } catch(e) {
+            console.log("[WEBVIEW TOOLKIT LOG ERROR]", e.message);
+          }
+
+          const pageCount = vrvToolkit.getPageCount();
+          console.log("PAGE COUNT =", pageCount);
+
+          if (pageCount < 1) {
+            throw new Error("Verovio loaded XML but produced 0 pages");
+          }
+
+          const svg = vrvToolkit.renderToSVG(1, {});
+          console.log("SVG LENGTH =", svg?.length);
+
+          const scoreRoot = document.getElementById('score');
+          if (scoreRoot) {
+            if (!svg || svg.length < 100) {
+              scoreRoot.innerHTML = "<h1 style='color:red'>SVG EMPTY</h1>";
+              return;
+            }
+            scoreRoot.innerHTML = svg;
+            console.log("[SVG COUNT]", document.querySelectorAll('svg').length);
+            try {
+              const svg = document.querySelector('svg');
+              if (svg) {
+                console.log(
+                  "[SVG NOTEHEADS]",
+                  svg.querySelectorAll('.notehead').length
+                );
+              } else {
+                console.log("[SVG NOTEHEADS] SVG element not found");
+              }
+            } catch (err) {
+              console.error("[SVG NOTEHEADS QUERY ERROR]", err);
+            }
+            ensureSelectionMetadata(scoreRoot);
+
+            // Tag music systems to differentiate first music system from subsequent ones
+            const systems = scoreRoot.querySelectorAll('.system');
+            let musicSystemIdx = 0;
+            systems.forEach((systemEl) => {
+              if (systemEl.querySelector('.staff')) {
+                systemEl.classList.add('music-system');
+                if (musicSystemIdx === 0) {
+                  systemEl.classList.add('first-music-system');
+                } else {
+                  systemEl.classList.add('subsequent-music-system');
+                }
+                musicSystemIdx++;
+              }
+            });
+
+            const svgEl = scoreRoot.querySelector("svg");
+            console.log("SVG FOUND:", !!svgEl);
+          }
+
+          const scoreSvg = scoreRoot.querySelector('svg');
+          if (scoreSvg) {
+            scoreSvg.style.width = 'auto';
+            scoreSvg.style.height = 'auto';
+            
+            // Adjust container size to enable scrollbars
+            const wrapper = document.getElementById('score-scale-wrapper');
+            if (wrapper) {
+              const svgWidth = parseFloat(scoreSvg.getAttribute('width')) || scoreSvg.clientWidth || 800;
+              const svgHeight = parseFloat(scoreSvg.getAttribute('height')) || scoreSvg.clientHeight || 400;
+              wrapper.style.width = (svgWidth * zoomLevel) + 'px';
+              wrapper.style.height = (svgHeight * zoomLevel) + 'px';
+            }
+          }
+
+          // Inject staff handles, selection events, and re-apply selections after layout pass
+          setTimeout(() => {
+            try {
+              injectStaffHandles();
+              attachMeasureSelectionEvents();
+              attachNoteSelectionEvents();
+
+              // Re-apply selection if exists
+              console.log("RESTORE SELECTION STATE IN RENDERSCORE", {
+                selectedNoteId, selectedStaffNums, selectedStaffNum, selectedMeasureNum, selectedBarId
+              });
+              if (selectedNoteIds && selectedNoteIds.length > 0) {
+                selectedNoteIds.forEach(id => {
+                  const noteEl = document.getElementById(id);
+                  if (noteEl) noteEl.classList.add('selected-note');
+                });
+              } else if (selectedNoteId) {
+                const noteEl = document.getElementById(selectedNoteId);
+                if (noteEl) noteEl.classList.add('selected-note');
+              }
+              if (selectedStaffNums && selectedStaffNums.length > 0) {
+                selectedStaffNums.forEach(num => {
+                  const staves = document.querySelectorAll('.staff[n="' + num + '"]');
+                  staves.forEach(el => el.classList.add('selected-staff'));
+                  const handle = document.querySelector('.staff-handle[data-staff-num="' + num + '"]');
+                  if (handle) handle.classList.add('selected-handle');
+                });
+              } else if (selectedStaffNum !== null) {
+                selectedStaffNums = [String(selectedStaffNum)];
+                const staves = document.querySelectorAll('.staff[n="' + selectedStaffNum + '"]');
+                staves.forEach(el => el.classList.add('selected-staff'));
+                const handle = document.querySelector('.staff-handle[data-staff-num="' + selectedStaffNum + '"]');
+                if (handle) handle.classList.add('selected-handle');
+              }
+              if (selectedMeasureNum !== null) {
+                const numMeas = document.querySelectorAll('.measure').length;
+                const localMIdx = numMeas > 0 ? (selectedMeasureNum - 1) % numMeas : 0;
+                const measureEl = document.querySelector('.measure[n="' + (localMIdx + 1) + '"]');
+                if (measureEl) measureEl.classList.add('selected-measure');
+              }
+              if (selectedBarId) {
+                const selectedEl = document.querySelector('.staff[data-bar-id="' + selectedBarId + '"]');
+                if (selectedEl) {
+                  selectedEl.classList.add('selected-bar');
+                }
+              }
+
+              if (isEditModeActive) {
+                realignEditMode();
+              }
+
+              window.buildLayoutMatrix();
+
+              sendResponse({
+                type: 'RENDER_SUCCESS'
+              });
+            } catch (e) {
+              console.warn("Error applying layout elements:", e);
+            }
+          }, 50);
+
+          setTimeout(() => {
+            if (typeof updateClickBackgrounds === 'function') {
+              updateClickBackgrounds();
+            }
+          }, 200);
+
+          setTimeout(() => {
+            if (typeof updateClickBackgrounds === 'function') {
+              updateClickBackgrounds();
+            }
+          }, 500);
+
+          updateProgressUI(0);
+          const roundedOriginal = Math.round(originalTempo);
+          const detectedText = document.getElementById('detected-tempo-text');
+          if (detectedText) detectedText.textContent = 'Detected: ' + roundedOriginal + ' BPM';
+
+          const slider = document.getElementById('tempo-range');
+          if (slider) slider.value = roundedOriginal;
+
+          const valLabel = document.getElementById('tempo-val');
+          if (valLabel) valLabel.textContent = roundedOriginal;
+
+          // STEP 6: Verify score container
+          const scoreWrap = document.getElementById('score-wrap');
+          if (scoreWrap) {
+            const style = getComputedStyle(scoreWrap);
+            console.log("[SCORE-WRAP STYLE]", "display:", style.display, "visibility:", style.visibility, "height:", style.height, "width:", style.width, "overflow:", style.overflow);
+          }
+          const scoreEl = document.getElementById('score');
+          if (scoreEl) {
+            const style = getComputedStyle(scoreEl);
+            console.log("[SCORE STYLE]", "display:", style.display, "visibility:", style.visibility, "height:", style.height, "width:", style.width, "overflow:", style.overflow);
+            // STEP 8: Verify transforms
+            console.log("[SCORE TRANSFORM]", style.transform);
+          }
+
+          // STEP 7: Verify SVG size
+          const svgEl = document.querySelector('svg');
+          if (svgEl) {
+            console.log("[SVG SIZE]", svgEl.getBoundingClientRect());
+          } else {
+            console.log("[SVG SIZE] SVG not found");
+          }
+
+          console.log("[RENDER] END");
+          console.log("Render success");
+        } catch (error) {
+          console.error(error);
+          showError(error.message);
+          
+          // Fullscreen error display (TEST 4 / TEST 5)
+          const errOverlay = document.createElement('div');
+          errOverlay.style.position = 'fixed';
+          errOverlay.style.top = '0';
+          errOverlay.style.left = '0';
+          errOverlay.style.width = '100%';
+          errOverlay.style.height = '100%';
+          errOverlay.style.backgroundColor = '#fee2e2';
+          errOverlay.style.color = '#991b1b';
+          errOverlay.style.padding = '24px';
+          errOverlay.style.boxSizing = 'border-box';
+          errOverlay.style.zIndex = '999999';
+          errOverlay.style.overflow = 'auto';
+          errOverlay.innerHTML = "<h1>ERROR</h1><pre>" + error + "\n\nStack:\n" + (error.stack || '') + "</pre>";
+          document.body.appendChild(errOverlay);
+        }
+      }
+
+      // Zoom State & Gesture Controls
+      let zoomLevel = 1.0;
+
+      // Edit Mode State variables
+      let isEditModeActive = false;
+      let editingBarId = null;
+      let savedZoomLevel = 1.0;
+      let savedScrollLeft = 0;
+      let savedScrollTop = 0;
+      let editTransformX = 0;
+      let editTransformY = 0;
+      let editTransformScale = 1.0;
+      let measuresPerPart = 4;
+      let isEditable = true;
+      let measuresPerSystem = 2;
+
+      if (!isEditable) {
+        document.body.classList.add('view-mode');
+      }
+
+      window.updateZoom = function(newZoom) {
+        zoomLevel = Math.max(0.5, Math.min(3.0, newZoom));
+        const score = document.getElementById('score');
+        if (score) {
+          score.style.transform = 'scale(' + zoomLevel + ')';
+          score.style.transformOrigin = 'top left';
+          
+          const wrapper = document.getElementById('score-scale-wrapper');
+          const scoreSvg = score.querySelector('svg');
+          if (wrapper && scoreSvg) {
+            const svgWidth = parseFloat(scoreSvg.getAttribute('width')) || scoreSvg.clientWidth || 800;
+            const svgHeight = parseFloat(scoreSvg.getAttribute('height')) || scoreSvg.clientHeight || 400;
+            wrapper.style.width = (svgWidth * zoomLevel) + 'px';
+            wrapper.style.height = (svgHeight * zoomLevel) + 'px';
+          }
+          window.buildLayoutMatrix();
+        }
+      };
+
+      // Selection state
+      let globalPartStavesCounts = [];
+      let selectedStaffNums = [];
+      let selectedStaffNum = null;
+      let selectedMeasureNum = null; // Bypassed for individual bar selection
+      let selectedBarId = null;
+      let layoutMatrix = [];
+      let pressTimer = null;
+      let wasLongPress = false;
+      let lastClickTime = 0;
+      let lastClickedBarId = null;
+
+      window.buildLayoutMatrix = function() {
+        layoutMatrix = [];
+        const measures = document.querySelectorAll('.measure');
+        const numMeasures = measures.length;
+        if (numMeasures === 0) {
+          console.log("LAYOUT MATRIX BUILT (empty)");
+          return;
+        }
+
+        const firstMeasure = measures[0];
+        const staves = firstMeasure.querySelectorAll('.staff');
+        const numStaves = staves.length;
+
+        for (let r = 0; r < numStaves; r++) {
+          layoutMatrix[r] = [];
+        }
+
+        measures.forEach((measureEl, mIdx) => {
+          const measureStaves = measureEl.querySelectorAll('.staff');
+          measureStaves.forEach((staffEl, sIdx) => {
+            if (sIdx < numStaves) {
+              const rect = staffEl.getBoundingClientRect();
+              
+              let pIdx = 0;
+              let current = 0;
+              if (globalPartStavesCounts && globalPartStavesCounts.length > 0) {
+                for (let p = 0; p < globalPartStavesCounts.length; p++) {
+                  const count = globalPartStavesCounts[p] || 1;
+                  if (sIdx >= current && sIdx < current + count) {
+                    pIdx = p;
+                    break;
+                  }
+                  current += count;
+                }
+              } else {
+                pIdx = sIdx;
+              }
+              const actualMeasuresPerPart = measuresPerPart || (globalPartStavesCounts && globalPartStavesCounts.length > 0 ? Math.round(numMeasures / globalPartStavesCounts.length) : numMeasures);
+              const localMIdx = mIdx % actualMeasuresPerPart;
+              const globalMeasureNum = pIdx * actualMeasuresPerPart + (localMIdx + 1);
+
+              const cell = {
+                barId: staffEl.getAttribute('data-bar-id') || ('staff' + (sIdx + 1) + '_m' + globalMeasureNum),
+                staffIndex: sIdx,
+                measureIndex: globalMeasureNum - 1,
+                x: rect.left,
+                y: rect.top,
+                width: rect.width,
+                height: rect.height,
+                centerX: rect.left + rect.width / 2,
+                centerY: rect.top + rect.height / 2
+              };
+              
+              layoutMatrix[sIdx][mIdx] = cell;
+            }
+          });
+        });
+
+        console.log("LAYOUT MATRIX BUILT");
+        for (let r = 0; r < numStaves; r++) {
+          for (let c = 0; c < numMeasures; c++) {
+            const cell = layoutMatrix[r][c];
+            if (cell) {
+              console.log("row=" + r + " col=" + c + "\nbarId=" + cell.barId + "\nx=" + cell.x + "\ny=" + cell.y);
+            }
+          }
+        }
+      };
+
+      function resetDoubleTapTimer() {
+        lastClickTime = 0;
+        lastClickedBarId = null;
+      }
+
+      function updateSelectionState(newStaffNum, newMeasureNum, newBarId, sourceName) {
+        const oldSelection = { selectedStaffNum, selectedMeasureNum, selectedBarId };
+        selectedStaffNum = newStaffNum;
+        selectedMeasureNum = newMeasureNum;
+        selectedBarId = newBarId;
+        console.log(
+          "SELECTION CHANGED",
+          {
+            oldSelection: oldSelection,
+            newSelection: { selectedStaffNum, selectedMeasureNum, selectedBarId },
+            source: sourceName
+          }
+        );
+      }
+
+      function selectStaff(staffNum) {
+        if (isEditModeActive) {
+          exitEditMode();
+        }
+        // Clear note, bar, measure selections but do NOT clear selectedStaffNums
+        selectedNoteId = '';
+        selectedMeasureNum = null;
+        selectedBarId = null;
+        document.querySelectorAll('.selected-measure').forEach(el => el.classList.remove('selected-measure'));
+        document.querySelectorAll('.selected-bar').forEach(el => el.classList.remove('selected-bar'));
+        document.querySelectorAll('.selected-note').forEach(el => el.classList.remove('selected-note'));
+        resetDoubleTapTimer();
+
+        const index = selectedStaffNums.indexOf(staffNum);
+        if (index > -1) {
+          // Deselect
+          selectedStaffNums.splice(index, 1);
+          document.querySelectorAll('.staff[n="' + staffNum + '"]').forEach(el => {
+            el.classList.remove('selected-staff');
+          });
+          const handle = document.querySelector('.staff-handle[data-staff-num="' + staffNum + '"]');
+          if (handle) {
+            handle.classList.remove('selected-handle');
+          }
+        } else {
+          // Select
+          selectedStaffNums.push(staffNum);
+          document.querySelectorAll('.staff[n="' + staffNum + '"]').forEach(el => {
+            el.classList.add('selected-staff');
+          });
+          const handle = document.querySelector('.staff-handle[data-staff-num="' + staffNum + '"]');
+          if (handle) {
+            handle.classList.add('selected-handle');
+          }
+        }
+
+        sendResponse({
+          type: 'STAFF_SELECTED',
+          staffIndices: selectedStaffNums.map(num => parseInt(num) - 1)
+        });
+      }
+
+      function selectMeasure(measureNum, isLongPress) {
+        if (isEditModeActive) {
+          exitEditMode();
+        }
+        // Kept for backward compatibility
+        clearSelection();
+        resetDoubleTapTimer();
+        updateSelectionState(null, measureNum, null, 'selectMeasure');
+
+        const numMeas = document.querySelectorAll('.measure').length;
+        const localMIdx = numMeas > 0 ? (parseInt(measureNum) - 1) % numMeas : 0;
+        const measureEl = document.querySelector('.measure[n="' + (localMIdx + 1) + '"]');
+        if (measureEl) {
+          measureEl.classList.add('selected-measure');
+        }
+
+        sendResponse({
+          type: 'MEASURE_SELECTED',
+          measureIndex: parseInt(measureNum) - 1,
+          isLongPress: !!isLongPress
+        });
+      }
+      function getMeasureAndPopupUntransformedCoords(staffEl, score, popupEl) {
+        const prevTransform = score.style.transform;
+        const prevTransition = score.style.transition;
+
+        // Temporarily clear transform and transition for accurate SVG-space measurement
+        score.style.transition = 'none';
+        score.style.transform = 'none';
+
+        // Force reflow so the cleared transform is applied before measuring
+        void score.offsetWidth;
+
+        const svgEl = score.querySelector('svg');
+        const refEl = svgEl || score;
+
+        const rect = staffEl.getBoundingClientRect();
+        const refRect = refEl.getBoundingClientRect();
+
+        // popup dims at identity scale (transform cleared)
+        let popupWidth = 290;  // fallback
+        let popupHeight = 140; // fallback
+        if (popupEl) {
+          const popupRect = popupEl.getBoundingClientRect();
+          if (popupRect.width > 0) popupWidth = popupRect.width;
+          if (popupRect.height > 0) popupHeight = popupRect.height;
+        }
+
+        // Restore original transform and transition style properties
+        score.style.transform = prevTransform;
+        score.style.transition = prevTransition;
+
+        // Measure coordinates relative to the SVG/score origin (untransformed / SVG-space)
+        const mLeft   = rect.left - refRect.left;
+        const mTop    = rect.top  - refRect.top;
+        const mWidth  = rect.width;
+        const mHeight = rect.height;
+        const mCx     = mLeft + mWidth  / 2;
+        const mCy     = mTop  + mHeight / 2;
+
+        return {
+          measure: {
+            left:   mLeft,
+            top:    mTop,
+            width:  mWidth,
+            height: mHeight,
+            cx:     mCx,
+            cy:     mCy
+          },
+          popup: {
+            width:  popupWidth,
+            height: popupHeight
+          }
+        };
+      }
+
+      function updatePopupPreview(staffEl) {
+        const previewWrap = document.getElementById('bar-preview-svg-wrap');
+        if (!previewWrap) return;
+        
+        previewWrap.innerHTML = '';
+        
+        // 1. Get visual bounding box of staffEl
+        const bbox = staffEl.getBBox();
+        let minX = bbox.x;
+        let maxX = bbox.x + bbox.width;
+        let minY = bbox.y;
+        let maxY = bbox.y + bbox.height;
+
+        // Use the actual bar-click-bg rect coordinates to perfectly align the preview crop
+        const clickBg = staffEl.querySelector('.bar-click-bg');
+        if (clickBg) {
+          const bgX = parseFloat(clickBg.getAttribute('x'));
+          const bgW = parseFloat(clickBg.getAttribute('width'));
+          const bgY = parseFloat(clickBg.getAttribute('y'));
+          const bgH = parseFloat(clickBg.getAttribute('height'));
+          if (!isNaN(bgX) && !isNaN(bgW) && !isNaN(bgY) && !isNaN(bgH)) {
+            // Check if it is the first measure in the system/staff to keep left elements (clefs/keySig/meterSig) visible
+            const parentMeasure = staffEl.closest('.measure');
+            const parentSystem = staffEl.closest('.system');
+            let isFirstMeasureInSystem = false;
+            if (parentMeasure && parentSystem) {
+              const systemMeasures = parentSystem.querySelectorAll('.measure');
+              if (systemMeasures.length > 0 && systemMeasures[0] === parentMeasure) {
+                isFirstMeasureInSystem = true;
+              }
+            }
+            const measureNum = staffEl.getAttribute('data-measure-number') || '1';
+            minX = (measureNum === '1' || isFirstMeasureInSystem) ? 0 : bgX;
+            maxX = bgX + bgW;
+            minY = bgY - 150;
+            maxY = bgY + bgH + 150;
+          }
+        } else {
+          // Ensure we cover at least the staff lines range to avoid weird clipping if bg not found
+          const yRange = getStaffLinesYRange(staffEl);
+          if (yRange.minY !== Infinity && yRange.maxY !== -Infinity) {
+            minY = Math.min(minY, yRange.minY - 150); // Pad 150 SVG units above staff lines
+            maxY = Math.max(maxY, yRange.maxY + 150); // Pad 150 SVG units below staff lines
+          }
+        }
+
+        const width = maxX - minX;
+        const height = maxY - minY;
+
+        console.log(
+          "[PREVIEW BOUNDS]",
+          {
+            minX,
+            maxX,
+            minY,
+            maxY,
+            width,
+            height
+          }
+        );
+
+        // 2. Clone the staff element
+        const clonedStaff = staffEl.cloneNode(true);
+
+        console.log(
+          "[CLONED STAFF]",
+          clonedStaff
+        );
+        
+        // Clean up interactive overlays and handles from cloned staff
+        clonedStaff.querySelectorAll('.bar-click-bg').forEach(el => el.remove());
+        clonedStaff.querySelectorAll('.staff-handle').forEach(el => el.remove());
+        clonedStaff.querySelectorAll('.insert-staff-btn').forEach(el => el.remove());
+        
+        // Strip selection classes
+        clonedStaff.classList.remove('selected-bar');
+        clonedStaff.classList.remove('selected-staff');
+        
+        // Find the root SVG's defs
+        const parentSvg = staffEl.closest('svg') || document.querySelector('svg');
+        const defs = (parentSvg ? parentSvg.querySelector('defs') : null) || document.querySelector('defs') || document.querySelector('svg defs');
+
+        // 3. Create a new SVG element for the preview
+        const previewSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        previewSvg.setAttribute('viewBox', minX + ' ' + minY + ' ' + width + ' ' + height);
+        previewSvg.setAttribute('width', '100%');
+        previewSvg.setAttribute('height', '100%');
+        previewSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        
+        // Append cloned defs first
+        if (defs) {
+          previewSvg.appendChild(defs.cloneNode(true));
+        }
+        
+        // Append cloned staff
+        previewSvg.appendChild(clonedStaff);
+
+        // Clone and append ties and slurs from the parent system (so cross-measure ties are visible)
+        const parentSystem = staffEl.closest('.system') || staffEl.closest('svg');
+        if (parentSystem) {
+          parentSystem.querySelectorAll('.tie, .slur').forEach(el => {
+            previewSvg.appendChild(el.cloneNode(true));
+          });
+        }
+
+        previewWrap.appendChild(previewSvg);
+
+        console.log(
+          "[PREVIEW SVG INSERTED]",
+          previewSvg.outerHTML.length
+        );
+
+        const wrapRect = previewWrap.getBoundingClientRect();
+        console.log(
+          "[PREVIEW WRAP RECT]",
+          wrapRect
+        );
+
+        console.log(
+          "[VIEWBOX]",
+          previewSvg.getAttribute('viewBox')
+        );
+
+        // Send update message to React Native if edit mode is active
+        if (isEditModeActive) {
+          sendResponse({
+            type: 'UPDATE_MODAL_PREVIEW',
+            svgHtml: previewSvg.outerHTML
+          });
+        }
+      }
+
+      function ensurePopupVisible(staffEl, popup) {
+        const scoreWrap = document.getElementById('score-wrap');
+        if (!scoreWrap) return;
+
+        setTimeout(() => {
+          const barRect = staffEl.getBoundingClientRect();
+          const popupRect = popup.getBoundingClientRect();
+          const containerRect = scoreWrap.getBoundingClientRect();
+
+          const minX = Math.min(barRect.left, popupRect.left);
+          const maxX = Math.max(barRect.right, popupRect.right);
+          const minY = Math.min(barRect.top, popupRect.top);
+          const maxY = Math.max(barRect.bottom, popupRect.bottom);
+
+          let deltaX = 0;
+          let deltaY = 0;
+
+          if (maxY > containerRect.bottom) {
+            deltaY = maxY - containerRect.bottom + 20;
+          }
+          if (minY < containerRect.top) {
+            deltaY = minY - containerRect.top - 20;
+          }
+
+          if (maxX > containerRect.right) {
+            deltaX = maxX - containerRect.right + 20;
+          }
+          if (minX < containerRect.left) {
+            deltaX = minX - containerRect.left - 20;
+          }
+
+          if (deltaX !== 0 || deltaY !== 0) {
+            const targetScrollTop = scoreWrap.scrollTop + deltaY;
+            const targetScrollLeft = scoreWrap.scrollLeft + deltaX;
+
+            scoreWrap.scrollTo({
+              top: targetScrollTop,
+              left: targetScrollLeft,
+              behavior: 'smooth'
+            });
+          }
+        }, 50);
+      }
+
+      function getOrCreateBackdropAndPopup() {
+        let backdrop = document.getElementById('modal-backdrop');
+        if (!backdrop) {
+          backdrop = document.createElement('div');
+          backdrop.id = 'modal-backdrop';
+          backdrop.className = 'modal-backdrop';
+          // Clicking the backdrop itself (not the popup) closes the modal
+          backdrop.addEventListener('click', function(e) {
+            if (e.target === backdrop) { exitEditMode(); }
+          });
+
+          const popup = document.createElement('div');
+          popup.id = 'editor-popup';
+          popup.className = 'editor-popup';
+          popup.innerHTML =
+            '<button class="popup-close-btn" onclick="exitEditMode()">&times;</button>' +
+            '<div class="popup-title">Edit Bar</div>' +
+            '<div class="bar-preview-container" id="popup-preview">' +
+              '<div id="bar-preview-svg-wrap"></div>' +
+            '</div>' +
+            '<div class="popup-sections-scroll">' +
+              '<div class="popup-sections">' +
+                '<div class="popup-section">' +
+                  '<div class="section-label">Notes</div>' +
+                  '<div class="button-row">' +
+                    '<button class="editor-btn" onclick="insertNote(\'whole\')">Whole</button>' +
+                    '<button class="editor-btn" onclick="insertNote(\'half\')">Half</button>' +
+                    '<button class="editor-btn" onclick="insertNote(\'quarter\')">Quarter</button>' +
+                    '<button class="editor-btn" onclick="insertNote(\'eighth\')">Eighth</button>' +
+                    '<button class="editor-btn" onclick="insertNote(\'16th\')">16th</button>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="popup-section">' +
+                  '<div class="section-label">Rests</div>' +
+                  '<div class="button-row">' +
+                    '<button class="editor-btn rest-btn" onclick="insertRest(\'whole\')">Whole</button>' +
+                    '<button class="editor-btn rest-btn" onclick="insertRest(\'half\')">Half</button>' +
+                    '<button class="editor-btn rest-btn" onclick="insertRest(\'quarter\')">Quarter</button>' +
+                    '<button class="editor-btn rest-btn" onclick="insertRest(\'eighth\')">Eighth</button>' +
+                    '<button class="editor-btn rest-btn" onclick="insertRest(\'16th\')">16th</button>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+
+          backdrop.appendChild(popup);
+          document.body.appendChild(backdrop);
+        }
+        return {
+          backdrop: backdrop,
+          popup: backdrop.querySelector('#editor-popup')
+        };
+      }
+
+      // Legacy wrapper so callers that reference getOrCreatePopup still work
+      function getOrCreatePopup() {
+        return getOrCreateBackdropAndPopup().popup;
+      }
+
+      window.enterEditMode = enterEditMode;
+      window.exitEditMode = exitEditMode;
+
+      function enterEditMode(selectionId) {
+        if (isEditModeActive && editingBarId === selectionId) {
+          return;
+        }
+
+        const staffEl = document.querySelector('.staff[data-bar-id="' + selectionId + '"]');
+        if (!staffEl) {
+          console.warn("enterEditMode: staff element not found for", selectionId);
+          return;
+        }
+
+        console.log("ENTER EDIT MODE FOR BAR:", selectionId);
+
+        isEditModeActive = true;
+        editingBarId = selectionId;
+
+        // Show the fixed modal backdrop + popup (initialized early so updatePopupPreview works on first select)
+        const { backdrop, popup } = getOrCreateBackdropAndPopup();
+        if (backdrop) {
+          backdrop.classList.add('visible');
+        }
+
+        // STEP 8: Reset scroll positions on open
+        if (popup) {
+          popup.scrollTop = 0;
+        }
+        const sectionsScroll = document.querySelector('.popup-sections-scroll');
+        if (sectionsScroll) {
+          sectionsScroll.scrollTop = 0;
+        }
+
+        // Update the bar preview inside the popup wrap first to generate the cloned SVG
+        updatePopupPreview(staffEl);
+
+        if (backdrop) {
+          console.log(
+            "[BACKDROP]",
+            {
+              display: getComputedStyle(backdrop).display,
+              visibility: getComputedStyle(backdrop).visibility,
+              opacity: getComputedStyle(backdrop).opacity
+            }
+          );
+        }
+
+        if (popup) {
+          console.log(
+            "[POPUP RECT]",
+            popup.getBoundingClientRect()
+          );
+        }
+
+        const previewSvg = document.querySelector('#bar-preview-svg-wrap svg');
+        console.log(
+          "[PREVIEW SVG EXISTS]",
+          !!previewSvg
+        );
+
+        const previewSvgWrap = document.getElementById('bar-preview-svg-wrap');
+        const svgHtml = previewSvg ? previewSvg.outerHTML : '';
+
+        sendResponse({
+          type: 'EDIT_MODE_CHANGED',
+          active: true,
+          selectionId: selectionId,
+          svgHtml: svgHtml
+        });
+
+        const scoreWrap = document.getElementById('score-wrap');
+        if (scoreWrap) {
+          scoreWrap.classList.add('editing-mode');
+        }
+
+        // STEP 2: Verify SVG exists in DOM
+        console.log("[POPUP SVG]", document.querySelector('#popup-preview svg'));
+
+        // STEP 3: Verify SVG size
+        const svg = document.querySelector('#popup-preview svg');
+        if (svg) {
+          console.log("[POPUP SVG SIZE]", svg.getBoundingClientRect());
+        } else {
+          console.log("[POPUP SVG SIZE] SVG not found");
+        }
+
+        const previewContainer = document.getElementById('popup-preview');
+
+        // STEP 4: Verify scroll position
+        if (popup && previewContainer) {
+          console.log("[POPUP SCROLL]", {
+            scrollTop: popup.scrollTop,
+            offsetTop: previewContainer.offsetTop
+          });
+        }
+
+        // STEP 5: Verify clipping styles
+        if (popup && previewContainer && previewSvgWrap) {
+          const popupStyle = window.getComputedStyle(popup);
+          const containerStyle = window.getComputedStyle(previewContainer);
+          const wrapStyle = window.getComputedStyle(previewSvgWrap);
+          console.log("[CLIPPING INSPECTION]", {
+            popup: {
+              overflow: popupStyle.overflow,
+              overflowX: popupStyle.overflowX,
+              overflowY: popupStyle.overflowY
+            },
+            previewContainer: {
+              overflow: containerStyle.overflow,
+              overflowX: containerStyle.overflowX,
+              overflowY: containerStyle.overflowY
+            },
+            svgWrap: {
+              overflow: wrapStyle.overflow,
+              overflowX: wrapStyle.overflowX,
+              overflowY: wrapStyle.overflowY
+            }
+          });
+        }
+
+        // STEP 6: Temporarily add border and background to previewContainer
+        
+
+        // Verification Logging
+        const popupEl = document.querySelector('.editor-popup');
+        console.log("BACKDROP ELEMENT:", backdrop);
+        console.log("POPUP ELEMENT:", popupEl);
+        if (backdrop) {
+          console.log("BACKDROP COMPUTED DISPLAY:", window.getComputedStyle(backdrop).display);
+          console.log("BACKDROP COMPUTED VISIBILITY:", window.getComputedStyle(backdrop).visibility);
+          console.log("BACKDROP COMPUTED OPACITY:", window.getComputedStyle(backdrop).opacity);
+        }
+
+        // Log focus target for debugging
+        const match = selectionId.match(/^staff(d+)_m(d+)$/);
+        let cell = null;
+        if (match) {
+          const staffNumber = parseInt(match[1]);
+          const measureNumber = parseInt(match[2]);
+          const r = staffNumber - 1;
+          const numMeas = document.querySelectorAll('.measure').length;
+          const c = numMeas > 0 ? (measureNumber - 1) % numMeas : 0;
+          cell = layoutMatrix[r] ? layoutMatrix[r][c] : null;
+        }
+
+        if (cell) {
+          console.log(
+            "FOCUS TARGET:\n" +
+            "barId=" + cell.barId + "\n" +
+            "x=" + cell.x + "\n" +
+            "y=" + cell.y + "\n" +
+            "width=" + cell.width + "\n" +
+            "height=" + cell.height
+          );
+        } else {
+          console.log("FOCUS TARGET:\nbarId=" + selectionId);
+        }
+
+        // Lock background scrolling while modal is open (disabled to keep music sheet scrollable and interactive)
+        // document.body.style.overflow = 'hidden';
+        // const scoreWrapLock = document.getElementById('score-wrap');
+        // if (scoreWrapLock) {
+        //   scoreWrapLock.style.overflow = 'hidden';
+        //   scoreWrapLock.style.pointerEvents = 'none';
+        // }
+
+        window.buildLayoutMatrix();
+      }
+
+      function realignEditMode() {
+        if (!isEditModeActive || !editingBarId) return;
+
+        const staffEl = document.querySelector('.staff[data-bar-id="' + editingBarId + '"]');
+        if (!staffEl) return;
+
+        // The popup is a fixed modal – just refresh the bar preview
+        updatePopupPreview(staffEl);
+
+        window.buildLayoutMatrix();
+      }
+
+      function exitEditMode() {
+        if (!isEditModeActive) return;
+
+        console.log("EXIT EDIT MODE");
+
+        isEditModeActive = false;
+        editingBarId = null;
+
+        // Hide the modal backdrop (popup lives inside it)
+        const backdrop = document.getElementById('modal-backdrop');
+        if (backdrop) {
+          backdrop.classList.remove('visible');
+        }
+
+        // Restore background scrolling
+        document.body.style.overflow = '';
+        const scoreWrap = document.getElementById('score-wrap');
+        if (scoreWrap) {
+          scoreWrap.classList.remove('editing-mode');
+          scoreWrap.style.overflow = '';
+          scoreWrap.style.pointerEvents = '';
+        }
+
+        sendResponse({
+          type: 'EDIT_MODE_CHANGED',
+          active: false
+        });
+
+        window.buildLayoutMatrix();
+
+        clearSelection();
+      }
+
+      window.insertNote = function(type) {
+        window.ReactNativeWebView?.postMessage(JSON.stringify({
+          type: 'INSERT_NOTE',
+          noteType: type,
+          isRest: false
+        }));
+        window.parent?.postMessage(JSON.stringify({
+          type: 'INSERT_NOTE',
+          noteType: type,
+          isRest: false
+        }), '*');
+      };
+
+      window.insertRest = function(type) {
+        window.ReactNativeWebView?.postMessage(JSON.stringify({
+          type: 'INSERT_NOTE',
+          noteType: type,
+          isRest: true
+        }));
+        window.parent?.postMessage(JSON.stringify({
+          type: 'INSERT_NOTE',
+          noteType: type,
+          isRest: true
+        }), '*');
+      };
+
+      function selectBar(selectionId, staffNum, measureNum, isLongPress, clickedEl, isDoubleTap) {
+        if (!isEditable) return;
+        if (selectedBarId === selectionId) {
+          if (isDoubleTap) {
+            enterEditMode(selectionId);
+          }
+          return;
+        }
+
+        if (isEditModeActive && selectionId !== editingBarId) {
+          exitEditMode();
+        }
+
+        clearDOMSelection();
+        const parsedStaff = parseInt(staffNum) || 1;
+        const parsedMeasure = parseInt(measureNum) || 1;
+        updateSelectionState(parsedStaff, parsedMeasure, selectionId, 'selectBar');
+
+        const staffEl = clickedEl || document.querySelector('.staff[data-bar-id="' + selectionId + '"]');
+        if (staffEl) {
+          staffEl.classList.add('selected-bar');
+        }
+
+        console.log(
+          "BAR CLICKED",
+          selectionId
+        );
+
+        console.log("CLICKED:\nstaff=" + parsedStaff + "\nmeasure=" + parsedMeasure);
+        console.log("SELECTED:\nstaff=" + parsedStaff + "\nmeasure=" + parsedMeasure);
+
+        // ---- POST-SELECTION DOM INSPECTION ----
+        setTimeout(() => {
+          console.log('\n=== POST-SELECTION DOM INSPECTION (selectionId=' + selectionId + ') ===');
+
+          // 1. Find element with selected-bar class
+          const selectedBarEls = document.querySelectorAll('.selected-bar');
+          console.log('[SEL-DBG] Elements with .selected-bar: ' + selectedBarEls.length);
+          selectedBarEls.forEach((el, i) => {
+            let bboxStr = 'getBBox_unavailable';
+            try { const b = el.getBBox(); bboxStr = JSON.stringify({x:b.x,y:b.y,w:b.width,h:b.height}); } catch(e) {}
+            console.log('[SEL-DBG]   [' + i + '] tag=' + el.tagName + ' class="' + el.getAttribute('class') + '" id=' + (el.id||'(none)') + ' bbox=' + bboxStr);
+          });
+
+          // 2. Find bar-click-bg rect for this selection
+          const bgEl = document.querySelector('.bar-click-bg[data-bar-id="' + selectionId + '"]');
+          if (bgEl) {
+            console.log('[SEL-DBG] .bar-click-bg for ' + selectionId + ':');
+            console.log('[SEL-DBG]   tag=' + bgEl.tagName + ' class="' + bgEl.getAttribute('class') + '"');
+            console.log('[SEL-DBG]   x=' + bgEl.getAttribute('x') + ' y=' + bgEl.getAttribute('y') + ' width=' + bgEl.getAttribute('width') + ' height=' + bgEl.getAttribute('height'));
+            let bboxStr2 = 'getBBox_unavailable';
+            try { const b = bgEl.getBBox(); bboxStr2 = JSON.stringify({x:b.x,y:b.y,w:b.width,h:b.height}); } catch(e) {}
+            console.log('[SEL-DBG]   getBBox=' + bboxStr2);
+          } else {
+            console.log('[SEL-DBG] .bar-click-bg[data-bar-id="' + selectionId + '"] NOT FOUND');
+          }
+
+          // 3. Check selected-measure (if used)
+          const selectedMeasureEls = document.querySelectorAll('.selected-measure');
+          console.log('[SEL-DBG] Elements with .selected-measure: ' + selectedMeasureEls.length);
+          selectedMeasureEls.forEach((el, i) => {
+            console.log('[SEL-DBG]   [' + i + '] tag=' + el.tagName + ' class="' + el.getAttribute('class') + '" id=' + (el.id||'(none)'));
+          });
+          console.log('=== END POST-SELECTION DOM INSPECTION ===\n');
+        }, 600); // Run after updateClickBackgrounds (which runs at 200ms and 500ms)
+        // ---- END POST-SELECTION DOM INSPECTION ----
+
+        sendResponse({
+          type: 'BAR_SELECTED',
+          selectionId: selectionId,
+          staffNumber: parsedStaff,
+          measureNumber: parsedMeasure,
+          isLongPress: !!isLongPress,
+          isDoubleTap: !!isDoubleTap
+        });
+
+        // Only open the modal editor on a double-tap / double-click.
+        if (isDoubleTap) {
+          enterEditMode(selectionId);
+        }
+      }
+        
+
+      function selectNote(noteId) {
+        if (!isEditable) return;
+        if (isEditModeActive) {
+          const noteEl = document.getElementById(noteId);
+          const parentBar = noteEl ? noteEl.closest('.staff') : null;
+          const parentBarId = parentBar ? parentBar.getAttribute('data-bar-id') : null;
+          if (parentBarId !== editingBarId) {
+            exitEditMode();
+          }
+        }
+
+        updateSelectionState(null, null, null, 'selectNote');
+        resetDoubleTapTimer();
+        document.querySelectorAll('.selected-staff').forEach(el => el.classList.remove('selected-staff'));
+        document.querySelectorAll('.selected-handle').forEach(el => el.classList.remove('selected-handle'));
+        document.querySelectorAll('.selected-measure').forEach(el => el.classList.remove('selected-measure'));
+        document.querySelectorAll('.selected-bar').forEach(el => el.classList.remove('selected-bar'));
+        
+        // Multi-selection logic:
+        const idx = selectedNoteIds.indexOf(noteId);
+        if (idx > -1) {
+          // Deselect note
+          selectedNoteIds.splice(idx, 1);
+          const el = document.getElementById(noteId);
+          if (el) el.classList.remove('selected-note');
+        } else {
+          if (selectedNoteIds.length >= 2) {
+            // Clear all previous selections
+            selectedNoteIds.forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.classList.remove('selected-note');
+            });
+            selectedNoteIds = [noteId];
+          } else {
+            selectedNoteIds.push(noteId);
+          }
+          const el = document.getElementById(noteId);
+          if (el) el.classList.add('selected-note');
+        }
+
+        selectedNoteId = selectedNoteIds.length > 0 ? selectedNoteIds[selectedNoteIds.length - 1] : '';
+
+        sendResponse({
+          type: 'NOTES_SELECTED',
+          noteIds: selectedNoteIds
+        });
+      }
+
+      function attachNoteSelectionEvents() {
+        const notes = document.querySelectorAll('.note');
+        notes.forEach(noteEl => {
+          noteEl.style.cursor = 'pointer';
+          
+          if (!noteEl.hasClickListener) {
+            noteEl.hasClickListener = true;
+            noteEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const noteId = noteEl.getAttribute('id');
+              if (noteId) {
+                selectNote(noteId);
+              }
+            });
+          }
+        });
+      }
+
+      function clearDOMSelection() {
+        selectedNoteId = '';
+        selectedNoteIds = [];
+        selectedStaffNums = [];
+        document.querySelectorAll('.selected-staff').forEach(el => el.classList.remove('selected-staff'));
+        document.querySelectorAll('.selected-handle').forEach(el => el.classList.remove('selected-handle'));
+        document.querySelectorAll('.selected-measure').forEach(el => el.classList.remove('selected-measure'));
+        document.querySelectorAll('.selected-bar').forEach(el => el.classList.remove('selected-bar'));
+        document.querySelectorAll('.selected-note').forEach(el => el.classList.remove('selected-note'));
+      }
+
+      function clearSelection() {
+        if (isEditModeActive) {
+          exitEditMode();
+        }
+        const wasNoteSelected = (selectedNoteId && selectedNoteId !== '') || (selectedNoteIds && selectedNoteIds.length > 0);
+        updateSelectionState(null, null, null, 'clearSelection');
+        clearDOMSelection();
+        if (wasNoteSelected) {
+          sendResponse({
+            type: 'NOTE_DESELECTED'
+          });
+        }
+      }
+
+      // Inject Handles
+      function injectStaffHandles() {
+        if (!isEditable) return;
+        const oldHandles = document.querySelectorAll('.staff-handle');
+        oldHandles.forEach(h => h.remove());
+
+        const oldInsertBtns = document.querySelectorAll('.insert-staff-btn');
+        oldInsertBtns.forEach(btn => btn.remove());
+
+        let firstMeasure = document.querySelector('.measure[n="1"]');
+        if (!firstMeasure) {
+          firstMeasure = document.querySelector('.measure');
+        }
+        if (!firstMeasure) return;
+
+        const staves = firstMeasure.querySelectorAll('.staff');
+        staves.forEach((staffEl, sIdx) => {
+          let staffNum = staffEl.getAttribute('n');
+          if (!staffNum || staffNum === 'null') {
+            staffNum = String(sIdx + 1);
+            staffEl.setAttribute('n', staffNum);
+          }
+          
+          const handleGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          handleGroup.setAttribute('class', 'staff-handle');
+          handleGroup.setAttribute('data-staff-num', staffNum);
+          handleGroup.style.cursor = 'pointer';
+
+          let yCenter = 0;
+          let minY = 0;
+          let maxY = 0;
+          let handleX = -580;
+          let connectionX = -100;
+          try {
+            const bbox = staffEl.getBBox();
+            yCenter = bbox.y + bbox.height / 2;
+            minY = bbox.y;
+            maxY = bbox.y + bbox.height;
+            handleX = bbox.x - 600;
+            connectionX = bbox.x - 80;
+          } catch (e) {
+            yCenter = 0;
+            minY = 0;
+            maxY = 0;
+            handleX = -580;
+            connectionX = -100;
+          }
+
+          const preciseRange = getStaffLinesYRange(staffEl);
+          if (preciseRange && preciseRange.minY !== Infinity) {
+            yCenter = preciseRange.minY + (preciseRange.maxY - preciseRange.minY) / 2;
+            minY = preciseRange.minY;
+            maxY = preciseRange.maxY;
+          }
+
+          // Connecting line from handle to staff (Feature 1)
+          const connLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          connLine.setAttribute('x1', String(handleX));
+          connLine.setAttribute('y1', yCenter);
+          connLine.setAttribute('x2', String(connectionX));
+          connLine.setAttribute('y2', yCenter);
+          connLine.setAttribute('stroke', '#a1a1aa');
+          connLine.setAttribute('stroke-width', '10');
+          connLine.setAttribute('stroke-dasharray', '25,25');
+          handleGroup.appendChild(connLine);
+
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', String(handleX));
+          circle.setAttribute('cy', yCenter);
+          circle.setAttribute('r', '75');
+          handleGroup.appendChild(circle);
+
+          staffEl.appendChild(handleGroup);
+
+          // Plus button below every staff (Feature 5) with grouping rules (Feature 1)
+          let shouldShowPlus = true;
+          if (globalPartStavesCounts && globalPartStavesCounts.length > 0) {
+            let staffIndexToPartIndex = [];
+            let staffIndexToLocalIndex = [];
+            globalPartStavesCounts.forEach((count, pIdx) => {
+              for (let i = 0; i < count; i++) {
+                staffIndexToPartIndex.push(pIdx);
+                staffIndexToLocalIndex.push(i);
+              }
+            });
+
+            const pIdx = staffIndexToPartIndex[sIdx];
+            const localIdx = staffIndexToLocalIndex[sIdx];
+            const partStaffCount = globalPartStavesCounts[pIdx];
+
+            if (partStaffCount === 2) {
+              // Treble/Bass pair -> show only below Bass staff (local index 1)
+              if (localIdx === 0) {
+                shouldShowPlus = false;
+              }
+            } else if (partStaffCount > 2) {
+              // Multi-staff part -> show only below the last staff
+              if (localIdx !== partStaffCount - 1) {
+                shouldShowPlus = false;
+              }
+            }
+          }
+
+          if (shouldShowPlus) {
+            const insertBtnGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            insertBtnGroup.setAttribute('class', 'insert-staff-btn');
+            insertBtnGroup.setAttribute('data-staff-num', staffNum);
+            insertBtnGroup.style.cursor = 'pointer';
+
+            const btnY = maxY > 0 ? maxY + 550 : yCenter + 720;
+
+            const plusCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            plusCircle.setAttribute('cx', String(handleX));
+            plusCircle.setAttribute('cy', String(btnY));
+            plusCircle.setAttribute('r', '300');
+            insertBtnGroup.appendChild(plusCircle);
+
+            const plusText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            plusText.setAttribute('x', String(handleX));
+            plusText.setAttribute('y', String(btnY));
+            plusText.setAttribute('font-size', '500');
+            plusText.setAttribute('font-family', 'Arial, sans-serif');
+            plusText.setAttribute('font-weight', 'bold');
+            plusText.setAttribute('fill', 'white');
+            plusText.setAttribute('text-anchor', 'middle');
+            plusText.setAttribute('dominant-baseline', 'central');
+            plusText.style.pointerEvents = 'none';
+            plusText.textContent = '+';
+            insertBtnGroup.appendChild(plusText);
+
+            if (staffEl.parentNode) {
+              staffEl.parentNode.appendChild(insertBtnGroup);
+            } else {
+              staffEl.appendChild(insertBtnGroup);
+            }
+
+            // Direct pointerup event listener for unified mouse/touch handling
+            insertBtnGroup.addEventListener('pointerup', (e) => {
+              console.log("[INSERT STAFF] BUTTON PRESSED", staffNum);
+              e.preventDefault();
+              e.stopPropagation();
+              console.log("[INSERT STAFF] SENDING MESSAGE", staffNum);
+              sendResponse({
+                type: 'INSERT_STAFF_BELOW',
+                staffIndex: parseInt(staffNum) - 1
+              });
+            });
+          }
+        });
+      }
+
+      // Selection Events for Measures (now for individual bar selection: staff × measure)
+      let hasDraggedRecently = false;
+
+      function attachMeasureSelectionEvents() {
+        console.log("attachMeasureSelectionEvents() called", {
+          selectedBarId
+        });
+        resetDoubleTapTimer(); // Ensure reset on every attach/render
+        // Clear any old overlays to prevent duplicates
+        document.querySelectorAll('.bar-click-bg').forEach(el => el.remove());
+        const measures = document.querySelectorAll('.measure');
+        const numMeasures = measures.length;
+        measures.forEach((measureEl, mIdx) => {
+          const staves = measureEl.querySelectorAll('.staff');
+          staves.forEach((staffEl, sIdx) => {
+            let staffNumber = staffEl.getAttribute('n');
+            if (!staffNumber || staffNumber === 'null') {
+              staffNumber = String(sIdx + 1);
+              staffEl.setAttribute('n', staffNumber);
+            }
+            
+            let pIdx = 0;
+            let current = 0;
+            if (globalPartStavesCounts && globalPartStavesCounts.length > 0) {
+              for (let p = 0; p < globalPartStavesCounts.length; p++) {
+                const count = globalPartStavesCounts[p] || 1;
+                if (sIdx >= current && sIdx < current + count) {
+                  pIdx = p;
+                  break;
+                }
+                current += count;
+              }
+            } else {
+              pIdx = sIdx;
+            }
+            const actualMeasuresPerPart = measuresPerPart || (globalPartStavesCounts && globalPartStavesCounts.length > 0 ? Math.round(numMeasures / globalPartStavesCounts.length) : numMeasures);
+            const localMIdx = mIdx % actualMeasuresPerPart;
+            const globalMeasureNum = pIdx * actualMeasuresPerPart + (localMIdx + 1);
+            const measureNumber = String(globalMeasureNum);
+
+            console.log("NUMBERING LOG: " + JSON.stringify({
+              pIdx: pIdx,
+              numMeasures: actualMeasuresPerPart,
+              mIdx: localMIdx,
+              globalMeasureNum: globalMeasureNum
+            }));
+            
+            const barId = 'staff' + staffNumber + '_m' + measureNumber;
+
+            console.log(
+              "BAR OVERLAY CREATED",
+              {
+                barId,
+                staffNumber,
+                measureNumber
+              }
+            );
+
+            // Store attributes on the staff element itself
+            staffEl.setAttribute('data-bar-id', barId);
+            staffEl.setAttribute('data-staff-number', staffNumber);
+            staffEl.setAttribute('data-measure-number', measureNumber);
+            staffEl.style.cursor = 'pointer';
+
+            // Generate overlay rect
+            try {
+              // Get the pure staff line bounds (Y = top/bottom staff lines; X = full measure span).
+              // Both functions now use ONLY direct path children of .staff, so:
+              //   - Ledger lines inside .layer are excluded from Y range
+              //   - Clef/keySig/meterSig paths are excluded (they're inside child <g> elements)
+              const xRange = getStaffLinesXRange(staffEl);
+              const yRange = getStaffLinesYRange(staffEl);
+
+              let x, width, y, height;
+
+              // Determine where the selection rect's left edge should start.
+              // For Measure 1 this must be AFTER the clef/key sig/time sig.
+              // getContentStartX() reads x attributes directly — no getBBox() needed.
+              const contentStartX = getContentStartX(staffEl);
+
+              if (xRange.minX !== Infinity && xRange.maxX !== -Infinity &&
+                  yRange.minY !== Infinity && yRange.maxY !== -Infinity) {
+                // Primary path: staff lines were parsed successfully.
+                // xRange.minX = left edge of staff lines (may be 0 for first measure)
+                // xRange.maxX = right barline of this measure
+                if (contentStartX !== null && contentStartX > xRange.minX) {
+                  // Start after header decorations
+                  x = contentStartX;
+                } else {
+                  // Non-first measure: staff lines start right at the barline
+                  x = xRange.minX;
+                }
+                width  = Math.max(0, xRange.maxX - x);
+                // Y: use exact staff line bounds — NOT getBBox() which would include ledger lines
+                y      = yRange.minY;
+                height = yRange.maxY - yRange.minY;
+              } else {
+                // Fallback: regex didn't match (unusual), use getBBox()
+                const staffBBox = staffEl.getBBox();
+                if (contentStartX !== null && contentStartX > staffBBox.x) {
+                  x = contentStartX;
+                } else {
+                  x = staffBBox.x;
+                }
+                width  = Math.max(0, (staffBBox.x + staffBBox.width) - x);
+                // For Y, try to get a tighter range from getBBox of just the staff lines group
+                // by taking only the first 5 direct path children
+                const directPaths = Array.from(staffEl.childNodes).filter(n => n.nodeName.toLowerCase() === 'path');
+                if (directPaths.length >= 2) {
+                  let minY = Infinity, maxY = -Infinity;
+                  directPaths.forEach(p => {
+                    try {
+                      const pb = p.getBBox();
+                      if (pb.y < minY) minY = pb.y;
+                      if (pb.y + pb.height > maxY) maxY = pb.y + pb.height;
+                    } catch(e) {}
+                  });
+                  y      = minY !== Infinity ? minY : staffBBox.y;
+                  height = maxY !== -Infinity ? maxY - minY : staffBBox.height;
+                } else {
+                  y      = staffBBox.y;
+                  height = staffBBox.height;
+                }
+              }
+
+              // ---- SELECTION DEBUG LOG ----
+              const dbgBarId = staffEl.getAttribute('data-bar-id') || barId;
+              const isFirstMeasure = (measureNumber === '1' || parseInt(measureNumber) === 1);
+              console.log('\n=== SELECTION DEBUG (before rect creation) ===');
+              console.log('[SEL-DBG] measure=' + dbgBarId + ' | measureNumber=' + measureNumber + ' | isFirstMeasure=' + isFirstMeasure);
+              console.log('[SEL-DBG] SVG tag=' + staffEl.tagName + ' id=' + (staffEl.id || '(none)'));
+              console.log('[SEL-DBG] Direct path children:', Array.from(staffEl.childNodes).filter(n => n.nodeName.toLowerCase() === 'path').length);
+              console.log('[SEL-DBG] xRange:', JSON.stringify(xRange));
+              console.log('[SEL-DBG] yRange:', JSON.stringify(yRange));
+              console.log('[SEL-DBG] contentStartX:', contentStartX);
+              console.log('[SEL-DBG] primaryPathUsed:', (xRange.minX !== Infinity && xRange.maxX !== -Infinity && yRange.minY !== Infinity && yRange.maxY !== -Infinity));
+              console.log('[SEL-DBG] Pre-zero-guard rect: x=' + x + ' y=' + y + ' width=' + width + ' height=' + height);
+              // ---- END PRE-ZERO-GUARD DEBUG ----
+
+              if (width <= 0) {
+                x = 0;
+                y = 0;
+                width = 0;
+                height = 0;
+              }
+
+              // Count selection source elements: direct staff lines + notes + rests
+              const staffLines = Array.from(staffEl.childNodes).filter(node => node.nodeName.toLowerCase() === 'path');
+              const notes = staffEl.querySelectorAll('.note');
+              const rests = staffEl.querySelectorAll('.rest');
+              const sourceElementsCount = staffLines.length + notes.length + rests.length;
+
+              console.log("ACTUAL BAR BOUNDS\n" +
+                          "x=" + x + "\n" +
+                          "y=" + y + "\n" +
+                          "width=" + width + "\n" +
+                          "height=" + height + "\n\n" +
+                          "SELECTION SOURCE ELEMENTS COUNT: " + sourceElementsCount);
+
+              let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+              bg.setAttribute('class', 'bar-click-bg');
+              bg.setAttribute('data-bar-id', barId);
+              bg.setAttribute('data-staff-number', staffNumber);
+              bg.setAttribute('data-measure-number', measureNumber);
+              bg.setAttribute('x', x);
+              bg.setAttribute('y', y);
+              bg.setAttribute('width', width);
+              bg.setAttribute('height', height);
+              bg.setAttribute('rx', '10');
+              bg.setAttribute('ry', '10');
+              bg.setAttribute('fill', 'white');
+              bg.setAttribute('fill-opacity', '0');
+              bg.setAttribute('style', 'pointer-events: all; cursor: pointer;');
+              
+              // Insert as first child of staffEl so it resides behind notes/lines
+              staffEl.insertBefore(bg, staffEl.firstChild);
+            } catch (e) {
+              console.warn("Failed to add bar click background:", e);
+            }
+
+             // Bind click event listener to the parent staffEl element to capture clicks on staff lines and whitespace
+             if (!staffEl.hasClickListener) {
+               staffEl.hasClickListener = true;
+               staffEl.addEventListener('click', (e) => {
+                 if (e.target.closest('.staff-handle')) return;
+                 if (e.target.closest('.insert-staff-btn')) return;
+                 if (e.target.closest('.note')) return; // let note selection handle it
+                 if (wasLongPress || hasDraggedRecently) {
+                   wasLongPress = false;
+                   e.stopPropagation();
+                   return;
+                 }
+
+                 // Task 2: Log details for tracing click event path
+                 console.log("CLICK PATH TRACE:");
+                 console.log("clicked element:", staffEl);
+                 console.log("event.target:", e.target);
+                 console.log("event.currentTarget:", e.currentTarget);
+                 console.log("selected measure number:", measureNumber);
+                 console.log("selected staff number:", staffNumber);
+
+                 // Task 3: Verify whether the clicked measure and selected measure are different
+                 const clickedMeasureNum = parseInt(measureNumber);
+                 const prevSelectedMeasureNumVal = selectedBarId ? parseInt(selectedBarId.split('_m')[1]) : null;
+                 console.log("Clicked measure and selected measure different:", clickedMeasureNum !== prevSelectedMeasureNumVal);
+
+                 const now = Date.now();
+                 const isDoubleTap = (now - lastClickTime < 350) && (lastClickedBarId === barId);
+                 lastClickTime = now;
+                 lastClickedBarId = barId;
+
+                 selectBar(barId, staffNumber, measureNumber, false, staffEl, isDoubleTap);
+                 e.stopPropagation();
+               });
+             }
+
+             // Bind touchstart double tap event listener for mobile device responsiveness
+             let lastTouchTime = 0;
+             if (!staffEl.hasTouchListener) {
+               staffEl.hasTouchListener = true;
+               staffEl.addEventListener('touchstart', (e) => {
+                 if (e.target.closest('.staff-handle')) return;
+                 if (e.target.closest('.insert-staff-btn')) return;
+                 if (e.target.closest('.note')) return;
+
+                 const now = Date.now();
+                 if (now - lastTouchTime < 350) {
+                   lastTouchTime = 0;
+                   selectBar(barId, staffNumber, measureNumber, false, staffEl, true);
+                   e.preventDefault();
+                   e.stopPropagation();
+                 } else {
+                   lastTouchTime = now;
+                 }
+               }, { passive: false });
+             }
+           });
+         });
+
+        // Re-apply selected bar class if selectedBarId is active
+        console.log("RESTORE SELECTION STATE IN ATTACHMEASURESELECTIONEVENTS", {
+          selectedBarId
+        });
+        if (selectedBarId) {
+          const selectedEl = document.querySelector('.staff[data-bar-id="' + selectedBarId + '"]');
+          if (selectedEl) {
+            selectedEl.classList.add('selected-bar');
+          }
+        }
+      }
+
+      function updateClickBackgrounds() {
+        console.log('[SEL-DBG] updateClickBackgrounds() called');
+        const staves = document.querySelectorAll('.measure .staff');
+        
+        staves.forEach(staffEl => {
+          try {
+            // Count selection source elements: direct staff lines + notes + rests
+            const staffLines = Array.from(staffEl.childNodes).filter(node => node.nodeName.toLowerCase() === 'path');
+            const notes = staffEl.querySelectorAll('.note');
+            const rests = staffEl.querySelectorAll('.rest');
+            const sourceElementsCount = staffLines.length + notes.length + rests.length;
+
+            const xRange = getStaffLinesXRange(staffEl);
+            const yRange = getStaffLinesYRange(staffEl);
+            const contentStartX = getContentStartX(staffEl);
+
+            let x, y, width, height;
+
+            if (xRange.minX !== Infinity && xRange.maxX !== -Infinity &&
+                yRange.minY !== Infinity && yRange.maxY !== -Infinity) {
+              // Primary path: exact staff line bounds parsed successfully
+              if (contentStartX !== null && contentStartX > xRange.minX) {
+                x = contentStartX;
+              } else {
+                x = xRange.minX;
+              }
+              width = Math.max(0, xRange.maxX - x);
+              y = yRange.minY;
+              height = yRange.maxY - yRange.minY;
+            } else {
+              // Fallback (only if no staff lines found via regex):
+              // Compute bounds from direct staff line path elements using getBBox()
+              let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+              staffLines.forEach(p => {
+                try {
+                  const b = p.getBBox();
+                  if (b.x < minX) minX = b.x;
+                  if (b.x + b.width > maxX) maxX = b.x + b.width;
+                  if (b.y < minY) minY = b.y;
+                  if (b.y + b.height > maxY) maxY = b.y + b.height;
+                } catch(e) {}
+              });
+              
+              if (minX !== Infinity) {
+                if (contentStartX !== null && contentStartX > minX) {
+                  x = contentStartX;
+                } else {
+                  x = minX;
+                }
+                width = Math.max(0, maxX - x);
+                y = minY;
+                height = maxY - minY;
+              } else {
+                // Absolute fallback (just in case no paths exist)
+                console.warn('[SEL-DBG] Fallback to staffEl getBBox (no path elements found)');
+                const staffBBox = staffEl.getBBox();
+                x = contentStartX !== null ? contentStartX : staffBBox.x;
+                width = Math.max(0, (staffBBox.x + staffBBox.width) - x);
+                y = staffBBox.y;
+                height = staffBBox.height;
+              }
+            }
+
+            const barId = staffEl.getAttribute('data-bar-id') || '(unknown)';
+            console.log("ACTUAL BAR BOUNDS\n" +
+                        "x=" + x + "\n" +
+                        "y=" + y + "\n" +
+                        "width=" + width + "\n" +
+                        "height=" + height + "\n\n" +
+                        "SELECTION SOURCE ELEMENTS COUNT: " + sourceElementsCount);
+
+            const bg = staffEl.querySelector('.bar-click-bg');
+            if (bg && width > 0 && height > 0) {
+              bg.setAttribute('x', x);
+              bg.setAttribute('y', y);
+              bg.setAttribute('width', width);
+              bg.setAttribute('height', height);
+            }
+          } catch (e) {
+            console.warn('[SEL-DBG] updateClickBackgrounds error for staff:', e);
+          }
+        });
+      }
+
+      // Drag and Drop Logic
+      let activeDrag = null;
+
+      function initDragAndDrop() {
+        const scoreWrap = document.getElementById('score-wrap');
+        if (!scoreWrap) return;
+
+        const startPressTimer = (staffNum) => {
+          // Long press disabled
+        };
+
+        const cancelPressTimer = () => {
+          if (pressTimer) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+          }
+        };
+
+        let barPressTimer = null;
+        let barTimerCoords = null;
+        let barTimerEl = null;
+        const startBarPressTimer = (selectionId, staffNum, measureNum, coords, clickedEl) => {
+          // Long press disabled
+        };
+
+        const cancelBarPressTimer = () => {
+          if (barPressTimer) {
+            clearTimeout(barPressTimer);
+            barPressTimer = null;
+          }
+          barTimerCoords = null;
+        };
+
+        const getEventCoords = (e) => {
+          if (e.touches && e.touches.length > 0) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+          }
+          return { x: e.clientX, y: e.clientY };
+        };
+
+        const handleStart = (e) => {
+          if (!isEditable) return;
+          cancelPressTimer();
+          cancelBarPressTimer();
+          wasLongPress = false;
+
+          const isNoteOrHandle = e.target.closest('.note') || e.target.closest('.staff-handle');
+          if (!isNoteOrHandle) {
+            // Let browser native scrolling handle it
+            return;
+          }
+
+          const handleEl = e.target.closest('.staff-handle');
+          if (handleEl) {
+            const staffNum = handleEl.getAttribute('data-staff-num');
+            const coords = getEventCoords(e);
+            activeDrag = {
+              type: 'staff',
+              id: staffNum,
+              startX: coords.x,
+              startY: coords.y,
+              currentX: coords.x,
+              currentY: coords.y
+            };
+            selectStaff(staffNum);
+            e.preventDefault();
+            return;
+          }
+        };
+
+        const handleMove = (e) => {
+          const coords = getEventCoords(e);
+
+          if (barPressTimer && barTimerCoords) {
+            const dx = coords.x - barTimerCoords.x;
+            const dy = coords.y - barTimerCoords.y;
+            if (Math.hypot(dx, dy) > 15) {
+              // User is dragging/scrolling before long-press fires: cancel timer so scroll goes through
+              cancelBarPressTimer();
+              hasDraggedRecently = true;
+            }
+          }
+
+          if (pressTimer) {
+            // Cancel staff select timer if moved
+            cancelPressTimer();
+          }
+
+          if (!activeDrag) return;
+          const dx = coords.x - activeDrag.startX;
+          const dy = coords.y - activeDrag.startY;
+
+          activeDrag.currentX = coords.x;
+          activeDrag.currentY = coords.y;
+
+          if (activeDrag.type === 'staff') {
+            e.preventDefault();
+            showStaffDragLine(activeDrag.currentY);
+          } else if (activeDrag.type === 'measure') {
+            activeDrag.hasDragged = true;
+            e.preventDefault();
+            showMeasureDragLine(activeDrag.currentX);
+          }
+        };
+
+        const handleEnd = (e) => {
+          cancelPressTimer();
+          cancelBarPressTimer();
+
+          if (wasLongPress) {
+            setTimeout(() => {
+              wasLongPress = false;
+            }, 50);
+          }
+          if (hasDraggedRecently) {
+            setTimeout(() => {
+              hasDraggedRecently = false;
+            }, 100);
+          }
+          if (!activeDrag) return;
+          hideDragLines();
+
+          if (activeDrag.type === 'staff') {
+            const targetIndex = findStaffDropTarget(activeDrag.currentY);
+            const fromIndex = parseInt(activeDrag.id) - 1;
+            if (targetIndex !== null && targetIndex !== fromIndex) {
+              sendResponse({
+                type: 'STAFF_REORDER',
+                fromIndex: fromIndex,
+                toIndex: targetIndex
+              });
+            }
+          } else if (activeDrag.type === 'measure' && activeDrag.hasDragged) {
+            const targetIndex = findMeasureDropTarget(activeDrag.currentX);
+            const fromIndex = parseInt(activeDrag.id) - 1;
+            if (targetIndex !== null && targetIndex !== fromIndex) {
+              sendResponse({
+                type: 'MEASURE_REORDER',
+                fromIndex: fromIndex,
+                toIndex: targetIndex
+              });
+            }
+          }
+          activeDrag = null;
+        };
+
+        // Scroll listener to set hasDraggedRecently during scrolling to block clicks
+        let scrollTimeout = null;
+        scoreWrap.addEventListener('scroll', () => {
+          hasDraggedRecently = true;
+          if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+          }
+          scrollTimeout = setTimeout(() => {
+            hasDraggedRecently = false;
+          }, 150);
+        });
+
+        // Mouse drag-to-scroll implementation (move sheet with cursor)
+        let isDraggingMouse = false;
+        let startX = 0;
+        let startY = 0;
+        let startScrollLeft = 0;
+        let startScrollTop = 0;
+
+        scoreWrap.addEventListener('mousedown', (e) => {
+          if (e.button !== 0) return;
+          if (e.target.closest('.staff-handle') || e.target.closest('.insert-staff-btn') || e.target.closest('.note')) return;
+
+          isDraggingMouse = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          startScrollLeft = scoreWrap.scrollLeft;
+          startScrollTop = scoreWrap.scrollTop;
+          scoreWrap.style.cursor = 'grabbing';
+          e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isDraggingMouse) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          scoreWrap.scrollLeft = startScrollLeft - dx;
+          scoreWrap.scrollTop = startScrollTop - dy;
+
+          if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+            hasDraggedRecently = true;
+          }
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (isDraggingMouse) {
+            isDraggingMouse = false;
+            scoreWrap.style.cursor = 'grab';
+            setTimeout(() => {
+              hasDraggedRecently = false;
+            }, 50);
+          }
+        });
+
+        scoreWrap.addEventListener('mousedown', handleStart);
+        scoreWrap.addEventListener('touchstart', handleStart);
+
+        window.addEventListener('mousemove', handleMove, { passive: false });
+        window.addEventListener('touchmove', handleMove, { passive: false });
+
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchend', handleEnd);
+
+        // Zoom gestures: Mobile pinch-to-zoom
+        let initialDist = 0;
+        let initialZoom = 1.0;
+        scoreWrap.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 2) {
+            initialDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialZoom = zoomLevel;
+          }
+        });
+
+        scoreWrap.addEventListener('touchmove', (e) => {
+          if (e.touches.length === 2 && initialDist > 0) {
+            e.preventDefault();
+            const currentDist = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            const newZoom = initialZoom * (currentDist / initialDist);
+            window.updateZoom(newZoom);
+          }
+        }, { passive: false });
+
+        scoreWrap.addEventListener('touchend', (e) => {
+          if (e.touches.length < 2) {
+            initialDist = 0;
+          }
+        });
+
+        // Zoom gestures: Web Ctrl + Mouse Wheel & Shift + Mouse Wheel for horizontal scroll
+        scoreWrap.addEventListener('wheel', (e) => {
+          if (e.ctrlKey) {
+            e.preventDefault();
+            const factor = e.deltaY < 0 ? 1.1 : 0.9;
+            window.updateZoom(zoomLevel * factor);
+          } else if (e.shiftKey) {
+            e.preventDefault();
+            scoreWrap.scrollLeft += e.deltaY;
+          } else if (Math.abs(e.deltaX) < 1 && Math.abs(e.deltaY) > 0) {
+            e.preventDefault();
+            scoreWrap.scrollTop += e.deltaY;
+          }
+        }, { passive: false });
+      }
+
+      function showStaffDragLine(screenY) {
+        let line = document.getElementById('staff-drag-line');
+        if (!line) {
+          line = document.createElement('div');
+          line.id = 'staff-drag-line';
+          line.style.cssText = 'position: absolute; left: 0; right: 0; height: 4px; background: #8b5cf6; pointer-events: none; z-index: 9999;';
+          document.body.appendChild(line);
+        }
+
+        const dropTarget = findStaffDropTarget(screenY);
+        if (dropTarget !== null) {
+          const firstMeasure = document.querySelector('.measure[n="1"]');
+          if (firstMeasure) {
+            const staves = firstMeasure.querySelectorAll('.staff');
+            const staffEl = staves[dropTarget];
+            if (staffEl) {
+              const bbox = staffEl.getBoundingClientRect();
+              const scrollY = window.scrollY || window.pageYOffset;
+              line.style.top = (bbox.top + scrollY) + 'px';
+              line.style.display = 'block';
+            }
+          }
+        } else {
+          line.style.display = 'none';
+        }
+      }
+
+      function findStaffDropTarget(screenY) {
+        const firstMeasure = document.querySelector('.measure[n="1"]');
+        if (!firstMeasure) return null;
+
+        const staves = firstMeasure.querySelectorAll('.staff');
+        let closestIndex = null;
+        let minDiff = Infinity;
+
+        staves.forEach((staffEl, idx) => {
+          const bbox = staffEl.getBoundingClientRect();
+          const yCenter = bbox.top + bbox.height / 2;
+          const diff = Math.abs(screenY - yCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIndex = idx;
+          }
+        });
+
+        return closestIndex;
+      }
+
+      function showMeasureDragLine(screenX) {
+        let line = document.getElementById('measure-drag-line');
+        if (!line) {
+          line = document.createElement('div');
+          line.id = 'measure-drag-line';
+          line.style.cssText = 'position: absolute; top: 0; bottom: 0; width: 4px; background: #8b5cf6; pointer-events: none; z-index: 9999;';
+          document.body.appendChild(line);
+        }
+
+        const dropTarget = findMeasureDropTarget(screenX);
+        if (dropTarget !== null) {
+          const measureEl = document.querySelector('.measure[n="' + (dropTarget + 1) + '"]');
+          if (measureEl) {
+            const bbox = measureEl.getBoundingClientRect();
+            const scrollX = window.scrollX || window.pageXOffset;
+            line.style.left = (bbox.left + scrollX) + 'px';
+            line.style.display = 'block';
+          }
+        } else {
+          line.style.display = 'none';
+        }
+      }
+
+      function findMeasureDropTarget(screenX) {
+        const measures = document.querySelectorAll('.measure');
+        let closestIndex = null;
+        let minDiff = Infinity;
+
+        measures.forEach((measureEl, idx) => {
+          const bbox = measureEl.getBoundingClientRect();
+          const xCenter = bbox.left + bbox.width / 2;
+          const diff = Math.abs(screenX - xCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIndex = idx;
+          }
+        });
+
+        return closestIndex;
+      }
+
+      function hideDragLines() {
+        const staffLine = document.getElementById('staff-drag-line');
+        if (staffLine) staffLine.style.display = 'none';
+        
+        const measureLine = document.getElementById('measure-drag-line');
+        if (measureLine) measureLine.style.display = 'none';
+      }
+
+      function initClickOutsideListener() {
+        let docDragStartX = 0;
+        let docDragStartY = 0;
+        let docHasDragged = false;
+
+        document.addEventListener('mousedown', (e) => {
+          docDragStartX = e.clientX;
+          docDragStartY = e.clientY;
+          docHasDragged = false;
+        });
+        
+        document.addEventListener('touchstart', (e) => {
+          if (e.touches && e.touches[0]) {
+            docDragStartX = e.touches[0].clientX;
+            docDragStartY = e.touches[0].clientY;
+          }
+          docHasDragged = false;
+        }, { passive: true });
+
+        document.addEventListener('mousemove', (e) => {
+          const dx = e.clientX - docDragStartX;
+          const dy = e.clientY - docDragStartY;
+          if (Math.hypot(dx, dy) > 10) {
+            docHasDragged = true;
+          }
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+          if (e.touches && e.touches[0]) {
+            const dx = e.touches[0].clientX - docDragStartX;
+            const dy = e.touches[0].clientY - docDragStartY;
+            if (Math.hypot(dx, dy) > 10) {
+              docHasDragged = true;
+            }
+          }
+        }, { passive: true });
+
+        document.addEventListener('click', (e) => {
+          if (docHasDragged) {
+            return;
+          }
+
+          if (isEditModeActive) {
+            // The modal backdrop and everything inside it (popup, buttons) are "inside"
+            const isClickInside = e.target.closest('#modal-backdrop') || e.target.closest('.selected-bar');
+            if (isClickInside) {
+              return;
+            } else {
+              exitEditMode();
+              clearSelection();
+              return;
+            }
+          }
+
+          // Exclude buttons, inputs, controls, etc.
+          if (e.target.closest('.tempo-control') || 
+              e.target.closest('.player-header') || 
+              e.target.closest('.player-footer') || 
+              e.target.closest('button') || 
+              e.target.closest('input')) {
+            return;
+          }
+
+          // Exclude music items
+          if (e.target.closest('.staff') || 
+              e.target.closest('.note') || 
+              e.target.closest('.staff-handle') ||
+              e.target.closest('.insert-staff-btn')) {
+            return;
+          }
+
+          if (wasLongPress || hasDraggedRecently) {
+            return;
+          }
+
+          console.log("Deselect clicked elsewhere:", e.target);
+          resetDoubleTapTimer();
+          clearSelection();
+        });
+      }
+
+      // Initialize Drag & Drop listeners on load
+      window.addEventListener('load', () => {
+        initDragAndDrop();
+        initClickOutsideListener();
+      });
+
+      const cdns = [
+        "https://cdn.jsdelivr.net/npm/verovio@4.1.0/dist/verovio-toolkit-wasm.js",
+        "https://unpkg.com/verovio@4.1.0/dist/verovio-toolkit-wasm.js",
+        "https://www.verovio.org/javascript/4.1.0/verovio-toolkit-wasm.js"
+      ];
+      let currentCdnIndex = 0;
+
+      function loadScript(url, onSuccess, onError) {
+        const script = document.createElement('script');
+        script.src = url;
+        script.onload = onSuccess;
+        script.onerror = onError;
+        document.head.appendChild(script);
+      }
+
+      const jspdfCdns = [
+        "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+        "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js",
+        "https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"
+      ];
+
+      function ensureJsPdfLoaded() {
+        return new Promise((resolve, reject) => {
+          if (typeof window.jspdf !== 'undefined') {
+            resolve(window.jspdf);
+            return;
+          }
+          let cdnIndex = 0;
+          function tryNextJsPdfCdn() {
+            if (cdnIndex >= jspdfCdns.length) {
+              reject(new Error("Failed to load jsPDF library from all CDNs."));
+              return;
+            }
+            const url = jspdfCdns[cdnIndex++];
+            console.log("Attempting to load jsPDF from:", url);
+            loadScript(url,
+              () => {
+                if (typeof window.jspdf !== 'undefined') {
+                  console.log("jsPDF loaded successfully from:", url);
+                  resolve(window.jspdf);
+                } else {
+                  console.warn("jsPDF loaded from " + url + " but window.jspdf is undefined.");
+                  tryNextJsPdfCdn();
+                }
+              },
+              (err) => {
+                console.warn("Failed to load jsPDF from:", url, err);
+                tryNextJsPdfCdn();
+              }
+            );
+          }
+          tryNextJsPdfCdn();
+        });
+      }
+
+      function tryNextCdn() {
+        if (currentCdnIndex >= cdns.length) {
+          console.error("All CDNs failed to load Verovio script.");
+          showError("Verovio script failed to load from all CDNs. Please check your internet connection.");
+          return;
+        }
+        const url = cdns[currentCdnIndex++];
+        console.log("Attempting to load Verovio from:", url);
+        loadScript(url, 
+          () => {
+            console.log("Verovio script loaded from:", url);
+            let retries = 0;
+            const interval = setInterval(() => {
+              if (typeof verovio !== 'undefined' && verovio.module) {
+                clearInterval(interval);
+                if (verovio.toolkit && verovio.toolkit.prototype) {
+                  const originalSetOptions = verovio.toolkit.prototype.setOptions;
+                  verovio.toolkit.prototype.setOptions = function(options) {
+                    const customOptions = {
+                      ...options,
+                      mnumInterval: 0
+                    };
+                    return originalSetOptions.call(this, customOptions);
+                  };
+                }
+                verovio.module.onRuntimeInitialized = () => {
+                  verovioLoaded = true;
+                  renderScore();
+                };
+                if (verovio.module.calledRun) {
+                  verovioLoaded = true;
+                  renderScore();
+                }
+              } else {
+                retries++;
+                if (retries > 360) { // Increased from 120 to 360 (18 seconds) for slower mobile CPUs
+                  clearInterval(interval);
+                  console.warn("WASM compilation timed out for:", url);
+                  tryNextCdn();
+                }
+              }
+            }, 50);
+          }, 
+          () => {
+            console.warn("Failed to load Verovio script from:", url);
+            tryNextCdn();
+          }
+        );
+      }
+
+      function initAndRender() {
+        tryNextCdn();
+      }
+
+      function sendResponse(payload) {
+        const jsonStr = JSON.stringify(payload);
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(jsonStr);
+        } else {
+          window.parent.postMessage(jsonStr, '*');
+        }
+      }
+
+      window.generatePDF = async function() {
+        try {
+          const jspdfModule = await ensureJsPdfLoaded();
+          const { jsPDF } = jspdfModule;
+          
+          // Save current options
+          const oldOpts = vrvToolkit.getOptions();
+          
+          // Set pagination options for A4 (ratio 1:1.414)
+          const pdfPageWidth = 1200;
+          const pdfPageHeight = 1697; // 1200 * 1.414
+          
+          vrvToolkit.setOptions({
+            pageWidth: pdfPageWidth,
+            pageHeight: pdfPageHeight,
+            scale: 30,
+            adjustPageHeight: false,
+            breaks: 'auto'
+          });
+          
+          // Reload data to apply pagination options
+          const musicxml = atob(musicxmlBase64);
+          vrvToolkit.loadData(musicxml);
+          
+          const pageCount = vrvToolkit.getPageCount();
+          const pdf = new jsPDF('p', 'px', [pdfPageWidth, pdfPageHeight]);
+          
+          for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
+            if (pageNum > 1) {
+              pdf.addPage([pdfPageWidth, pdfPageHeight], 'p');
+            }
+            
+            const rawSvgString = vrvToolkit.renderToSVG(pageNum, {});
+            const scoreRoot = document.getElementById('score');
+            const originalInnerHTML = scoreRoot ? scoreRoot.innerHTML : '';
+            if (scoreRoot) {
+              scoreRoot.innerHTML = rawSvgString;
+              ensureSelectionMetadata(scoreRoot);
+            }
+            const svgString = scoreRoot ? scoreRoot.innerHTML : rawSvgString;
+            if (scoreRoot) {
+              scoreRoot.innerHTML = originalInnerHTML;
+            }
+            
+            // Convert SVG string to canvas
+            const canvas = await new Promise((resolve, reject) => {
+              const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+              const blobURL = (window.URL || window.webkitURL || window).createObjectURL(svgBlob);
+              const image = new Image();
+              image.onload = () => {
+                const c = document.createElement('canvas');
+                c.width = pdfPageWidth;
+                c.height = pdfPageHeight;
+                const ctx = c.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, pdfPageWidth, pdfPageHeight);
+                ctx.drawImage(image, 0, 0);
+                (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
+                resolve(c);
+              };
+              image.onerror = (err) => {
+                (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
+                reject(new Error('Failed to load SVG image for canvas rendering.'));
+              };
+              image.src = blobURL;
+            });
+            
+            const imgData = canvas.toDataURL('image/png');
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfPageWidth, pdfPageHeight);
+          }
+          
+          // Restore original options and re-render for screen display
+          vrvToolkit.setOptions(oldOpts);
+          vrvToolkit.loadData(musicxml);
+          const svg = vrvToolkit.renderToSVG(1, {});
+          
+
+          document.getElementById('score').innerHTML = svg;
+          ensureSelectionMetadata(document.getElementById('score'));
+          const scoreSvg = document.getElementById('score').querySelector('svg');
+          if (scoreSvg) {
+            scoreSvg.style.width = '100%';
+            scoreSvg.style.height = 'auto';
+          }
+          
+          const pdfBase64 = pdf.output('datauristring');
+          sendResponse({
+            type: 'PDF_GENERATED',
+            data: pdfBase64
+          });
+          
+        } catch (err) {
+          sendResponse({
+            type: 'PDF_ERROR',
+            error: err.message
+          });
+        }
+      };
+
+      function handleIncomingMessage(event) {
+        console.log(
+          "[WEBVIEW RECEIVED MESSAGE]",
+          event.data?.length
+        );
+        try {
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+          if (!data) return;
+          console.log("WEBVIEW RECEIVED MESSAGE:", data);
+          
+          if (data.type === 'SET_EDIT_MODE') {
+            isEditable = !!data.editable;
+            if (isEditable) {
+              document.body.classList.remove('view-mode');
+              injectStaffHandles();
+            } else {
+              document.body.classList.add('view-mode');
+              clearDOMSelection();
+              document.querySelectorAll('.staff-handle, .insert-staff-btn').forEach(el => el.remove());
+            }
+          } else if (data.type === 'UPDATE_XML') {
+            if (data.musicxml) {
+              console.log("WEBVIEW RECEIVED UPDATE_XML, re-rendering score");
+              
+              let oldXml = '';
+              try {
+                oldXml = musicxmlBase64 ? atob(musicxmlBase64) : '';
+              } catch(e) {
+                console.log("[WEBVIEW UPDATE_XML OLD DECODE ERROR]", e.message);
+              }
+              console.log("[WEBVIEW UPDATE_XML STORED XML BEFORE UPDATE]", oldXml.length);
+              
+              try {
+                musicxmlBase64 = btoa(data.musicxml);
+                console.log("[WEBVIEW UPDATE_XML STORED XML AFTER UPDATE]", data.musicxml.length);
+              } catch(e) {
+                console.log("[WEBVIEW UPDATE_XML BTOA ERROR]", e.message);
+              }
+              
+              const xml = data.musicxml;
+              console.log(
+                "[WEBVIEW XML UPDATED]",
+                xml.length
+              );
+              renderScore();
+              rebuildPlaybackSchedule();
+            }
+          } else if (data.type === 'UPDATE_TEMPO') {
+            if (data.tempo !== undefined) {
+              console.log("WEBVIEW RECEIVED UPDATE_TEMPO:", data.tempo);
+              originalTempo = data.tempo;
+              tempo = data.tempo;
+              const roundedOriginal = Math.round(originalTempo);
+              const detectedText = document.getElementById('detected-tempo-text');
+              if (detectedText) detectedText.textContent = 'Detected: ' + roundedOriginal + ' BPM';
+              const slider = document.getElementById('tempo-range');
+              if (slider) slider.value = roundedOriginal;
+              const valLabel = document.getElementById('tempo-val');
+              if (valLabel) valLabel.textContent = roundedOriginal;
+            }
+          } else if (data.type === 'UPDATE_TIME_SIGNATURE') {
+            if (data.timeSignature) {
+              console.log("WEBVIEW RECEIVED UPDATE_TIME_SIGNATURE:", data.timeSignature);
+              timeSignature = data.timeSignature;
+            }
+          } else if (data.type === 'GENERATE_PDF') {
+            window.generatePDF();
+          } else if (data.type === 'PLAY') {
+            startPlayback();
+          } else if (data.type === 'PAUSE') {
+            pausePlayback();
+          } else if (data.type === 'RESTART') {
+            window.restartPlayback();
+          } else if (data.type === 'SEEK') {
+            window.seekToTime(data.time);
+          } else if (data.type === 'SET_TEMPO') {
+            if (data.tempo !== undefined) {
+              window.setTempo(data.tempo, false);
+              const slider = document.getElementById('tempo-range');
+              if (slider) slider.value = Math.round(data.tempo);
+            }
+          } else if (data.type === 'SET_SPEED') {
+            if (data.rate !== undefined) {
+              window.setTempo(originalTempo * data.rate, false);
+              const slider = document.getElementById('tempo-range');
+              if (slider) slider.value = Math.round(originalTempo * data.rate);
+            }
+          } else if (data.type === 'HIGHLIGHT_NOTE') {
+            if (data.time !== undefined) {
+              const speed = tempo / originalTempo;
+              window.highlightCurrentNote(data.time * speed);
+            }
+          } else if (data.type === 'ZOOM_IN') {
+            window.updateZoom(zoomLevel + 0.1);
+          } else if (data.type === 'ZOOM_OUT') {
+            window.updateZoom(zoomLevel - 0.1);
+          } else if (data.type === 'RESET_ZOOM') {
+            window.updateZoom(1.0);
+          } else if (data.type === 'SELECT_BAR') {
+            if (data.selectionId !== undefined) {
+              selectBar(data.selectionId, data.staffNumber, data.measureNumber, !!data.isLongPress);
+            }
+          } else if (data.type === 'SELECT_NOTE') {
+            if (data.noteId !== undefined) {
+              selectNote(data.noteId);
+            }
+          } else if (data.type === 'SELECT_NOTES') {
+            if (data.noteIds !== undefined && Array.isArray(data.noteIds)) {
+              document.querySelectorAll('.selected-note').forEach(el => el.classList.remove('selected-note'));
+              selectedNoteIds = [...data.noteIds];
+              selectedNoteIds.forEach(id => {
+                const noteEl = document.getElementById(id);
+                if (noteEl) noteEl.classList.add('selected-note');
+              });
+            }
+          } else if (data.type === 'SELECT_MEASURE') {
+            if (data.measureIndex !== undefined) {
+              selectMeasure(data.measureIndex + 1, !!data.isLongPress);
+            }
+          } else if (data.type === 'SELECT_STAFF') {
+            if (data.staffIndex !== undefined) {
+              selectStaff(data.staffIndex + 1);
+            }
+          } else if (data.type === 'CLEAR_SELECTION') {
+            clearSelection();
+          } else if (data.type === 'EXIT_EDIT_MODE') {
+            exitEditMode();
+          } else if (data.type === 'UPDATE_VIEWPORT') {
+            const backdrop = document.getElementById('modal-backdrop');
+            if (backdrop) {
+              backdrop.style.position = 'absolute';
+              backdrop.style.top = data.scrollY + 'px';
+              backdrop.style.height = data.viewportHeight + 'px';
+            }
+          }
+        } catch (e) {
+          // Ignore parse errors from unrelated messages
+        }
+      }
+
+      window.addEventListener('message', handleIncomingMessage);
+      document.addEventListener('message', handleIncomingMessage);
+      window.addEventListener('resize', () => {
+        renderScore();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          exitEditMode();
+          return;
+        }
+        if (!selectedNoteId) return;
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          sendResponse({
+            type: 'MOVE_NOTE',
+            noteId: selectedNoteId,
+            direction: 'up'
+          });
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          sendResponse({
+            type: 'MOVE_NOTE',
+            noteId: selectedNoteId,
+            direction: 'down'
+          });
+        }
+      });
+
+      if (document.readyState === 'complete') {
+        initAndRender();
+      } else {
+        window.addEventListener('load', initAndRender);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+2026-06-29 23:09:08,826 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Book.java:560  | 1 sheet in C:\ReactNative\music-app\MeloNote\backend\temp\2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a.jpeg
+2026-06-29 23:09:09,134 INFO []                 Book.java:2565 | Stored /book.xml
+2026-06-29 23:09:09,135 INFO []                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a.omr
+2026-06-29 23:09:09,148 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-06-29 23:09:09,152 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | LOAD
+2026-06-29 23:09:09,712 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]            SheetStub.java:1278 | Loaded image #1 2800x3957 from C:\ReactNative\music-app\MeloNote\backend\temp\2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a.jpeg
+2026-06-29 23:09:09,726 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | BINARY
+2026-06-29 23:09:10,982 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | SCALE
+2026-06-29 23:09:11,048 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]         ScaleBuilder.java:255  | Beam  guessed height: 15 -- mid of [8..23]
+2026-06-29 23:09:11,051 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]         ScaleBuilder.java:271  | Beam measured height: 12 -- 0.27 of [8..23] range at 507% of needed quorum
+2026-06-29 23:09:11,052 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]         ScaleBuilder.java:401  | Normalized black jitter: 20.83 %
+2026-06-29 23:09:11,053 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]            ScaleStep.java:65   | Scale{ interline(22,24,25) line(3,7,8) beam(12)}
+2026-06-29 23:09:11,055 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | GRID
+2026-06-29 23:09:12,532 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       LinesRetriever.java:1500 | Global slope: 0.00026
+2026-06-29 23:09:12,671 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]    ClustersRetriever.java:326  | Retrieved raw line clusters: 10 of sizes [5] with interline(22,24,25)
+2026-06-29 23:09:13,422 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]            PeakGraph.java:310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8] #5[9, 10]
+2026-06-29 23:09:14,719 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]        SystemManager.java:779  | 1 part along 5 systems
+2026-06-29 23:09:14,721 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Book.java:543  | Created scores: [{Score 1}]
+2026-06-29 23:09:14,722 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | HEADERS
+2026-06-29 23:09:17,014 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | STEM_SEEDS
+2026-06-29 23:09:17,157 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]        StemSeedsStep.java:86   | stem(5 max:6)
+2026-06-29 23:09:17,306 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | BEAMS
+2026-06-29 23:09:29,494 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | LEDGERS
+2026-06-29 23:09:30,195 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | HEADS
+2026-06-29 23:09:50,598 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_VOID[L:-0.4,R:-0.5] NOTEHEAD_BLACK[L:0.7,R:0.7]}
+2026-06-29 23:09:50,600 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | STEMS
+2026-06-29 23:09:52,908 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | REDUCTION
+2026-06-29 23:09:53,380 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]        ReductionStep.java:105  | Stems free length median value: 86 pixels, 3.6 interlines
+2026-06-29 23:09:53,394 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | CUE_BEAMS
+2026-06-29 23:09:53,395 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2026-06-29 23:09:53,396 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | TEXTS
+2026-06-29 23:09:55,236 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       MetronomeInter.java:1410 | Metronome. Non recognized note for glyph#7412
+2026-06-29 23:09:55,253 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | MEASURES
+2026-06-29 23:09:55,271 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Page.java:307  | 22 raw measures: [4 in system#1, 4 in system#2, 4 in system#3, 4 in system#4, 6 in system#5]
+2026-06-29 23:09:55,272 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | CHORDS
+2026-06-29 23:09:55,313 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | CURVES
+2026-06-29 23:09:57,789 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]         SlursBuilder.java:240  | Slurs: 0
+2026-06-29 23:09:57,803 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]      SegmentsBuilder.java:155  | Segments: 0
+2026-06-29 23:09:57,820 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | SYMBOLS
+2026-06-29 23:09:59,015 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | LINKS
+2026-06-29 23:09:59,133 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | RHYTHMS
+2026-06-29 23:09:59,307 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]        MeasureRhythm.java:1044 | Measure{#21} No timeOffset for HeadChordInter#7701{(0.951/0.951) staff:9 slot#4 dur:1/16}
+2026-06-29 23:09:59,310 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]   AbstractChordInter.java:627  | Measure{#21} No timeOffset for HeadChordInter#7702{(0.948/0.948) staff:9 slot#5 dur:1/16}
+2026-06-29 23:09:59,310 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]        MeasureRhythm.java:1044 | Measure{#21} No timeOffset for RestChordInter#8368{(0.799/0.799) staff:10 slot#5 dur:1/16}
+2026-06-29 23:09:59,311 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                Voice.java:257  | Measure{#21} Voice{#5 excess:1/16} too long
+2026-06-29 23:09:59,312 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]          StackRhythm.java:224  | S5 MeasureStack#21 no correct rhythm
+2026-06-29 23:09:59,314 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]       StepMonitoring.java:98   | PAGE
+2026-06-29 23:09:59,328 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                Voice.java:257  | Measure{#21} Voice{#5 excess:1/16} too long
+2026-06-29 23:09:59,330 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Book.java:2584 | Book{2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a} storing
+2026-06-29 23:09:59,460 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Book.java:2565 | Stored /book.xml
+2026-06-29 23:09:59,710 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-06-29 23:10:01,710 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-06-29 23:10:01,710 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Book.java:2525 | Book stored as C:\ReactNative\music-app\MeloNote\backend\outputs\2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a.omr
+2026-06-29 23:10:01,719 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]            SheetStub.java:1655 | Sheet disposed
+2026-06-29 23:10:01,774 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Book.java:2050 | End of Stub#1
+2026-06-29 23:10:01,776 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                 Book.java:2057 | End of Book{2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a}
+2026-06-29 23:10:03,120 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]            SheetStub.java:1000 | Loaded /sheet#1/sheet#1.xml
+2026-06-29 23:10:03,855 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]      PartwiseBuilder.java:2706 | Exporting sheet(s): [#1]
+2026-06-29 23:10:03,871 WARN [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]      PartwiseBuilder.java:1615 | Error visiting MetronomeInter#7440{<invalid-internals>} in {Page#1.1}
+java.lang.NullPointerException: Cannot invoke "org.audiveris.omr.sig.inter.BeatUnitInter$Note.toMusicXml()" because "note" is null
+	at org.audiveris.omr.score.PartwiseBuilder.processDirection(PartwiseBuilder.java:1574)
+	at org.audiveris.omr.score.PartwiseBuilder.processNote(PartwiseBuilder.java:2267)
+	at org.audiveris.omr.score.PartwiseBuilder.processChord(PartwiseBuilder.java:1394)
+	at org.audiveris.omr.score.PartwiseBuilder.processMeasure(PartwiseBuilder.java:2135)
+	at org.audiveris.omr.score.PartwiseBuilder.processPart(PartwiseBuilder.java:2677)
+	at org.audiveris.omr.score.PartwiseBuilder.processSystem(PartwiseBuilder.java:3222)
+	at org.audiveris.omr.score.PartwiseBuilder.processLogicalPart(PartwiseBuilder.java:1874)
+	at org.audiveris.omr.score.PartwiseBuilder.processStub(PartwiseBuilder.java:3173)
+	at org.audiveris.omr.score.PartwiseBuilder.processPartList(PartwiseBuilder.java:2709)
+	at org.audiveris.omr.score.PartwiseBuilder.processScore(PartwiseBuilder.java:2984)
+	at org.audiveris.omr.score.PartwiseBuilder.build(PartwiseBuilder.java:3542)
+	at org.audiveris.omr.score.ScoreExporter.export(ScoreExporter.java:122)
+	at org.audiveris.omr.score.ScoreExporter.export(ScoreExporter.java:163)
+	at org.audiveris.omr.sheet.Book.export(Book.java:630)
+	at org.audiveris.omr.CLI$ProcessingTask.processBook(CLI.java:927)
+	at org.audiveris.omr.CLI$CliTask.call(CLI.java:513)
+	at org.audiveris.omr.Main.runBatchTasks(Main.java:361)
+	at org.audiveris.omr.Main.main(Main.java:263)
+	at Audiveris.main(Audiveris.java:50)
+2026-06-29 23:10:04,158 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]        ScoreExporter.java:164  | Score 2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a exported to C:\ReactNative\music-app\MeloNote\backend\outputs\2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a.mxl
+2026-06-29 23:10:04,234 INFO [2606202d-049b-4e49-98ca-27d647d745ea_clean_eccf3964-7817-453a-a964-c8907baf759a]                Score.java:181  | Closing {Score 1}

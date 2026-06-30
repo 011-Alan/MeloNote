@@ -1,0 +1,352 @@
+[
+  {
+    "timestamp": "2026-06-08T10:54:53.627518",
+    "overall_score": 73.1,
+    "error_type": "high_noise",
+    "noise_floor_db": -20.711906084411112,
+    "zcr": 0.12433482024629237,
+    "flatness": 0.0006595185841433704,
+    "centroid": 935.1149773850467,
+    "density": 2.6538067596413666
+  },
+  {
+    "timestamp": "2026-06-08T11:00:17.646481",
+    "overall_score": 66.7,
+    "error_type": "high_noise",
+    "noise_floor_db": -20.711906084411112,
+    "zcr": 0.12433482024629237,
+    "flatness": 0.0006595185841433704,
+    "centroid": 935.1149773850467,
+    "density": 2.6538067596413666
+  },
+  {
+    "timestamp": "2026-06-08T12:15:23.571103",
+    "overall_score": 66.7,
+    "error_type": "high_noise",
+    "noise_floor_db": -20.711906084411112,
+    "zcr": 0.12433482024629237,
+    "flatness": 0.0006595185841433704,
+    "centroid": 935.1149773850467,
+    "density": 2.6538067596413666
+  },
+  {
+    "timestamp": "2026-06-08T15:05:58.114605",
+    "overall_score": 64.3,
+    "error_type": "high_noise",
+    "noise_floor_db": -42.49324827220597,
+    "zcr": 0.13483945001657824,
+    "flatness": 0.021609283983707428,
+    "centroid": 1470.1507398163471,
+    "density": 1.5777454834313924
+  },
+  {
+    "timestamp": "2026-06-23T17:21:50.588199",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T17:25:47.348413",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T17:49:44.177912",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T19:07:21.130652",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T19:46:04.618622",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T19:46:30.308669",
+    "overall_score": 64.3,
+    "error_type": "high_noise",
+    "noise_floor_db": -42.49324827220597,
+    "zcr": 0.13483945001657824,
+    "flatness": 0.021609283983707428,
+    "centroid": 1470.1507398163471,
+    "density": 1.5777454834313924
+  },
+  {
+    "timestamp": "2026-06-23T20:06:33.086123",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T20:19:39.495777",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T22:24:22.028415",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T22:50:45.073336",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T23:02:37.345311",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T23:05:38.485684",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T23:15:14.844951",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T23:40:45.708333",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T23:46:57.318934",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-23T23:58:55.742467",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T10:40:45.708475",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T10:47:28.137808",
+    "overall_score": 64.3,
+    "error_type": "high_noise",
+    "noise_floor_db": -42.49324827220597,
+    "zcr": 0.13483945001657824,
+    "flatness": 0.021609283983707428,
+    "centroid": 1470.1507398163471,
+    "density": 1.5777454834313924
+  },
+  {
+    "timestamp": "2026-06-24T11:03:06.093231",
+    "overall_score": 64.3,
+    "error_type": "high_noise",
+    "noise_floor_db": -42.49324827220597,
+    "zcr": 0.13483945001657824,
+    "flatness": 0.021609283983707428,
+    "centroid": 1470.1507398163471,
+    "density": 1.5777454834313924
+  },
+  {
+    "timestamp": "2026-06-24T11:05:36.971223",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T11:13:05.991958",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T11:49:48.871350",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T12:06:54.381760",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T12:15:53.380717",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T12:43:45.823021",
+    "overall_score": 65.2,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T12:46:28.021114",
+    "overall_score": 69.4,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-24T12:52:27.336225",
+    "overall_score": 69.4,
+    "error_type": "high_noise",
+    "noise_floor_db": -32.9128872697943,
+    "zcr": 0.06325168578904992,
+    "flatness": 0.00017696732538752258,
+    "centroid": 683.1559698997547,
+    "density": 1.3599916882546499
+  },
+  {
+    "timestamp": "2026-06-25T18:30:47.431395",
+    "overall_score": 52.0,
+    "error_type": "general",
+    "noise_floor_db": -160.0,
+    "zcr": 0.0,
+    "flatness": 1.0000008344650269,
+    "centroid": 0.0,
+    "density": 0.0
+  },
+  {
+    "timestamp": "2026-06-25T18:47:47.032725",
+    "overall_score": 51.4,
+    "error_type": "high_noise",
+    "noise_floor_db": -34.20055982237279,
+    "zcr": 0.06279296875,
+    "flatness": 0.015592415817081928,
+    "centroid": 1139.703774830075,
+    "density": 1.092896171877333
+  },
+  {
+    "timestamp": "2026-06-25T20:17:33.660878",
+    "overall_score": 72.4,
+    "error_type": "high_noise",
+    "noise_floor_db": -37.41313094149931,
+    "zcr": 0.06263491981907894,
+    "flatness": 0.009310994297266006,
+    "centroid": 1224.5986580012986,
+    "density": 1.6666666597222224
+  },
+  {
+    "timestamp": "2026-06-26T11:59:10.926089",
+    "overall_score": 44.4,
+    "error_type": "high_noise",
+    "noise_floor_db": -30.21295208130324,
+    "zcr": 0.1386598680840164,
+    "flatness": 0.05979342386126518,
+    "centroid": 1804.7493964738123,
+    "density": 1.7944116847105571
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "project_id": "3cf8f9c0-b579-406c-8c88-91973858c41f",
+  "original_filename": "silence.webm",
+  "time_signature": "4/4",
+  "notes": [],
+  "treble_notes": [],
+  "bass_notes": [],
+  "detected_tempo": 120.0,
+  "tempo": 120.0,
+  "tempo_confidence": "LOW",
+  "duration_preserved": true,
+  "musicxml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n<score-partwise version=\"4.0\">\n  <work><work-title>Transcribed Score</work-title></work>\n  <part-list>\n    <score-part id=\"P1\"><part-name>Piano</part-name></score-part>\n  </part-list>\n  <part id=\"P1\">\n    <measure number=\"1\">\n      <attributes>\n        <divisions>4</divisions>\n        <key><fifths>0</fifths><mode>major</mode></key>\n        <time><beats>4</beats><beat-type>4</beat-type></time>\n        <staves>2</staves>\n        <clef number=\"1\"><sign>G</sign><line>2</line></clef>\n        <clef number=\"2\"><sign>F</sign><line>4</line></clef>\n      </attributes>\n      <direction placement=\"above\">\n        <direction-type>\n          <metronome><beat-unit>quarter</beat-unit><per-minute>120</per-minute></metronome>\n        </direction-type>\n        <sound tempo=\"120\"/>\n      </direction>\n      <note>\n        <rest measure=\"yes\"/>\n        <duration>16</duration>\n        <voice>1</voice>\n        <type>whole</type>\n        <staff>1</staff>\n      </note>\n      <backup>\n        <duration>16</duration>\n      </backup>\n      <note>\n        <rest measure=\"yes\"/>\n        <duration>16</duration>\n        <voice>5</voice>\n        <type>whole</type>\n        <staff>2</staff>\n      </note>\n    </measure>\n  </part>\n</score-partwise>",
+  "quality_scores": {
+    "pitch_accuracy": 100.0,
+    "rhythm_accuracy": 50.0,
+    "tempo_accuracy": 80.0,
+    "chroma_similarity": 12.5,
+    "overall_score": 52.0,
+    "best_tempo": 120,
+    "best_gap_threshold": 0.35,
+    "best_grid_resolution": 0.25,
+    "pitchAccuracy": 100.0,
+    "rhythmAccuracy": 50.0,
+    "tempoAccuracy": 80.0,
+    "chromaSimilarity": 12.5,
+    "overallScore": 52.0,
+    "bestTempo": 120,
+    "bestGapThreshold": 0.35,
+    "bestGridResolution": 0.25
+  },
+  "raw_notes": [],
+  "best_grid_resolution": 0.25,
+  "activated_modules": {
+    "spleeter": false,
+    "hpss": false,
+    "torchcrepe": false,
+    "pyin": false,
+    "basic_pitch_ensemble": false,
+    "butterworth_filter": true,
+    "spectral_gating": false
+  },
+  "activation_reasons": {
+    "butterworth_filter": "Always active as baseline preprocessing",
+    "spleeter": "Bypassed (Speed preset is 'fast')",
+    "hpss": "Bypassed (Speed preset is 'fast')",
+    "spectral_gating": "Bypassed (Speed preset is 'fast')",
+    "basic_pitch_ensemble": "Bypassed (Speed preset is 'fast')",
+    "torchcrepe": "Bypassed (Speed preset is 'fast')",
+    "pyin": "Bypassed (Speed preset is 'fast')"
+  }
+}
