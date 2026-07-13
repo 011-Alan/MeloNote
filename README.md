@@ -1,5 +1,6 @@
 # MeloNote
 
+[![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](#)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
 [![Expo Router](https://img.shields.io/badge/expo--router-v56-blue.svg)](https://docs.expo.dev/router/introduction/)
 [![Flask Backend](https://img.shields.io/badge/flask-v2.0-orange.svg)](https://flask.palletsprojects.com/)
@@ -8,6 +9,9 @@
 
 A modern, professional-grade AI-powered music transcription and sheet music workspace. MeloNote bridges the gap between acoustic performance, physical scores, and digital editing, enabling musicians to record, digitize, compose, and manage sheet music dynamically within a unified mobile-friendly environment.
 
+---
+
+## Current Version: `1.0.0`
 
 ## Acknowledgements
 
