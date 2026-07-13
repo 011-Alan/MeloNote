@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { useSettings } from '@/context/SettingsContext';
 
 interface Highlight {
   icon: string;
@@ -16,18 +17,21 @@ const highlights: Highlight[] = [
 ];
 
 export function FeatureHighlights() {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Built with MeloAI</Text>
+      <Text style={[styles.sectionTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>Built with MeloAI</Text>
       <View style={styles.flexWrapContainer}>
         {highlights.map((item, idx) => (
           <Animated.View
             key={idx}
             entering={FadeInUp.delay(idx * 120).duration(500)}
-            style={styles.pill}
+            style={[styles.pill, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#FFFFFF', borderColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.08)' }]}
           >
             <Text style={styles.icon}>{item.icon}</Text>
-            <Text style={styles.label}>{item.label}</Text>
+            <Text style={[styles.label, { color: isDark ? '#FFFFFF' : '#121212' }]}>{item.label}</Text>
           </Animated.View>
         ))}
       </View>

@@ -1,94 +1,212 @@
-import React from 'react';
-import { StyleSheet, View, Text, ScrollView, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, ScrollView, Pressable, Platform, ViewStyle, TextStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-// Import design system components
+// Import design system components & settings context
 import { GradientBackground, GlassCard } from '@/components/ui/DesignSystem';
+import { useSettings } from '@/context/SettingsContext';
 
-interface SettingRowProps {
+import { WalkthroughRegistry } from '@/components/onboarding/WalkthroughRegistry';
+
+interface SwitchRowProps {
   icon: string;
   title: string;
-  value?: string;
-  showChevron?: boolean;
+  isEnabled: boolean;
+  onToggle: () => void;
+  innerRef?: (ref: any) => void;
 }
 
-function SettingRow({ icon, title, value, showChevron = true }: SettingRowProps) {
+function SwitchRow({ icon, title, isEnabled, onToggle, innerRef }: SwitchRowProps) {
+  const { theme } = useSettings();
+  const textColor = theme === 'dark' ? '#FFFFFF' : '#121212';
+  const trackBg = isEnabled
+    ? '#FF4FA3'
+    : (theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)');
+  const knobBg = '#FFFFFF';
+
   return (
-    <Pressable style={({ pressed }) => [styles.settingRow, pressed && styles.rowPressed]}>
+    <Pressable ref={innerRef} style={styles.settingRow} onPress={onToggle}>
       <View style={styles.settingRowLeft}>
         <View style={styles.settingIconCircle}>
           <Ionicons name={icon as any} size={20} color="#FF4FA3" />
         </View>
-        <Text style={styles.settingTitle}>{title}</Text>
+        <Text style={[styles.settingTitle, { color: textColor }]}>{title}</Text>
       </View>
       <View style={styles.settingRowRight}>
-        {value && <Text style={styles.settingValue}>{value}</Text>}
-        {showChevron && <Ionicons name="chevron-forward" size={16} color="#8E929A" />}
+        <View style={[styles.switchTrack, { backgroundColor: trackBg }]}>
+          <View style={[
+            styles.switchKnob,
+            {
+              backgroundColor: knobBg,
+              left: isEnabled ? 22 : 2,
+            }
+          ]} />
+        </View>
       </View>
     </Pressable>
   );
 }
 
+interface SliderRowProps {
+  icon: string;
+  title: string;
+  value: number; // 0.0 to 1.0
+  onValueChange: (val: number) => void;
+  disabled: boolean;
+  innerRef?: (ref: any) => void;
+}
+
+function SliderRow({ icon, title, value, onValueChange, disabled, innerRef }: SliderRowProps) {
+  const { theme } = useSettings();
+  const textColor = theme === 'dark' ? '#FFFFFF' : '#121212';
+  const [sliderWidth, setSliderWidth] = useState(0);
+
+  const handleTouch = (e: any) => {
+    if (disabled || sliderWidth <= 0) return;
+    const touchX = e.nativeEvent.locationX ?? e.nativeEvent.offsetX ?? 0;
+    const ratio = Math.max(0, Math.min(1, touchX / sliderWidth));
+    onValueChange(ratio);
+  };
+
+  const percentage = Math.round(value * 100);
+  const displayProgress = value * 100;
+
+  return (
+    <View ref={innerRef} style={[styles.sliderRowContainer, disabled && { opacity: 0.35 }]}>
+      <View style={styles.settingRowHeader}>
+        <View style={styles.settingRowLeft}>
+          <View style={styles.settingIconCircle}>
+            <Ionicons name={icon as any} size={20} color="#FF4FA3" />
+          </View>
+          <Text style={[styles.settingTitle, { color: textColor }]}>{title}</Text>
+        </View>
+        <Text style={styles.settingValue}>{percentage}%</Text>
+      </View>
+      <View style={styles.sliderWrapper}>
+        <View
+          onLayout={(e) => setSliderWidth(e.nativeEvent.layout.width)}
+          onTouchStart={handleTouch}
+          onTouchMove={handleTouch}
+          onTouchEnd={handleTouch}
+          style={styles.sliderTouchArea}
+        >
+          <View 
+            pointerEvents="none"
+            style={[
+              styles.sliderTrackBackground,
+              { backgroundColor: theme === 'dark' ? '#2E3135' : '#E0E1E6' }
+            ]}
+          >
+            <LinearGradient
+              colors={['#FF8A00', '#FF4FA3']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[
+                styles.sliderTrackFill,
+                { width: `${displayProgress}%` }
+              ]}
+            />
+            <View
+              style={[
+                styles.sliderKnob,
+                { left: `${displayProgress}%` }
+              ]}
+            />
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+import { useOnboarding } from '@/context/OnboardingContext';
+
 export default function SettingsScreen() {
+  const { userName } = useOnboarding();
+  const name = userName || 'Alan Jackson';
+  
+  const {
+    theme,
+    setTheme,
+    notificationsEnabled,
+    setNotificationsEnabled,
+    inAppVolumeEnabled,
+    setInAppVolumeEnabled,
+    inAppVolume,
+    setInAppVolume,
+  } = useSettings();
+
+  const avatarText = name.trim().charAt(0).toUpperCase() || 'U';
+
+  const isDark = theme === 'dark';
+  const groupTitleColor = isDark ? '#8E929A' : '#60646C';
+  const nameColor = isDark ? '#FFFFFF' : '#121212';
+  const indicatorBorder = isDark ? '#0F0F12' : '#FFFFFF';
+
   return (
     <GradientBackground>
       <ScrollView
+        ref={(r) => WalkthroughRegistry.register('active-scrollview', r)}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
         {/* Profile Header Card */}
         <GlassCard style={styles.profileCard}>
           <View style={styles.profileAvatarCircle}>
-            <Text style={styles.profileAvatarText}>A</Text>
-            <View style={styles.onlineIndicator} />
+            <Text style={styles.profileAvatarText}>{avatarText}</Text>
+            <View style={[styles.onlineIndicator, { borderColor: indicatorBorder }]} />
           </View>
           <View style={styles.profileDetails}>
-            <Text style={styles.profileName}>Alan Jackson</Text>
-            <Text style={styles.profileEmail}>alanjackson@workspace.ai</Text>
-          </View>
-          
-          <View style={styles.profileStatsDivider} />
-          
-          <View style={styles.statsContainer}>
-            <View style={styles.statBox}>
-              <Text style={styles.statNumber}>12</Text>
-              <Text style={styles.statLabel}>Projects</Text>
-            </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statNumber}>3</Text>
-              <Text style={styles.statLabel}>Workspaces</Text>
-            </View>
-            <View style={styles.statBox}>
-              <Text style={styles.statNumber}>Pro</Text>
-              <Text style={styles.statLabel}>Tier Plan</Text>
-            </View>
+            <Text style={[styles.profileName, { color: nameColor }]}>{name}</Text>
           </View>
         </GlassCard>
 
-        {/* Workspace settings group */}
-        <Text style={styles.groupTitle}>WORKSPACE CONFIG</Text>
+        {/* Preferences group */}
+        <Text style={[styles.groupTitle, { color: groupTitleColor }]}>PREFERENCES</Text>
         <GlassCard style={styles.settingsGroupCard}>
-          <SettingRow icon="musical-notes-outline" title="Transcription Engine" value="MeloNet v4.2 AI" />
-          <View style={styles.innerDivider} />
-          <SettingRow icon="options-outline" title="Default Export Format" value="MusicXML (Editable)" />
-          <View style={styles.innerDivider} />
-          <SettingRow icon="volume-high-outline" title="Synthesizer Soundfont" value="FluidR3 GM" />
+          <SwitchRow
+            innerRef={(r) => WalkthroughRegistry.register('settings-theme', r)}
+            icon="moon-outline"
+            title="Dark Theme Mode"
+            isEnabled={isDark}
+            onToggle={() => setTheme(isDark ? 'light' : 'dark')}
+          />
+          <View style={[styles.innerDivider, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.06)' }]} />
+          
+          <SwitchRow
+            icon="notifications-outline"
+            title="Notifications"
+            isEnabled={notificationsEnabled}
+            onToggle={() => setNotificationsEnabled(!notificationsEnabled)}
+          />
+          <View style={[styles.innerDivider, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.06)' }]} />
+
+          <SwitchRow
+            icon="volume-mute-outline"
+            title="Enable In-App Volume"
+            isEnabled={inAppVolumeEnabled}
+            onToggle={() => setInAppVolumeEnabled(!inAppVolumeEnabled)}
+          />
         </GlassCard>
 
-        {/* Account preferences group */}
-        <Text style={styles.groupTitle}>ACCOUNT & PREFERENCES</Text>
+        {/* Playback Volume Slider group */}
+        <Text style={[styles.groupTitle, { color: groupTitleColor }]}>PLAYBACK VOLUME</Text>
         <GlassCard style={styles.settingsGroupCard}>
-          <SettingRow icon="color-palette-outline" title="Theme Mode" value="Dark Glass" />
-          <View style={styles.innerDivider} />
-          <SettingRow icon="notifications-outline" title="Notifications" />
-          <View style={styles.innerDivider} />
-          <SettingRow icon="shield-checkmark-outline" title="Security & API Keys" />
+          <SliderRow
+            innerRef={(r) => WalkthroughRegistry.register('settings-volume', r)}
+            icon="volume-high-outline"
+            title="Volume Level"
+            value={inAppVolume}
+            onValueChange={setInAppVolume}
+            disabled={!inAppVolumeEnabled}
+          />
         </GlassCard>
 
         {/* App details bottom notice */}
         <View style={styles.appDetailsFooter}>
           <Ionicons name="sparkles" size={16} color="#FF8A00" />
-          <Text style={styles.footerText}>Powered by MeloNote Advanced Audio AI</Text>
+          <Text style={styles.footerText}>AI-powered MeloNote</Text>
         </View>
       </ScrollView>
     </GradientBackground>
@@ -99,19 +217,19 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 40,
+    paddingBottom: 80,
     gap: 16,
-  },
+  } as ViewStyle,
   profileCard: {
     alignItems: 'center',
     gap: 14,
     paddingVertical: 24,
-  },
+  } as ViewStyle,
   profileAvatarCircle: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255, 79, 163, 0.1)',
+    backgroundColor: '#FF4FA3',
     borderWidth: 2,
     borderColor: '#FF4FA3',
     alignItems: 'center',
@@ -121,12 +239,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
-  },
+  } as ViewStyle,
   profileAvatarText: {
     color: '#FFFFFF',
     fontSize: 32,
     fontWeight: '800',
-  },
+  } as TextStyle,
   onlineIndicator: {
     position: 'absolute',
     bottom: 2,
@@ -136,57 +254,25 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     backgroundColor: '#00E676',
     borderWidth: 2,
-    borderColor: '#0F0F12',
-  },
+  } as ViewStyle,
   profileDetails: {
     alignItems: 'center',
-  },
+  } as ViewStyle,
   profileName: {
-    color: '#FFFFFF',
     fontSize: 20,
     fontWeight: '800',
     letterSpacing: -0.5,
-  },
-  profileEmail: {
-    color: '#8E929A',
-    fontSize: 13,
-    marginTop: 4,
-  },
-  profileStatsDivider: {
-    height: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-    width: '100%',
-    marginVertical: 4,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-around',
-  },
-  statBox: {
-    alignItems: 'center',
-    gap: 4,
-  },
-  statNumber: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '800',
-  },
-  statLabel: {
-    color: '#8E929A',
-    fontSize: 12,
-  },
+  } as TextStyle,
   groupTitle: {
-    color: '#8E929A',
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1.5,
     marginTop: 10,
     marginLeft: 4,
-  },
+  } as TextStyle,
   settingsGroupCard: {
     padding: 6,
-  },
+  } as ViewStyle,
   settingRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -194,15 +280,19 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderRadius: 14,
-  },
-  rowPressed: {
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-  },
+  } as ViewStyle,
+  settingRowHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+  } as ViewStyle,
   settingRowLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-  },
+  } as ViewStyle,
   settingIconCircle: {
     width: 36,
     height: 36,
@@ -210,27 +300,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 79, 163, 0.08)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  } as ViewStyle,
   settingTitle: {
-    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '600',
-  },
+  } as TextStyle,
   settingRowRight: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-  },
+  } as ViewStyle,
   settingValue: {
     color: '#FF8A00',
     fontSize: 13,
-    fontWeight: '600',
-  },
+    fontWeight: '700',
+  } as TextStyle,
   innerDivider: {
     height: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.04)',
     marginHorizontal: 12,
-  },
+  } as ViewStyle,
   appDetailsFooter: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -238,10 +327,64 @@ const styles = StyleSheet.create({
     gap: 6,
     marginTop: 14,
     opacity: 0.6,
-  },
+  } as ViewStyle,
   footerText: {
     color: '#8E929A',
     fontSize: 12,
     fontWeight: '600',
-  },
+  } as TextStyle,
+  switchTrack: {
+    width: 46,
+    height: 26,
+    borderRadius: 13,
+    padding: 2,
+    justifyContent: 'center',
+    position: 'relative',
+  } as ViewStyle,
+  switchKnob: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    position: 'absolute',
+  } as ViewStyle,
+  sliderRowContainer: {
+    paddingVertical: 8,
+    gap: 6,
+  } as ViewStyle,
+  sliderWrapper: {
+    width: '100%',
+    height: 28,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+  } as ViewStyle,
+  sliderTouchArea: {
+    width: '100%',
+    height: 28,
+    justifyContent: 'center',
+  } as ViewStyle,
+  sliderTrackBackground: {
+    height: 6,
+    borderRadius: 3,
+    width: '100%',
+    position: 'relative',
+  } as ViewStyle,
+  sliderTrackFill: {
+    height: 6,
+    borderRadius: 3,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  } as ViewStyle,
+  sliderKnob: {
+    position: 'absolute',
+    top: -5,
+    marginLeft: -8,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 3,
+    borderColor: '#FF4FA3',
+    elevation: 3,
+  } as ViewStyle,
 });

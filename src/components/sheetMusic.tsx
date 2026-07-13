@@ -5,6 +5,7 @@ import {
   View,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { useSettings } from '@/context/SettingsContext';
 
 import {
   buildSheetMusicHtml,
@@ -101,6 +102,17 @@ export default function SheetMusic({
   }, []);
 
   const [isReady, setIsReady] = React.useState(false);
+  const { inAppVolumeEnabled, inAppVolume } = useSettings();
+
+  useEffect(() => {
+    if (isReady && webViewRef && webViewRef.current) {
+      const currentVolume = inAppVolumeEnabled ? inAppVolume : 0.0;
+      webViewRef.current.postMessage(JSON.stringify({
+        type: 'SET_VOLUME',
+        volume: currentVolume
+      }));
+    }
+  }, [inAppVolume, inAppVolumeEnabled, isReady, webViewRef]);
 
   useEffect(() => {
     if (isReady && webViewRef && webViewRef.current) {

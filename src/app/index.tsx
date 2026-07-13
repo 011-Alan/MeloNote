@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSettings } from '@/context/SettingsContext';
 
 // Import mobile home screen components
 import { MobileHero } from '@/components/mobile/MobileHero';
@@ -12,13 +13,15 @@ import { FutureLearning } from '@/components/mobile/FutureLearning';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
 
   const handlePressAction = (route: string) => {
     router.push(route as any);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#050507' : '#F5F5F7' }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -27,9 +30,9 @@ export default function HomeScreen() {
         
         <PrimaryActions onPressAction={handlePressAction} />
         
-        <QuickActions onPressAction={handlePressAction} />
+        {/* <QuickActions onPressAction={handlePressAction} /> */}
         
-        <RecentProjects onContinueProject={(id) => handlePressAction('/create')} />
+        {/* <RecentProjects onContinueProject={(id) => handlePressAction('/create')} /> */}
         
         <FeatureHighlights />
         

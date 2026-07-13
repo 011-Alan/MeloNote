@@ -9,6 +9,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import Svg, { Line, G, Circle, Path } from 'react-native-svg';
+import { useSettings } from '@/context/SettingsContext';
 
 interface FloatingNote {
   id: number;
@@ -77,6 +78,12 @@ interface MobileMenuButtonProps {
 }
 
 export function MobileMenuButton({ isOpen, onPress }: MobileMenuButtonProps) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+  const staffLineColor = isDark ? '#FFFFFF' : '#000000';
+  const containerBg = isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)';
+  const containerBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+
   // Shared values for staff line unfolding
   const lineWidth1 = useSharedValue(24);
   const lineWidth2 = useSharedValue(24);
@@ -122,6 +129,7 @@ export function MobileMenuButton({ isOpen, onPress }: MobileMenuButtonProps) {
       onPress={handlePress}
       style={({ pressed }) => [
         styles.container,
+        { backgroundColor: containerBg, borderColor: containerBorder },
         pressed && styles.pressed,
       ]}
     >
@@ -132,11 +140,11 @@ export function MobileMenuButton({ isOpen, onPress }: MobileMenuButtonProps) {
 
       {/* 5-Line Musical Staff Custom Menu Icon */}
       <View style={styles.iconWrapper}>
-        <Animated.View style={[styles.staffLine, lineStyle1]} />
-        <Animated.View style={[styles.staffLine, lineStyle2]} />
-        <Animated.View style={[styles.staffLine, lineStyle3]} />
-        <Animated.View style={[styles.staffLine, lineStyle4]} />
-        <Animated.View style={[styles.staffLine, lineStyle5]} />
+        <Animated.View style={[styles.staffLine, { backgroundColor: staffLineColor }, lineStyle1]} />
+        <Animated.View style={[styles.staffLine, { backgroundColor: staffLineColor }, lineStyle2]} />
+        <Animated.View style={[styles.staffLine, { backgroundColor: staffLineColor }, lineStyle3]} />
+        <Animated.View style={[styles.staffLine, { backgroundColor: staffLineColor }, lineStyle4]} />
+        <Animated.View style={[styles.staffLine, { backgroundColor: staffLineColor }, lineStyle5]} />
       </View>
     </Pressable>
   );

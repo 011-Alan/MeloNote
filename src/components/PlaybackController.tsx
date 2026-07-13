@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Pressable, Platform, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Platform, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSettings } from '@/context/SettingsContext';
 
 interface PlaybackControllerProps {
   currentTime: number;
@@ -11,7 +12,6 @@ interface PlaybackControllerProps {
   onSeek: (time: number) => void;
   onDragStart?: () => void;
   onDragEnd?: () => void;
-  renderRightSide?: () => React.ReactNode;
 }
 
 export default function PlaybackController({
@@ -23,11 +23,55 @@ export default function PlaybackController({
   onSeek,
   onDragStart,
   onDragEnd,
-  renderRightSide,
 }: PlaybackControllerProps) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   const [isDragging, setIsDragging] = useState(false);
   const [dragTime, setDragTime] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
+
+  // Equalizer animation heights
+  const anim1 = useRef(new Animated.Value(6)).current;
+  const anim2 = useRef(new Animated.Value(10)).current;
+  const anim3 = useRef(new Animated.Value(8)).current;
+
+  useEffect(() => {
+    let animations: Animated.CompositeAnimation[] = [];
+
+    if (isPlaying) {
+      const createLoop = (value: Animated.Value, min: number, max: number, duration: number) => {
+        return Animated.loop(
+          Animated.sequence([
+            Animated.timing(value, {
+              toValue: max,
+              duration: duration,
+              useNativeDriver: false,
+            }),
+            Animated.timing(value, {
+              toValue: min,
+              duration: duration,
+              useNativeDriver: false,
+            }),
+          ])
+        );
+      };
+
+      const a1 = createLoop(anim1, 6, 20, 300);
+      const a2 = createLoop(anim2, 6, 26, 250);
+      const a3 = createLoop(anim3, 6, 22, 350);
+
+      animations = [a1, a2, a3];
+      animations.forEach(a => a.start());
+    } else {
+      Animated.timing(anim1, { toValue: 8, duration: 200, useNativeDriver: false }).start();
+      Animated.timing(anim2, { toValue: 8, duration: 200, useNativeDriver: false }).start();
+      Animated.timing(anim3, { toValue: 8, duration: 200, useNativeDriver: false }).start();
+    }
+
+    return () => {
+      animations.forEach(a => a.stop());
+    };
+  }, [isPlaying]);
 
   const formatTime = (sec: number) => {
     if (isNaN(sec) || sec < 0) return '0:00';
@@ -50,7 +94,7 @@ export default function PlaybackController({
   const displayProgress = Math.min(100, Math.max(0, progressPercent));
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#121214' : '#FFFFFF', borderTopColor: isDark ? '#1c1c1e' : 'rgba(0, 0, 0, 0.08)' }]}>
       {/* Clickable and Draggable Progress Bar with Pointer Ball */}
       <View style={styles.sliderWrapper}>
         <View
@@ -70,7 +114,7 @@ export default function PlaybackController({
           }}
           style={styles.touchArea}
         >
-          <View style={styles.trackBackground}>
+          <View style={[styles.trackBackground, { backgroundColor: isDark ? '#2c2c2e' : 'rgba(0, 0, 0, 0.08)' }]}>
             <View 
               style={[
                 styles.trackFill, 
@@ -91,7 +135,7 @@ export default function PlaybackController({
       {/* Buttons & Info Row */}
       <View style={styles.controlsRow}>
         <View style={styles.timeLeftContainer}>
-          <Text style={styles.timeText}>
+          <Text style={[styles.timeText, { color: isDark ? '#ffffff' : '#121212' }]}>
             {formatTime(activeProgress)} / {formatTime(duration)}
           </Text>
         </View>
@@ -102,11 +146,12 @@ export default function PlaybackController({
             onPress={onRestart}
             style={({ pressed }) => [
               styles.restartBtn,
+              { backgroundColor: isDark ? '#1c1c1e' : 'rgba(0, 0, 0, 0.05)' },
               currentTime === 0 && { opacity: 0.4 },
               pressed && currentTime > 0 && { transform: [{ scale: 0.9 }] }
             ]}
           >
-            <Ionicons name="play-skip-back" size={18} color="white" />
+            <Ionicons name="play-skip-back" size={18} color={isDark ? 'white' : '#121212'} />
           </Pressable>
 
           <Pressable
@@ -125,7 +170,11 @@ export default function PlaybackController({
         </View>
 
         <View style={styles.rightSideContainer}>
-          {renderRightSide ? renderRightSide() : null}
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 26, paddingRight: 4 }}>
+            <Animated.View style={{ width: 4, backgroundColor: '#FF8A00', borderRadius: 4, height: anim1 }} />
+            <Animated.View style={{ width: 4, backgroundColor: '#FF4FA3', borderRadius: 4, height: anim2 }} />
+            <Animated.View style={{ width: 4, backgroundColor: '#7B61FF', borderRadius: 4, height: anim3 }} />
+          </View>
         </View>
       </View>
     </View>
@@ -187,12 +236,13 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   timeLeftContainer: {
-    minWidth: 100,
-    justifyContent: 'flex-start',
+    flex: 0.6,
+    minWidth: 90,
+    alignItems: 'flex-start',
   },
   timeText: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
   },
   buttonsContainer: {
@@ -217,7 +267,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rightSideContainer: {
-    minWidth: 100,
-    alignItems: 'flex-end',
+    flex: 0.6,
+    minWidth: 90,
+    alignItems: "center",
   },
 });

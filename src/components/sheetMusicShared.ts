@@ -1853,6 +1853,7 @@ export function buildSheetMusicHtml(
       rebuildPlaybackSchedule();
       let timerId = null;
       let audioCtx = null;
+      let synthVolume = 1.0;
       let firstNoteFired = false;
       let activeOscillators = [];
       let activeHighlightTimeouts = [];
@@ -2036,10 +2037,11 @@ export function buildSheetMusicHtml(
           const sustainStart = attack + decay;
           const sustainEnd = Math.max(sustainStart, durationSec - release);
 
-          gainNode.gain.linearRampToValueAtTime(0.2, scheduleTime + attack); // Attack
-          gainNode.gain.exponentialRampToValueAtTime(0.1, scheduleTime + sustainStart); // Decay
-          gainNode.gain.setValueAtTime(0.1, scheduleTime + sustainEnd); // Sustain
-          gainNode.gain.exponentialRampToValueAtTime(0.0001, scheduleTime + durationSec); // Release
+          const volMultiplier = typeof synthVolume !== 'undefined' ? synthVolume : 1.0;
+          gainNode.gain.linearRampToValueAtTime(0.2 * volMultiplier, scheduleTime + attack); // Attack
+          gainNode.gain.exponentialRampToValueAtTime(0.1 * volMultiplier, scheduleTime + sustainStart); // Decay
+          gainNode.gain.setValueAtTime(0.1 * volMultiplier, scheduleTime + sustainEnd); // Sustain
+          gainNode.gain.exponentialRampToValueAtTime(0.0001 * volMultiplier, scheduleTime + durationSec); // Release
 
           osc.start(scheduleTime);
           osc.stop(scheduleTime + durationSec);
@@ -3180,15 +3182,15 @@ export function buildSheetMusicHtml(
                 selectedStaffNums.forEach(num => {
                   const staves = document.querySelectorAll('.staff[n="' + num + '"]');
                   staves.forEach(el => el.classList.add('selected-staff'));
-                  const handle = document.querySelector('.staff-handle[data-staff-num="' + num + '"]');
-                  if (handle) handle.classList.add('selected-handle');
+                  const handles = document.querySelectorAll('.staff-handle[data-staff-num="' + num + '"]');
+                  handles.forEach(h => h.classList.add('selected-handle'));
                 });
               } else if (selectedStaffNum !== null) {
                 selectedStaffNums = [String(selectedStaffNum)];
                 const staves = document.querySelectorAll('.staff[n="' + selectedStaffNum + '"]');
                 staves.forEach(el => el.classList.add('selected-staff'));
-                const handle = document.querySelector('.staff-handle[data-staff-num="' + selectedStaffNum + '"]');
-                if (handle) handle.classList.add('selected-handle');
+                const handles = document.querySelectorAll('.staff-handle[data-staff-num="' + selectedStaffNum + '"]');
+                handles.forEach(h => h.classList.add('selected-handle'));
               }
               if (selectedMeasureNum !== null) {
                 const numMeas = document.querySelectorAll('.measure').length;
@@ -3430,11 +3432,11 @@ export function buildSheetMusicHtml(
         );
       }
 
-      function selectStaff(staffNum) {
+      function selectStaff(staffNum, isShift = false) {
         if (isEditModeActive) {
           exitEditMode();
         }
-        // Clear note, bar, measure selections but do NOT clear selectedStaffNums
+        // Clear note, bar, measure selections
         selectedNoteId = '';
         selectedMeasureNum = null;
         selectedBarId = null;
@@ -3443,26 +3445,43 @@ export function buildSheetMusicHtml(
         document.querySelectorAll('.selected-note').forEach(el => el.classList.remove('selected-note'));
         resetDoubleTapTimer();
 
-        const index = selectedStaffNums.indexOf(staffNum);
-        if (index > -1) {
-          // Deselect
-          selectedStaffNums.splice(index, 1);
-          document.querySelectorAll('.staff[n="' + staffNum + '"]').forEach(el => {
-            el.classList.remove('selected-staff');
-          });
-          const handle = document.querySelector('.staff-handle[data-staff-num="' + staffNum + '"]');
-          if (handle) {
-            handle.classList.remove('selected-handle');
+        if (isShift) {
+          const index = selectedStaffNums.indexOf(staffNum);
+          if (index > -1) {
+            // Deselect
+            selectedStaffNums.splice(index, 1);
+            document.querySelectorAll('.staff[n="' + staffNum + '"]').forEach(el => {
+              el.classList.remove('selected-staff');
+            });
+            const handles = document.querySelectorAll('.staff-handle[data-staff-num="' + staffNum + '"]');
+            handles.forEach(h => h.classList.remove('selected-handle'));
+          } else {
+            // Select
+            selectedStaffNums.push(staffNum);
+            document.querySelectorAll('.staff[n="' + staffNum + '"]').forEach(el => {
+              el.classList.add('selected-staff');
+            });
+            const handles = document.querySelectorAll('.staff-handle[data-staff-num="' + staffNum + '"]');
+            handles.forEach(h => h.classList.add('selected-handle'));
           }
         } else {
-          // Select
-          selectedStaffNums.push(staffNum);
-          document.querySelectorAll('.staff[n="' + staffNum + '"]').forEach(el => {
-            el.classList.add('selected-staff');
-          });
-          const handle = document.querySelector('.staff-handle[data-staff-num="' + staffNum + '"]');
-          if (handle) {
-            handle.classList.add('selected-handle');
+          const isCurrentlySelected = selectedStaffNums.includes(staffNum);
+
+          // Clear previous staff selections
+          document.querySelectorAll('.selected-staff').forEach(el => el.classList.remove('selected-staff'));
+          document.querySelectorAll('.selected-handle').forEach(el => el.classList.remove('selected-handle'));
+
+          if (isCurrentlySelected) {
+            selectedStaffNums = [];
+            selectedStaffNum = null;
+          } else {
+            selectedStaffNums = [staffNum];
+            selectedStaffNum = parseInt(staffNum);
+            document.querySelectorAll('.staff[n="' + staffNum + '"]').forEach(el => {
+              el.classList.add('selected-staff');
+            });
+            const handles = document.querySelectorAll('.staff-handle[data-staff-num="' + staffNum + '"]');
+            handles.forEach(h => h.classList.add('selected-handle'));
           }
         }
 
@@ -4207,146 +4226,162 @@ export function buildSheetMusicHtml(
         const oldInsertBtns = document.querySelectorAll('.insert-staff-btn');
         oldInsertBtns.forEach(btn => btn.remove());
 
-        let firstMeasure = document.querySelector('.measure[n="1"]');
-        if (!firstMeasure) {
-          firstMeasure = document.querySelector('.measure');
-        }
-        if (!firstMeasure) return;
+        const systems = document.querySelectorAll('.system');
 
-        const staves = firstMeasure.querySelectorAll('.staff');
-        staves.forEach((staffEl, sIdx) => {
-          let staffNum = staffEl.getAttribute('n');
-          if (!staffNum || staffNum === 'null') {
-            staffNum = String(sIdx + 1);
-            staffEl.setAttribute('n', staffNum);
-          }
-          
-          const handleGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-          handleGroup.setAttribute('class', 'staff-handle');
-          handleGroup.setAttribute('data-staff-num', staffNum);
-          handleGroup.style.cursor = 'pointer';
-
-          let yCenter = 0;
-          let minY = 0;
-          let maxY = 0;
-          let handleX = -580;
-          let connectionX = -100;
-          try {
-            const bbox = staffEl.getBBox();
-            yCenter = bbox.y + bbox.height / 2;
-            minY = bbox.y;
-            maxY = bbox.y + bbox.height;
-            handleX = bbox.x - 600;
-            connectionX = bbox.x - 80;
-          } catch (e) {
-            yCenter = 0;
-            minY = 0;
-            maxY = 0;
-            handleX = -580;
-            connectionX = -100;
-          }
-
-          const preciseRange = getStaffLinesYRange(staffEl);
-          if (preciseRange && preciseRange.minY !== Infinity) {
-            yCenter = preciseRange.minY + (preciseRange.maxY - preciseRange.minY) / 2;
-            minY = preciseRange.minY;
-            maxY = preciseRange.maxY;
-          }
-
-          // Connecting line from handle to staff (Feature 1)
-          const connLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          connLine.setAttribute('x1', String(handleX));
-          connLine.setAttribute('y1', yCenter);
-          connLine.setAttribute('x2', String(connectionX));
-          connLine.setAttribute('y2', yCenter);
-          connLine.setAttribute('stroke', '#a1a1aa');
-          connLine.setAttribute('stroke-width', '10');
-          connLine.setAttribute('stroke-dasharray', '25,25');
-          handleGroup.appendChild(connLine);
-
-          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          circle.setAttribute('cx', String(handleX));
-          circle.setAttribute('cy', yCenter);
-          circle.setAttribute('r', '75');
-          handleGroup.appendChild(circle);
-
-          staffEl.appendChild(handleGroup);
-
-          // Plus button below every staff (Feature 5) with grouping rules (Feature 1)
-          let shouldShowPlus = true;
-          if (globalPartStavesCounts && globalPartStavesCounts.length > 0) {
-            let staffIndexToPartIndex = [];
-            let staffIndexToLocalIndex = [];
-            globalPartStavesCounts.forEach((count, pIdx) => {
-              for (let i = 0; i < count; i++) {
-                staffIndexToPartIndex.push(pIdx);
-                staffIndexToLocalIndex.push(i);
-              }
-            });
-
-            const pIdx = staffIndexToPartIndex[sIdx];
-            const localIdx = staffIndexToLocalIndex[sIdx];
-            const partStaffCount = globalPartStavesCounts[pIdx];
-
-            if (partStaffCount === 2) {
-              // Treble/Bass pair -> show only below Bass staff (local index 1)
-              if (localIdx === 0) {
-                shouldShowPlus = false;
-              }
-            } else if (partStaffCount > 2) {
-              // Multi-staff part -> show only below the last staff
-              if (localIdx !== partStaffCount - 1) {
-                shouldShowPlus = false;
-              }
+        const processMeasure = (measureEl) => {
+          if (!measureEl) return;
+          const staves = measureEl.querySelectorAll('.staff');
+          staves.forEach((staffEl, sIdx) => {
+            let staffNum = staffEl.getAttribute('n');
+            if (!staffNum || staffNum === 'null') {
+              staffNum = String(sIdx + 1);
+              staffEl.setAttribute('n', staffNum);
             }
-          }
+            
+            const handleGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            handleGroup.setAttribute('class', 'staff-handle');
+            handleGroup.setAttribute('data-staff-num', staffNum);
+            handleGroup.style.cursor = 'pointer';
 
-          if (shouldShowPlus) {
-            const insertBtnGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-            insertBtnGroup.setAttribute('class', 'insert-staff-btn');
-            insertBtnGroup.setAttribute('data-staff-num', staffNum);
-            insertBtnGroup.style.cursor = 'pointer';
-
-            const btnY = maxY > 0 ? maxY + 550 : yCenter + 720;
-
-            const plusCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            plusCircle.setAttribute('cx', String(handleX));
-            plusCircle.setAttribute('cy', String(btnY));
-            plusCircle.setAttribute('r', '300');
-            insertBtnGroup.appendChild(plusCircle);
-
-            const plusText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            plusText.setAttribute('x', String(handleX));
-            plusText.setAttribute('y', String(btnY));
-            plusText.setAttribute('font-size', '500');
-            plusText.setAttribute('font-family', 'Arial, sans-serif');
-            plusText.setAttribute('font-weight', 'bold');
-            plusText.setAttribute('fill', 'white');
-            plusText.setAttribute('text-anchor', 'middle');
-            plusText.setAttribute('dominant-baseline', 'central');
-            plusText.style.pointerEvents = 'none';
-            plusText.textContent = '+';
-            insertBtnGroup.appendChild(plusText);
-
-            if (staffEl.parentNode) {
-              staffEl.parentNode.appendChild(insertBtnGroup);
-            } else {
-              staffEl.appendChild(insertBtnGroup);
+            let yCenter = 0;
+            let minY = 0;
+            let maxY = 0;
+            let handleX = -580;
+            let connectionX = -100;
+            try {
+              const bbox = staffEl.getBBox();
+              yCenter = bbox.y + bbox.height / 2;
+              minY = bbox.y;
+              maxY = bbox.y + bbox.height;
+              handleX = bbox.x - 600;
+              connectionX = bbox.x - 80;
+            } catch (e) {
+              yCenter = 0;
+              minY = 0;
+              maxY = 0;
+              handleX = -580;
+              connectionX = -100;
             }
 
-            // Direct pointerup event listener for unified mouse/touch handling
-            insertBtnGroup.addEventListener('pointerup', (e) => {
-              console.log("[INSERT STAFF] BUTTON PRESSED", staffNum);
-              e.preventDefault();
-              e.stopPropagation();
-              console.log("[INSERT STAFF] SENDING MESSAGE", staffNum);
-              sendResponse({
-                type: 'INSERT_STAFF_BELOW',
-                staffIndex: parseInt(staffNum) - 1
+            const preciseRange = getStaffLinesYRange(staffEl);
+            if (preciseRange && preciseRange.minY !== Infinity) {
+              yCenter = preciseRange.minY + (preciseRange.maxY - preciseRange.minY) / 2;
+              minY = preciseRange.minY;
+              maxY = preciseRange.maxY;
+            }
+
+            // Connecting line from handle to staff (Feature 1)
+            const connLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            connLine.setAttribute('x1', String(handleX));
+            connLine.setAttribute('y1', yCenter);
+            connLine.setAttribute('x2', String(connectionX));
+            connLine.setAttribute('y2', yCenter);
+            connLine.setAttribute('stroke', '#a1a1aa');
+            connLine.setAttribute('stroke-width', '10');
+            connLine.setAttribute('stroke-dasharray', '25,25');
+            handleGroup.appendChild(connLine);
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', String(handleX));
+            circle.setAttribute('cy', yCenter);
+            circle.setAttribute('r', '75');
+            handleGroup.appendChild(circle);
+
+            staffEl.appendChild(handleGroup);
+
+            // Plus button below every staff (Feature 5) with grouping rules (Feature 1)
+            let shouldShowPlus = true;
+            if (globalPartStavesCounts && globalPartStavesCounts.length > 0) {
+              let staffIndexToPartIndex = [];
+              let staffIndexToLocalIndex = [];
+              globalPartStavesCounts.forEach((count, pIdx) => {
+                for (let i = 0; i < count; i++) {
+                  staffIndexToPartIndex.push(pIdx);
+                  staffIndexToLocalIndex.push(i);
+                }
               });
-            });
+
+              const pIdx = staffIndexToPartIndex[sIdx];
+              const localIdx = staffIndexToLocalIndex[sIdx];
+              const partStaffCount = globalPartStavesCounts[pIdx];
+
+              if (partStaffCount === 2) {
+                // Treble/Bass pair -> show only below Bass staff (local index 1)
+                if (localIdx === 0) {
+                  shouldShowPlus = false;
+                }
+              } else if (partStaffCount > 2) {
+                // Multi-staff part -> show only below the last staff
+                if (localIdx !== partStaffCount - 1) {
+                  shouldShowPlus = false;
+                }
+              }
+            }
+
+            if (shouldShowPlus) {
+              const insertBtnGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+              insertBtnGroup.setAttribute('class', 'insert-staff-btn');
+              insertBtnGroup.setAttribute('data-staff-num', staffNum);
+              insertBtnGroup.style.cursor = 'pointer';
+
+              const btnY = maxY > 0 ? maxY + 550 : yCenter + 720;
+
+              const plusCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+              plusCircle.setAttribute('cx', String(handleX));
+              plusCircle.setAttribute('cy', String(btnY));
+              plusCircle.setAttribute('r', '300');
+              insertBtnGroup.appendChild(plusCircle);
+
+              const plusText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+              plusText.setAttribute('x', String(handleX));
+              plusText.setAttribute('y', String(btnY));
+              plusText.setAttribute('font-size', '500');
+              plusText.setAttribute('font-family', 'Arial, sans-serif');
+              plusText.setAttribute('font-weight', 'bold');
+              plusText.setAttribute('fill', 'white');
+              plusText.setAttribute('text-anchor', 'middle');
+              plusText.setAttribute('dominant-baseline', 'central');
+              plusText.style.pointerEvents = 'none';
+              plusText.textContent = '+';
+              insertBtnGroup.appendChild(plusText);
+
+              if (staffEl.parentNode) {
+                staffEl.parentNode.appendChild(insertBtnGroup);
+              } else {
+                staffEl.appendChild(insertBtnGroup);
+              }
+
+              // Direct pointerup event listener for unified mouse/touch handling
+              insertBtnGroup.addEventListener('pointerup', (e) => {
+                console.log("[INSERT STAFF] BUTTON PRESSED", staffNum);
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("[INSERT STAFF] SENDING MESSAGE", staffNum);
+                sendResponse({
+                  type: 'INSERT_STAFF_BELOW',
+                  staffIndex: parseInt(staffNum) - 1
+                });
+              });
+            }
+          });
+        };
+
+        if (systems.length > 0) {
+          systems.forEach((systemEl) => {
+            const systemMeasures = systemEl.querySelectorAll('.measure');
+            if (systemMeasures.length > 0) {
+              processMeasure(systemMeasures[0]);
+            }
+          });
+        } else {
+          let firstMeasure = document.querySelector('.measure[n="1"]');
+          if (!firstMeasure) {
+            firstMeasure = document.querySelector('.measure');
           }
-        });
+          if (firstMeasure) {
+            processMeasure(firstMeasure);
+          }
+        }
       }
 
       // Selection Events for Measures (now for individual bar selection: staff × measure)
@@ -4748,7 +4783,7 @@ export function buildSheetMusicHtml(
               currentX: coords.x,
               currentY: coords.y
             };
-            selectStaff(staffNum);
+            selectStaff(staffNum, e.shiftKey);
             e.preventDefault();
             return;
           }
@@ -5244,32 +5279,248 @@ export function buildSheetMusicHtml(
         }
       }
 
-      window.generatePDF = async function() {
+      window.generatePDF = async function(title, author, tempo, isDark) {
         try {
           const jspdfModule = await ensureJsPdfLoaded();
           const { jsPDF } = jspdfModule;
           
+          // Sanitise title to remove internal filenames
+          function cleanDisplayTitle(t) {
+            if (!t) return 'Untitled';
+            const trimmed = t.trim();
+            const isInternalFile = /^\d+-(audio|scan|upload|file)/i.test(trimmed) || 
+                                   /^(audio|scan|upload|file)-\d+/i.test(trimmed) ||
+                                   /^[a-f0-9-]{36}$/i.test(trimmed) || 
+                                   /^[\d_-]+$/i.test(trimmed) || 
+                                   /\.(mp3|wav|m4a|ogg|flac|musicxml|xml|pdf)$/i.test(trimmed);
+            if (isInternalFile) {
+              return 'Untitled';
+            }
+            return trimmed;
+          }
+
+          // Sanitise author to leave blank if generic
+          function cleanDisplayAuthor(a) {
+            if (!a) return '';
+            const trimmed = a.trim();
+            if (trimmed.toLowerCase() === 'unknown author' || trimmed.toLowerCase() === 'unknown') {
+              return '';
+            }
+            return trimmed;
+          }
+          
           // Save current options
           const oldOpts = vrvToolkit.getOptions();
           
-          // Set pagination options for A4 (ratio 1:1.414)
-          const pdfPageWidth = 1200;
-          const pdfPageHeight = 1697; // 1200 * 1.414
+          // Set high-resolution pagination options for A4 (ratio 1:1.414)
+          const pdfPageWidth = 2400;
+          const pdfPageHeight = 3394; // 2400 * 1.414
+          
+          const svgHeight = 3054; // Keep standard aspect ratio height
           
           vrvToolkit.setOptions({
             pageWidth: pdfPageWidth,
-            pageHeight: pdfPageHeight,
+            pageHeight: svgHeight,
             scale: 30,
             adjustPageHeight: false,
-            breaks: 'auto'
+            breaks: 'encoded',
+            justifyLastSystem: true,
+            showPartHeaders: false,
+            indent: 0,
+            staffLabelLength: 0,
+            footer: 'none',
+            header: 'none'
           });
           
           // Reload data to apply pagination options
-          const musicxml = atob(musicxmlBase64);
-          vrvToolkit.loadData(musicxml);
+          const rawXmlText = atob(musicxmlBase64);
+          
+          // Parse MusicXML to DOM
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(rawXmlText, "text/xml");
+          
+          // Clean all part, instrument, and group labels in the entire document unconditionally
+          const genericTags = ['part-name', 'part-abbreviation', 'display-text', 'instrument-name', 'instrument-abbreviation', 'group-name', 'group-abbreviation'];
+          for (let tagIdx = 0; tagIdx < genericTags.length; tagIdx++) {
+            const els = xmlDoc.getElementsByTagName(genericTags[tagIdx]);
+            for (let i = 0; i < els.length; i++) {
+              els[i].textContent = " ";
+            }
+          }
+          
+          // Inject exactly 4 measures per staff system and set page breaks
+          const parts = xmlDoc.getElementsByTagName('part');
+          let isGrandStaff = false;
+          if (parts.length > 0) {
+            const measures = parts[0].getElementsByTagName('measure');
+            const totalMeasures = measures.length;
+            
+            // Grand staff or multi-part system detection
+            if (parts.length > 1) {
+              isGrandStaff = true;
+            } else {
+              for (let i = 0; i < Math.min(totalMeasures, 4); i++) {
+                const staves = measures[i].getElementsByTagName('staves')[0];
+                if (staves && parseInt(staves.textContent) > 1) {
+                  isGrandStaff = true;
+                  break;
+                }
+              }
+            }
+            
+            const maxSystemsFirstPage = isGrandStaff ? 6 : 12;
+            const maxSystemsLaterPages = isGrandStaff ? 8 : 16;
+            
+            let currentSystemCount = 0;
+            let currentPageIndex = 1;
+            
+            for (let mIdx = 0; mIdx < totalMeasures; mIdx++) {
+              // Inject system/page breaks every 4 measures
+              if (mIdx > 0 && mIdx % 4 === 0) {
+                currentSystemCount++;
+                
+                const systemLimit = (currentPageIndex === 1) ? maxSystemsFirstPage : maxSystemsLaterPages;
+                const printElem = xmlDoc.createElement('print');
+                
+                if (currentSystemCount >= systemLimit) {
+                  printElem.setAttribute('new-page', 'yes');
+                  currentPageIndex++;
+                  currentSystemCount = 0;
+                } else {
+                  printElem.setAttribute('new-system', 'yes');
+                }
+                
+                // Inject across all parts at index
+                for (let pIdx = 0; pIdx < parts.length; pIdx++) {
+                  const partMeasures = parts[pIdx].getElementsByTagName('measure');
+                  if (partMeasures[mIdx]) {
+                    const measureEl = partMeasures[mIdx];
+                    measureEl.insertBefore(printElem.cloneNode(true), measureEl.firstChild);
+                  }
+                }
+              }
+            }
+          }
+          
+          const serializer = new XMLSerializer();
+          const modifiedMusicXml = serializer.serializeToString(xmlDoc);
+          
+          vrvToolkit.loadData(modifiedMusicXml);
           
           const pageCount = vrvToolkit.getPageCount();
           const pdf = new jsPDF('p', 'px', [pdfPageWidth, pdfPageHeight]);
+
+          // Helper to clean SVG strings of external resources (like fonts or imports)
+          // that WebView CORS or CSP sandboxing might block.
+          function cleanSvgString(svgStr) {
+            let cleaned = svgStr;
+            // Remove @font-face declarations
+            cleaned = cleaned.replace(/@font-face\s*\{[^}]*\}/g, '');
+            // Remove @import declarations
+            cleaned = cleaned.replace(/@import\s+[^;]+;/g, '');
+            // Ensure standard namespace declarations exist
+            if (!cleaned.includes('xmlns=')) {
+              cleaned = cleaned.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+            }
+            if (!cleaned.includes('xmlns:xlink=')) {
+              cleaned = cleaned.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+            }
+            // Force width and height attributes to match high-resolution settings
+            cleaned = cleaned.replace(/<svg([^>]*)width="[^"]*"/i, '<svg$1width="' + pdfPageWidth + '"');
+            cleaned = cleaned.replace(/<svg([^>]*)height="[^"]*"/i, '<svg$1height="' + svgHeight + '"');
+            if (!cleaned.includes('viewBox=')) {
+              cleaned = cleaned.replace('<svg', '<svg viewBox="0 0 ' + pdfPageWidth + ' ' + svgHeight + '"');
+            }
+            return cleaned;
+          }
+
+          // Helper to style SVG element colors based on the theme (Dark/Light mode)
+          function colorSvgForTheme(svgStr, darkThemeEnabled) {
+            let colored = svgStr;
+            const targetColor = darkThemeEnabled ? '#ffffff' : '#000000';
+            
+            if (darkThemeEnabled) {
+              colored = colored.replace(/stroke="#000000"/gi, 'stroke="#ffffff"');
+              colored = colored.replace(/fill="#000000"/gi, 'fill="#ffffff"');
+              colored = colored.replace(/stroke="#000"/gi, 'stroke="#fff"');
+              colored = colored.replace(/fill="#000"/gi, 'fill="#fff"');
+              colored = colored.replace(/stroke="black"/gi, 'stroke="white"');
+              colored = colored.replace(/fill="black"/gi, 'fill="white"');
+              colored = colored.replace(/color="black"/gi, 'color="white"');
+            } else {
+              colored = colored.replace(/stroke="#ffffff"/gi, 'stroke="#000000"');
+              colored = colored.replace(/fill="#ffffff"/gi, 'fill="#000000"');
+              colored = colored.replace(/stroke="#fff"/gi, 'stroke="#000"');
+              colored = colored.replace(/fill="#fff"/gi, 'fill="#000"');
+              colored = colored.replace(/stroke="white"/gi, 'stroke="black"');
+              colored = colored.replace(/fill="white"/gi, 'fill="black"');
+              colored = colored.replace(/color="white"/gi, 'color="black"');
+            }
+
+            const overrideStyle = '<style>' +
+              'path, line, rect:not([fill="none"]):not([fill-opacity="0"]):not(.bar-click-bg), polygon, ellipse, text {' +
+                'fill: ' + targetColor + ' !important;' +
+                'stroke: ' + targetColor + ' !important;' +
+              '}' +
+              'g.ledgerLines path, g.ledgerLines line {' +
+                'stroke: ' + targetColor + ' !important;' +
+              '}' +
+              '/* Hide default part headers, instrument labels, and Verovio headers/footers */' +
+              'g.partName, g.partNameCell, text.partName, .part-name, .instrument-name, g.instrumentName, text.staffLabel, g.staffLabel, g.system-labels, .system-labels, g.part-name, g.instrument-name, ' +
+              'g.footer, g.pgFoot, text.footer, text.pgFoot, .footer, .pgFoot, g.header, g.pgHead, text.header, text.pgHead, .header, .pgHead {' +
+                'display: none !important;' +
+              '}' +
+            '</style>';
+
+            colored = colored.replace(/<svg([^>]*)>/i, '<svg$1>' + overrideStyle);
+            return colored;
+          }
+          
+          // Shared layout drawing helper
+          function drawLayout(ctx, img, pageNum) {
+            const bgColor = isDark ? '#000000' : '#ffffff';
+            const primaryColor = isDark ? '#ffffff' : '#121212';
+            const secondaryColor = isDark ? '#aeaeae' : '#60646C';
+            const borderColor = isDark ? '#3a3a3c' : '#E0E1E6';
+            
+            // Sanitise title and author
+            const cleanedTitle = cleanDisplayTitle(title);
+            const cleanedAuthor = cleanDisplayAuthor(author);
+            
+            // Draw background
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, pdfPageWidth, pdfPageHeight);
+            
+            if (pageNum === 1) {
+              // Title (centered, bold, size 64px)
+              ctx.fillStyle = primaryColor;
+              ctx.font = 'bold 64px sans-serif';
+              ctx.textAlign = 'center';
+              ctx.fillText(cleanedTitle, pdfPageWidth / 2, 140);
+              
+              // Author (right-aligned, size 28px)
+              if (cleanedAuthor) {
+                ctx.fillStyle = secondaryColor;
+                ctx.font = 'italic 28px sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(cleanedAuthor, pdfPageWidth - 150, 200);
+              }
+              
+              // Separator line below metadata
+              ctx.strokeStyle = borderColor;
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(150, 225);
+              ctx.lineTo(pdfPageWidth - 150, 225);
+              ctx.stroke();
+              
+              // Draw SVG shifted down to y = 240
+              ctx.drawImage(img, 0, 240, pdfPageWidth, svgHeight);
+            } else {
+              // Page 2+ starts directly at y = 100
+              ctx.drawImage(img, 0, 100, pdfPageWidth, svgHeight);
+            }
+          }
           
           for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
             if (pageNum > 1) {
@@ -5277,50 +5528,77 @@ export function buildSheetMusicHtml(
             }
             
             const rawSvgString = vrvToolkit.renderToSVG(pageNum, {});
-            const scoreRoot = document.getElementById('score');
-            const originalInnerHTML = scoreRoot ? scoreRoot.innerHTML : '';
-            if (scoreRoot) {
-              scoreRoot.innerHTML = rawSvgString;
-              ensureSelectionMetadata(scoreRoot);
-            }
-            const svgString = scoreRoot ? scoreRoot.innerHTML : rawSvgString;
-            if (scoreRoot) {
-              scoreRoot.innerHTML = originalInnerHTML;
-            }
             
-            // Convert SVG string to canvas
+            // Clean & theme the raw SVG
+            const cleanedSvg = cleanSvgString(rawSvgString);
+            const themedSvg = colorSvgForTheme(cleanedSvg, isDark);
+            
+            // Convert themed SVG string to canvas
             const canvas = await new Promise((resolve, reject) => {
-              const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-              const blobURL = (window.URL || window.webkitURL || window).createObjectURL(svgBlob);
+              let base64Svg;
+              try {
+                base64Svg = btoa(unescape(encodeURIComponent(themedSvg)));
+              } catch (e) {
+                console.error("Base64 conversion failed", e);
+              }
+              
               const image = new Image();
+              
               image.onload = () => {
                 const c = document.createElement('canvas');
                 c.width = pdfPageWidth;
                 c.height = pdfPageHeight;
                 const ctx = c.getContext('2d');
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, pdfPageWidth, pdfPageHeight);
-                ctx.drawImage(image, 0, 0);
-                (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
+                
+                drawLayout(ctx, image, pageNum);
+                
                 resolve(c);
               };
+              
               image.onerror = (err) => {
-                (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
-                reject(new Error('Failed to load SVG image for canvas rendering.'));
+                console.error("Data URL SVG load failed, trying Blob URL fallback...", err);
+                // Fallback to Blob URL
+                try {
+                  const svgBlob = new Blob([themedSvg], { type: 'image/svg+xml;charset=utf-8' });
+                  const blobURL = (window.URL || window.webkitURL || window).createObjectURL(svgBlob);
+                  const fallbackImage = new Image();
+                  fallbackImage.onload = () => {
+                    const c = document.createElement('canvas');
+                    c.width = pdfPageWidth;
+                    c.height = pdfPageHeight;
+                    const ctx = c.getContext('2d');
+                    
+                    drawLayout(ctx, fallbackImage, pageNum);
+                    
+                    (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
+                    resolve(c);
+                  };
+                  fallbackImage.onerror = (fallbackErr) => {
+                    (window.URL || window.webkitURL || window).revokeObjectURL(blobURL);
+                    reject(new Error('Failed to load SVG image for canvas rendering: ' + (fallbackErr.message || "Unknown error")));
+                  };
+                  fallbackImage.src = blobURL;
+                } catch (blobErr) {
+                  reject(new Error('Failed to load SVG image (both Data URL and Blob URL failed): ' + blobErr.message));
+                }
               };
-              image.src = blobURL;
+              
+              if (base64Svg) {
+                image.src = 'data:image/svg+xml;base64,' + base64Svg;
+              } else {
+                image.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(themedSvg);
+              }
             });
             
-            const imgData = canvas.toDataURL('image/png');
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfPageWidth, pdfPageHeight);
+            const imgData = canvas.toDataURL('image/jpeg', 0.85);
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfPageWidth, pdfPageHeight, undefined, 'FAST');
           }
           
           // Restore original options and re-render for screen display
           vrvToolkit.setOptions(oldOpts);
-          vrvToolkit.loadData(musicxml);
+          vrvToolkit.loadData(atob(musicxmlBase64));
           const svg = vrvToolkit.renderToSVG(1, {});
           
-
           document.getElementById('score').innerHTML = svg;
           ensureSelectionMetadata(document.getElementById('score'));
           const scoreSvg = document.getElementById('score').querySelector('svg');
@@ -5414,7 +5692,12 @@ export function buildSheetMusicHtml(
               timeSignature = data.timeSignature;
             }
           } else if (data.type === 'GENERATE_PDF') {
-            window.generatePDF();
+            window.generatePDF(data.title, data.author, data.tempo, data.isDark);
+          } else if (data.type === 'SET_VOLUME') {
+            if (data.volume !== undefined) {
+              console.log("WEBVIEW RECEIVED SET_VOLUME:", data.volume);
+              synthVolume = data.volume;
+            }
           } else if (data.type === 'UNLOCK_AUDIO') {
             if (!audioCtx) {
               try {

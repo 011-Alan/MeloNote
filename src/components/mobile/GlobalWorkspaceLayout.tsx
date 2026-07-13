@@ -6,16 +6,31 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
+  useSharedValue as useSharedValue2, // dummy placeholder if needed, let's keep original imports
   interpolate,
+  withSpring,
+  withSequence,
+  withDelay,
+  withTiming,
+  runOnJS,
 } from 'react-native-reanimated';
 
 // Import components
 import { MeloNoteLogoIntro } from './MeloNoteLogoIntro';
 import { SidebarNav } from './SidebarNav';
 import { MobileMenuButton } from './MobileMenuButton';
+import { OnboardingScreen } from './OnboardingScreen';
+import { useSettings } from '@/context/SettingsContext';
+import { GlassCard } from '../ui/DesignSystem';
+import { Ionicons } from '@expo/vector-icons';
+import { requestNotificationPermissions, isExpoGo } from '@/utils/notifications';
+import { useOnboarding } from '@/context/OnboardingContext';
+import { NameCollectionModal } from '../onboarding/NameCollectionModal';
+import { WalkthroughPromptModal } from '../onboarding/WalkthroughPromptModal';
+import { WalkthroughOverlay } from '../onboarding/WalkthroughOverlay';
 
 export function GlobalWorkspaceLayout() {
+  console.log('GlobalWorkspaceLayout mounted');
   const router = useRouter();
   const pathname = usePathname();
   const { width, height } = useWindowDimensions();
@@ -23,9 +38,95 @@ export function GlobalWorkspaceLayout() {
   // States
   const [introActive, setIntroActive] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [toast, setToast] = useState<{ title: string; body: string } | null>(null);
+  
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
 
-  // Drawer animation progress shared values
+  const {
+    userName,
+    onboardingCompleted,
+    isLoaded: isOnboardingLoaded,
+    saveName,
+    completeOnboarding,
+    completeWalkthrough,
+  } = useOnboarding();
+
+  // Reanimated shared values
   const drawerProgress = useSharedValue(0);
+  const toastOpacity = useSharedValue(0);
+
+  const { theme } = useSettings();
+
+  const layoutTheme = {
+    bgSafe: theme === 'dark' ? '#050507' : '#FFFFFF',
+    bgApp: theme === 'dark' ? '#000000' : '#F9F9FA',
+    bgMain: theme === 'dark' ? '#050507' : '#FFFFFF',
+    bgHeader: theme === 'dark' ? '#0F0F12' : '#F0F0F3',
+    borderHeader: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.06)',
+    textHeader: theme === 'dark' ? '#FFFFFF' : '#121212',
+  };
+
+  useEffect(() => {
+    const handleToast = (e: any) => {
+      const { title, body } = e.detail;
+      setToast({ title, body });
+      toastOpacity.value = 0;
+      toastOpacity.value = withSequence(
+        withTiming(1, { duration: 350 }),
+        withDelay(3000, withTiming(0, { duration: 350 }, (finished) => {
+          if (finished) {
+            runOnJS(setToast)(null);
+          }
+        }))
+      );
+    };
+
+    if (Platform.OS === 'web') {
+      window.addEventListener('melonote_toast', handleToast);
+      return () => window.removeEventListener('melonote_toast', handleToast);
+    }
+  }, []);
+
+  // Request notification permissions at startup
+  useEffect(() => {
+    requestNotificationPermissions();
+  }, []);
+
+  // Native notification tap handler
+  useEffect(() => {
+    if (Platform.OS !== 'web' && !isExpoGo && typeof require !== 'undefined') {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const Notifications = require('expo-notifications');
+        const subscription = Notifications.addNotificationResponseReceivedListener((response: any) => {
+          const { title, data } = response.notification.request.content;
+          console.log('[NOTIFICATION TAP] Native notification tapped:', title, data);
+          if (data?.projectId) {
+            router.push({ pathname: '/projects', params: { openProjectId: data.projectId } });
+          } else if (title?.includes('Audio') || title?.includes('Transcription')) {
+            router.push('/record');
+          } else if (title?.includes('Scan') || title?.includes('Digitization') || title?.includes('Sheet')) {
+            router.push('/scan');
+          }
+        });
+        return () => {
+          subscription.remove();
+        };
+      } catch (err) {
+        console.warn('Failed to bind notifications listener:', err);
+      }
+    }
+  }, []);
+
+  const toastAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: toastOpacity.value,
+      transform: [
+        { translateY: interpolate(toastOpacity.value, [0, 1], [-20, 0]) },
+      ],
+    };
+  });
 
   useEffect(() => {
     drawerProgress.value = withSpring(isDrawerOpen ? 1 : 0, {
@@ -33,6 +134,16 @@ export function GlobalWorkspaceLayout() {
       stiffness: 100,
     });
   }, [isDrawerOpen]);
+
+  useEffect(() => {
+    // Trigger walkthrough prompt 1 second after name is saved and home loads
+    if (!introActive && userName && !onboardingCompleted && isOnboardingLoaded) {
+      const timer = setTimeout(() => {
+        setShowPrompt(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [introActive, userName, onboardingCompleted, isOnboardingLoaded]);
 
   // Determine active tab name from pathname
   const activeTab = useMemo(() => {
@@ -47,6 +158,8 @@ export function GlobalWorkspaceLayout() {
         return 'Scan Sheet';
       case '/projects':
         return 'Projects';
+      case '/basics':
+        return 'Music Basics';
       case '/settings':
         return 'Settings';
       default:
@@ -67,6 +180,8 @@ export function GlobalWorkspaceLayout() {
         return '📄 Scan Sheet';
       case '/projects':
         return '📂 Projects';
+      case '/basics':
+        return '🎼 Music Basics';
       case '/settings':
         return '⚙️ Settings';
       default:
@@ -120,28 +235,21 @@ export function GlobalWorkspaceLayout() {
 
   const renderHomeContent = () => {
     return (
-      <View style={styles.appContainer}>
-        {/* Main Content View with scaling & shifting transformations */}
-        <Animated.View style={[styles.mainScreenContainer, mainScreenAnimatedStyle]}>
-          
-          {/* Custom Header Bar containing the Animated staff menu button */}
-          <View style={styles.customHeaderBar}>
+      <View style={[styles.appContainer, { backgroundColor: layoutTheme.bgApp }]}>
+        <Animated.View style={[styles.mainScreenContainer, { backgroundColor: layoutTheme.bgMain }, mainScreenAnimatedStyle]}>
+          <View style={[styles.customHeaderBar, { backgroundColor: layoutTheme.bgHeader, borderColor: layoutTheme.borderHeader }]}>
             <MobileMenuButton isOpen={isDrawerOpen} onPress={() => setIsDrawerOpen(!isDrawerOpen)} />
-            <Text style={styles.headerTitle}>{pageTitle}</Text>
-            <View style={{ width: 44 }} /> {/* Spacer */}
+            <Text style={[styles.headerTitle, { color: layoutTheme.textHeader }]}>{pageTitle}</Text>
+            <View style={{ width: 44 }} />
           </View>
-
-          {/* Active route slot screen content rendering below the global header */}
           <View style={styles.slotContainer}>
             <Slot />
           </View>
-
-          {/* Dimming overlay when drawer is open - handles tapping to close */}
-          {isDrawerOpen ? (
+          {isDrawerOpen && (
             <Animated.View style={[styles.dimOverlay, overlayAnimatedStyle]}>
               <Pressable style={styles.overlayPressable} onPress={() => setIsDrawerOpen(false)} />
             </Animated.View>
-          ) : null}
+          )}
         </Animated.View>
 
         {/* Sliding Sidebar Navigation Drawer */}
@@ -152,12 +260,70 @@ export function GlobalWorkspaceLayout() {
             onClose={() => setIsDrawerOpen(false)}
           />
         </Animated.View>
+
+        {/* In-app Toast Notification Overlay */}
+        {toast && (
+          <Animated.View style={[styles.toastContainer, toastAnimatedStyle]}>
+            <Pressable
+              onPress={() => {
+                if (toast.title?.includes('Audio') || toast.title?.includes('Transcription')) {
+                  router.push('/record');
+                } else if (toast.title?.includes('Scan') || toast.title?.includes('Digitization')) {
+                  router.push('/scan');
+                }
+                setToast(null);
+              }}
+            >
+              <GlassCard style={styles.toastCard}>
+                <View style={styles.toastContent}>
+                  <Ionicons name="notifications" size={20} color="#FF4FA3" />
+                  <View style={styles.toastTextWrapper}>
+                    <Text style={[styles.toastTitle, { color: layoutTheme.textHeader }]}>{toast.title}</Text>
+                    <Text style={styles.toastBody}>{toast.body}</Text>
+                  </View>
+                </View>
+              </GlassCard>
+            </Pressable>
+          </Animated.View>
+        )}
+
+        {/* Onboarding Overlays */}
+        {showPrompt && (
+          <WalkthroughPromptModal
+            visible={showPrompt}
+            userName={userName}
+            onStart={() => {
+              setShowPrompt(false);
+              setShowWalkthrough(true);
+            }}
+            onSkip={() => {
+              setShowPrompt(false);
+              completeOnboarding();
+            }}
+          />
+        )}
+        {showWalkthrough && (
+          <WalkthroughOverlay
+            onComplete={() => {
+              setShowWalkthrough(false);
+              completeWalkthrough();
+            }}
+          />
+        )}
       </View>
     );
   };
 
   if (introActive) {
     return <MeloNoteLogoIntro onComplete={() => setIntroActive(false)} />;
+  }
+
+  if (isOnboardingLoaded && !userName) {
+    return (
+      <View style={{ flex: 1, backgroundColor: layoutTheme.bgApp }}>
+        <NameCollectionModal visible={true} onContinue={saveName} />
+      </View>
+    );
   }
 
   // Render responsive mockup phone container for desktop web
@@ -211,7 +377,7 @@ export function GlobalWorkspaceLayout() {
 
   // Full Screen Native Mobile View
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
+    <SafeAreaView style={[styles.safeAreaContainer, { backgroundColor: layoutTheme.bgSafe }]}>
       {renderHomeContent()}
     </SafeAreaView>
   );
@@ -383,5 +549,38 @@ const styles = StyleSheet.create({
     borderRadius: 150,
     backgroundColor: 'rgba(123, 97, 255, 0.04)',
     filter: Platform.OS === 'web' ? 'blur(90px)' : undefined,
+  },
+  toastContainer: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    right: 20,
+    zIndex: 9999,
+    alignItems: 'center',
+  },
+  toastCard: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    width: '100%',
+    maxWidth: 350,
+  },
+  toastContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  toastTextWrapper: {
+    flex: 1,
+    gap: 2,
+  },
+  toastTitle: {
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  toastBody: {
+    color: '#8E929A',
+    fontSize: 11,
+    fontWeight: '600',
+    lineHeight: 15,
   },
 });

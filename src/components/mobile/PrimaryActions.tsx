@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSettings } from '@/context/SettingsContext';
+
+import { WalkthroughRegistry } from '../onboarding/WalkthroughRegistry';
 
 interface ActionItem {
   icon: string;
@@ -15,6 +18,9 @@ interface PrimaryActionsProps {
 }
 
 export function PrimaryActions({ onPressAction }: PrimaryActionsProps) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+
   const actions: ActionItem[] = [
     {
       icon: '🎤',
@@ -35,7 +41,7 @@ export function PrimaryActions({ onPressAction }: PrimaryActionsProps) {
       colors: ['#7B61FF', '#FF8A00'],
       title: 'Scan Sheet',
       subtitle: 'Scan printed sheet music into notation.',
-      route: '/record', // For demo OMR scanning
+      route: '/scan',
     },
   ];
 
@@ -43,10 +49,19 @@ export function PrimaryActions({ onPressAction }: PrimaryActionsProps) {
     <View style={styles.container}>
       {actions.map((action, idx) => (
         <Pressable
+          ref={(r) => {
+            if (action.title.includes('Audio')) WalkthroughRegistry.register('action-record', r);
+            if (action.title.includes('Compose')) WalkthroughRegistry.register('action-compose', r);
+            if (action.title.includes('Scan')) WalkthroughRegistry.register('action-scan', r);
+          }}
           key={idx}
           onPress={() => onPressAction(action.route)}
           style={({ pressed }) => [
             styles.card,
+            {
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : '#FFFFFF',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.08)',
+            },
             pressed && styles.cardPressed,
           ]}
         >
@@ -60,12 +75,12 @@ export function PrimaryActions({ onPressAction }: PrimaryActionsProps) {
           </LinearGradient>
 
           <View style={styles.textContainer}>
-            <Text style={styles.cardTitle}>{action.title}</Text>
-            <Text style={styles.cardSubtitle}>{action.subtitle}</Text>
+            <Text style={[styles.cardTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>{action.title}</Text>
+            <Text style={[styles.cardSubtitle, { color: isDark ? '#B0B4BA' : '#60646C' }]}>{action.subtitle}</Text>
           </View>
 
-          <View style={styles.arrowCircle}>
-            <Text style={styles.arrowText}>→</Text>
+          <View style={[styles.arrowCircle, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)' }]}>
+            <Text style={[styles.arrowText, { color: isDark ? '#B0B4BA' : '#60646C' }]}>→</Text>
           </View>
         </Pressable>
       ))}

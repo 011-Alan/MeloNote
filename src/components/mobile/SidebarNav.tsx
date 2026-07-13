@@ -1,20 +1,40 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Path, Defs, LinearGradient as SvgGradient, Stop } from 'react-native-svg';
+import Svg, { Path, Defs, LinearGradient as SvgGradient, Stop, Ellipse } from 'react-native-svg';
+import { useSettings } from '@/context/SettingsContext';
+import { useOnboarding } from '@/context/OnboardingContext';
 
-const MiniTrebleClef = () => (
-  <Svg viewBox="0 0 100 150" width={22} height={33}>
-    <Path
-      d="M35 135 C35 145, 50 145, 50 135 C50 120, 38 115, 30 110 C20 102, 15 90, 15 75 C15 45, 40 20, 50 5 C52 2, 55 2, 55 5 L55 125 C55 135, 62 140, 70 140 C80 140, 85 130, 85 120 C85 105, 72 98, 65 98 C60 98, 55 100, 55 105 C55 110, 58 112, 60 112 C62 112, 65 110, 65 106 C65 103, 62 101, 58 101 L58 55 C65 65, 75 75, 75 88 C75 102, 65 115, 52 118 L52 35 C42 45, 30 60, 30 78 C30 92, 38 102, 45 108 C48 110, 52 112, 52 115 L52 128 C45 128, 35 125, 35 135 Z"
-      fill="url(#miniClefGrad)"
-    />
+const MeloLogo = () => (
+  <Svg viewBox="0 0 120 120" width={32} height={32}>
     <Defs>
-      <SvgGradient id="miniClefGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <SvgGradient id="logoMGrad" x1="0%" y1="0%" x2="100%" y2="100%">
         <Stop offset="0%" stopColor="#FF8A00" />
+        <Stop offset="50%" stopColor="#FF4FA3" />
         <Stop offset="100%" stopColor="#7B61FF" />
       </SvgGradient>
     </Defs>
+    {/* Noteheads (side notes are long, middle is higher) */}
+    <Ellipse cx="25" cy="90" rx="9" ry="6" fill="url(#logoMGrad)" transform="rotate(-15, 25, 90)" />
+    <Ellipse cx="60" cy="65" rx="9" ry="6" fill="url(#logoMGrad)" transform="rotate(-15, 60, 65)" />
+    <Ellipse cx="95" cy="90" rx="9" ry="6" fill="url(#logoMGrad)" transform="rotate(-15, 95, 90)" />
+
+    {/* Stems */}
+    <Path
+      d="M 31 90 L 31 30 M 66 65 L 66 30 M 101 90 L 101 30"
+      stroke="url(#logoMGrad)"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
+
+    {/* Flat Connecting Beam */}
+    <Path
+      d="M 31 30 L 101 30"
+      fill="none"
+      stroke="url(#logoMGrad)"
+      strokeWidth="9"
+      strokeLinecap="round"
+    />
   </Svg>
 );
 
@@ -32,18 +52,43 @@ interface SidebarNavProps {
 }
 
 export function SidebarNav({ activeTab, onNavigate, onClose }: SidebarNavProps) {
+  const { theme } = useSettings();
+  const { userName } = useOnboarding();
+  const isDark = theme === 'dark';
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return 'Good Morning';
+    if (hour >= 12 && hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
+  const bgColors = isDark ? ['#0F0F12', '#0A0A0C'] : ['#FFFFFF', '#F5F5F7'];
+  const sidebarBorderColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+  const logoTitleColor = isDark ? '#FFFFFF' : '#121212';
+  const greetingTitleColor = isDark ? '#FFFFFF' : '#121212';
+  const greetingSubColor = isDark ? '#60646C' : '#555555';
+  const menuItemActiveBg = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.08)';
+  const menuLabelColor = isDark ? '#8E929A' : '#555555';
+  const menuLabelActiveColor = isDark ? '#FFFFFF' : '#121212';
+  const dividerColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.08)';
+  const bottomBg = isDark ? '#0F0F12' : '#FFFFFF';
+  const bottomLabelColor = isDark ? '#8E929A' : '#555555';
+  const aboutTextColor = isDark ? '#40444C' : '#888888';
+
   const navItems: NavItem[] = [
     { icon: '🏠', name: 'Home', route: '/' },
-    { icon: '🎼', name: 'Compose', route: '/create' },
+    { icon: '✍️', name: 'Compose', route: '/create' },
     { icon: '🎤', name: 'Record', route: '/record' },
     { icon: '📄', name: 'Scan Sheet', route: '/scan' },
     { icon: '📂', name: 'Projects', route: '/projects' },
+    { icon: '🎼', name: 'Music Basics', route: '/basics' },
   ];
 
   return (
-    <View style={styles.sidebarContainer}>
+    <View style={[styles.sidebarContainer, { backgroundColor: isDark ? '#0F0F12' : '#FFFFFF', borderColor: sidebarBorderColor }]}>
       <LinearGradient
-        colors={['#0F0F12', '#0A0A0C']}
+        colors={bgColors as any}
         style={StyleSheet.absoluteFill}
       />
 
@@ -51,16 +96,18 @@ export function SidebarNav({ activeTab, onNavigate, onClose }: SidebarNavProps) 
         {/* Top Header */}
         <View style={styles.header}>
           <View style={styles.logoRow}>
-            <MiniTrebleClef />
+            <MeloLogo />
             <View style={styles.logoTextWrapper}>
-              <Text style={styles.logoTitle}>MeloNote</Text>
+              <Text style={[styles.logoTitle, { color: logoTitleColor }]}>MeloNote</Text>
               <Text style={styles.logoSubtitle}>AI Music Workspace</Text>
             </View>
           </View>
           
           <View style={styles.greetingBox}>
-            <Text style={styles.greetingTitle}>Good Evening</Text>
-            <Text style={styles.greetingSub}>Ready to create some music?</Text>
+            <Text style={[styles.greetingTitle, { color: greetingTitleColor }]}>
+              {getGreeting()}{userName ? `, ${userName}` : ''}
+            </Text>
+            <Text style={[styles.greetingSub, { color: greetingSubColor }]}>Ready to create some music?</Text>
           </View>
         </View>
 
@@ -79,7 +126,7 @@ export function SidebarNav({ activeTab, onNavigate, onClose }: SidebarNavProps) 
                 }}
                 style={({ pressed }) => [
                   styles.menuItem,
-                  isActive && styles.menuItemActive,
+                  isActive && { backgroundColor: menuItemActiveBg },
                   pressed && styles.pressed,
                 ]}
               >
@@ -92,7 +139,7 @@ export function SidebarNav({ activeTab, onNavigate, onClose }: SidebarNavProps) 
                 )}
 
                 <Text style={styles.menuIcon}>{item.icon}</Text>
-                <Text style={[styles.menuLabel, isActive && styles.menuLabelActive]}>
+                <Text style={[styles.menuLabel, { color: isActive ? menuLabelActiveColor : menuLabelColor }, isActive && styles.menuLabelActive]}>
                   {item.name}
                 </Text>
 
@@ -108,22 +155,23 @@ export function SidebarNav({ activeTab, onNavigate, onClose }: SidebarNavProps) 
       </ScrollView>
 
       {/* Fixed Bottom Section */}
-      <View style={styles.bottomSection}>
-        <View style={styles.divider} />
+      <View style={[styles.bottomSection, { backgroundColor: bottomBg }]}>
+        <View style={[styles.divider, { backgroundColor: dividerColor }]} />
         
         <Pressable
-          onPress={() => onNavigate('/settings', 'Settings')}
+          onPress={() => {
+            onNavigate('/settings', 'Settings');
+            onClose();
+          }}
           style={({ pressed }) => [styles.bottomItem, pressed && styles.pressed]}
         >
           <Text style={styles.bottomIcon}>⚙️</Text>
-          <Text style={styles.bottomLabel}>Settings</Text>
+          <Text style={[styles.bottomLabel, { color: bottomLabelColor }]}>Settings</Text>
         </Pressable>
-
-
-
-        <View style={styles.aboutBox}>
-          <Text style={styles.aboutText}>MeloNote Mobile Workspace v1.2</Text>
-        </View>
+        
+        <Text style={{ fontSize: 10, color: aboutTextColor, textAlign: 'center', marginTop: 10, opacity: 0.8 }}>
+          © MeloNote 2026. All rights reserved.
+        </Text>
       </View>
     </View>
   );
@@ -246,7 +294,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuLabelActive: {
-    color: '#FFFFFF',
     fontWeight: '700',
   },
   comingSoonBadge: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSettings } from '@/context/SettingsContext';
 
 interface BottomNavProps {
   activeTab: string;
@@ -8,6 +9,8 @@ interface BottomNavProps {
 }
 
 export function BottomNav({ activeTab, onPressTab }: BottomNavProps) {
+  const { theme } = useSettings();
+  
   const tabs = [
     { name: 'Home', icon: '🏠', route: '/' },
     { name: 'Projects', icon: '📂', route: '/projects' },
@@ -16,8 +19,13 @@ export function BottomNav({ activeTab, onPressTab }: BottomNavProps) {
     { name: 'Profile', icon: '👤', route: '/settings' },
   ];
 
+  const barBg = theme === 'dark' ? 'rgba(15, 15, 18, 0.85)' : 'rgba(255, 255, 255, 0.85)';
+  const barBorder = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+  const activeColor = theme === 'dark' ? '#FFFFFF' : '#121212';
+  const inactiveColor = theme === 'dark' ? '#60646C' : '#8E929A';
+
   return (
-    <View style={styles.navBarContainer}>
+    <View style={[styles.navBarContainer, { backgroundColor: barBg, borderColor: barBorder }]}>
       <View style={styles.innerBar}>
         {tabs.map((tab, idx) => {
           if (tab.isCenter) {
@@ -53,7 +61,11 @@ export function BottomNav({ activeTab, onPressTab }: BottomNavProps) {
               <Text style={[styles.tabIcon, isActive && styles.tabIconActive]}>
                 {tab.icon}
               </Text>
-              <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
+              <Text style={[
+                styles.tabLabel, 
+                { color: inactiveColor }, 
+                isActive && [styles.tabLabelActive, { color: activeColor }]
+              ]}>
                 {tab.name}
               </Text>
             </Pressable>

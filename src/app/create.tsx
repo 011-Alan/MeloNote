@@ -11,6 +11,7 @@ import {
   BackHandler,
   PanResponder,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 import Modal from '@/components/PortalModal';
 import { useRouter } from 'expo-router';
@@ -20,7 +21,11 @@ import PlaybackController from '@/components/PlaybackController';
 import { parseNote, getBeatsPerMeasure } from '@/components/sheetMusicShared';
 import { WebView } from 'react-native-webview';
 import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
 import { useAudioPlayer } from 'expo-audio';
+import { useSettings } from '@/context/SettingsContext';
+import { GlassCard } from '@/components/ui/DesignSystem';
+import { WalkthroughRegistry } from '@/components/onboarding/WalkthroughRegistry';
 
 
 type Staff = {
@@ -1363,7 +1368,7 @@ export interface CreateScreenProps {
   initialTimeSignature?: string;
   initialTempo?: number;
   initialMusicXML?: string;
-  initialSourceType?: 'manual' | 'transcribed';
+  initialSourceType?: 'manual' | 'transcribed' | 'scan';
   defaultEditMode?: boolean;
   onExit?: () => void;
   measuresPerSystem?: number;
@@ -1502,7 +1507,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
   };
 
   // Score state (initialized with initial values if provided)
-  const [score, setScore] = useState<Score>(() => {
+  const [score, rawSetScore] = useState<Score>(() => {
     let notesToUse = initialNotes;
 
     // Parse MusicXML if initialNotes are not provided directly (Issue 3)
@@ -1571,6 +1576,46 @@ export default function CreateScreen(props?: CreateScreenProps) {
     }
   }, [score]);
 
+  // Undo / Redo History Management
+  const undoStackRef = useRef<Score[]>([]);
+  const redoStackRef = useRef<Score[]>([]);
+  const isUndoRedoActionRef = useRef<boolean>(false);
+
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+
+  const updateCanUndoRedo = useCallback(() => {
+    setCanUndo(undoStackRef.current.length > 0);
+    setCanRedo(redoStackRef.current.length > 0);
+  }, []);
+
+  const setScore = useCallback((value: Score | ((prev: Score) => Score)) => {
+    rawSetScore(prev => {
+      const next = typeof value === 'function' ? value(prev) : value;
+      
+      if (isUndoRedoActionRef.current) {
+        return next;
+      }
+      
+      // Save current state to undo stack
+      const prevClone = JSON.parse(JSON.stringify(prev));
+      undoStackRef.current.push(prevClone);
+      
+      // Clear redo stack on new action
+      redoStackRef.current = [];
+      
+      setTimeout(updateCanUndoRedo, 0);
+      return next;
+    });
+  }, [updateCanUndoRedo]);
+
+  const clearHistory = useCallback(() => {
+    undoStackRef.current = [];
+    redoStackRef.current = [];
+    setCanUndo(false);
+    setCanRedo(false);
+  }, []);
+
   const [tempoInputText, setTempoInputText] = useState(score.tempo.toString());
 
   // Keep local input text in sync when score tempo changes from WebView or props
@@ -1585,6 +1630,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
 
   // Load existing project or build state on mount/props change
   useEffect(() => {
+    clearHistory();
     if (initialProjectId) {
       const loadExistingProject = async () => {
         try {
@@ -1633,6 +1679,8 @@ export default function CreateScreen(props?: CreateScreenProps) {
       });
     }
   }, [initialProjectId, initialNotes, reconstructScore]);
+
+
 
   const titleStartOffset = useRef({ x: 0, y: 0 });
   const authorStartOffset = useRef({ x: 0, y: 0 });
@@ -1701,6 +1749,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
   const [hasChanges, setHasChanges] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
+  const [showScanBackModal, setShowScanBackModal] = useState(false);
   const [showMeasureEditorModal, setShowMeasureEditorModal] = useState(false);
   const [showNoteSelectionModal, setShowNoteSelectionModal] = useState(false);
   const [noteModalSubMode, setNoteModalSubMode] = useState<'duration' | 'rest'>('duration');
@@ -1836,16 +1885,30 @@ export default function CreateScreen(props?: CreateScreenProps) {
   const isModeSwitchingRef = useRef(false);
   const player = useAudioPlayer(recordingURI);
 
+  const { theme, inAppVolumeEnabled, inAppVolume } = useSettings();
+  const isDark = theme === 'dark';
+
+  useEffect(() => {
+    if (player) {
+      player.volume = inAppVolumeEnabled ? inAppVolume : 0.0;
+    }
+  }, [player, inAppVolume, inAppVolumeEnabled]);
+
   const playbackModeRef = useRef(playbackMode);
   playbackModeRef.current = playbackMode;
 
   const playerCurrentTimeRef = useRef(0);
   const originalDurationRef = useRef(0);
 
-  // Sync recording URI from loaded project
+  const [sourceType, setSourceType] = useState<'manual' | 'transcribed' | 'scan'>(initialSourceType || 'manual');
+  const [isAudioAvailable, setIsAudioAvailable] = useState<boolean>(true);
+  const [audioChecked, setAudioChecked] = useState<boolean>(false);
+  const modeSwitchingTimeRef = useRef<number | null>(null);
+
+  // Sync recording URI and sourceType from loaded project
   useEffect(() => {
     if (initialProjectId) {
-      const getProjUri = async () => {
+      const getProjData = async () => {
         try {
           let projectData: any = null;
           if (Platform.OS === 'web') {
@@ -1859,16 +1922,142 @@ export default function CreateScreen(props?: CreateScreenProps) {
               projectData = JSON.parse(data);
             }
           }
-          if (projectData && projectData.recordingURI) {
-            setRecordingURI(projectData.recordingURI);
+          if (projectData) {
+            if (projectData.recordingURI) {
+              setRecordingURI(projectData.recordingURI);
+            }
+            if (projectData.sourceType) {
+              setSourceType(projectData.sourceType);
+            } else if (projectData.recordingURI) {
+              setSourceType('transcribed');
+            } else {
+              setSourceType('manual');
+            }
           }
         } catch (e) {
-          console.log('[AUDIO SYNC] failed to load project URI:', e);
+          console.log('[PROJECT LOAD SYNC] failed to load project metadata:', e);
         }
       };
-      getProjUri();
+      getProjData();
     }
   }, [initialProjectId]);
+
+  useEffect(() => {
+    if (initialSourceType) {
+      setSourceType(initialSourceType);
+    }
+  }, [initialSourceType]);
+
+  // Check if original audio file/URI is valid and exists
+  useEffect(() => {
+    const verifyAudio = async () => {
+      if (sourceType !== 'transcribed') {
+        setIsAudioAvailable(false);
+        setAudioChecked(true);
+        return;
+      }
+      if (!recordingURI) {
+        setIsAudioAvailable(false);
+        setAudioChecked(true);
+        return;
+      }
+
+      try {
+        let available = false;
+        if (Platform.OS === 'web') {
+          // On web, audio is stored as a data URL (base64) or a blob URL.
+          if (
+            recordingURI.startsWith('data:') ||
+            recordingURI.startsWith('blob:') ||
+            recordingURI.startsWith('http')
+          ) {
+            // Verify if the URI is actually fetchable/accessible
+            try {
+              const res = await fetch(recordingURI, { method: 'HEAD' });
+              available = res.ok;
+            } catch {
+              // Fall back to simple fetch check
+              try {
+                const getRes = await fetch(recordingURI);
+                available = getRes.ok;
+              } catch {
+                available = false;
+              }
+            }
+          }
+        } else {
+          // On native, the audio file should exist locally
+          const info = await FileSystem.getInfoAsync(recordingURI);
+          available = info.exists;
+        }
+
+        // Fallback to backend server if local/blob audio is unavailable
+        if (!available && initialProjectId) {
+          const backendBases = Platform.OS === 'web' 
+            ? ['http://localhost:5000', 'http://192.168.1.4:5000']
+            : ['http://192.168.1.4:5000'];
+            
+          for (const base of backendBases) {
+            const originalUrl = `${base}/export/original/${initialProjectId}`;
+            console.log('[AUDIO VALIDATION] Checking backend original fallback:', originalUrl);
+            try {
+              const res = await fetch(originalUrl, { method: 'HEAD' });
+              if (res.ok) {
+                setRecordingURI(originalUrl);
+                available = true;
+                break;
+              }
+            } catch (e) {
+              // Ignore and try next
+            }
+            
+            const wavUrl = `${base}/export/wav/${initialProjectId}`;
+            console.log('[AUDIO VALIDATION] Checking backend wav fallback:', wavUrl);
+            try {
+              const res = await fetch(wavUrl, { method: 'HEAD' });
+              if (res.ok) {
+                setRecordingURI(wavUrl);
+                available = true;
+                break;
+              }
+            } catch (e) {
+              // Ignore and try next
+            }
+          }
+        }
+
+        setIsAudioAvailable(available);
+      } catch (err) {
+        console.warn('[AUDIO VALIDATION] Failed to verify audio:', err);
+        // Be lenient on error — trust the URI if it looks valid
+        setIsAudioAvailable(!!recordingURI);
+      } finally {
+        setAudioChecked(true);
+      }
+    };
+
+    verifyAudio();
+  }, [recordingURI, sourceType, initialProjectId]);
+
+  // Fallback playbackMode to 'notation' if audio becomes unavailable
+  useEffect(() => {
+    if (!isAudioAvailable && playbackMode === 'original') {
+      setPlaybackMode('notation');
+    }
+  }, [isAudioAvailable, playbackMode]);
+
+  // Cleanup audio player on unmount
+  useEffect(() => {
+    return () => {
+      if (player) {
+        try {
+          player.pause();
+        } catch (e) {
+          console.warn('[AUDIO CLEANUP] Failed to pause player on unmount:', e);
+        }
+      }
+    };
+  }, [player]);
 
   // Audio player duration setup for original audio mode
   useEffect(() => {
@@ -2103,6 +2292,461 @@ export default function CreateScreen(props?: CreateScreenProps) {
     }
   };
 
+  const handleUndo = useCallback(() => {
+    if (undoStackRef.current.length === 0) return;
+    
+    // Save current state to redo stack
+    const currentClone = JSON.parse(JSON.stringify(score));
+    redoStackRef.current.push(currentClone);
+    
+    // Pop last state from undo stack
+    const prevState = undoStackRef.current.pop();
+    
+    isUndoRedoActionRef.current = true;
+    rawSetScore(prevState!);
+    
+    // Clear selections to prevent stale references
+    setSelectedNoteId(null);
+    setSelectedNoteIds([]);
+    setSelectedMeasureIndex(null);
+    setSelectedBarId(null);
+    postMessageToSheet({ type: 'CLEAR_SELECTION' });
+    
+    // Sync tempo input text
+    if (prevState) {
+      setTempoInputText(prevState.tempo.toString());
+    }
+
+    updateCanUndoRedo();
+
+    setTimeout(() => {
+      isUndoRedoActionRef.current = false;
+    }, 0);
+  }, [score, updateCanUndoRedo]);
+
+  const handleRedo = useCallback(() => {
+    if (redoStackRef.current.length === 0) return;
+    
+    // Save current state to undo stack
+    const currentClone = JSON.parse(JSON.stringify(score));
+    undoStackRef.current.push(currentClone);
+    
+    // Pop last state from redo stack
+    const nextState = redoStackRef.current.pop();
+    
+    isUndoRedoActionRef.current = true;
+    rawSetScore(nextState!);
+    
+    // Clear selections to prevent stale references
+    setSelectedNoteId(null);
+    setSelectedNoteIds([]);
+    setSelectedMeasureIndex(null);
+    setSelectedBarId(null);
+    postMessageToSheet({ type: 'CLEAR_SELECTION' });
+
+    // Sync tempo input text
+    if (nextState) {
+      setTempoInputText(nextState.tempo.toString());
+    }
+
+    updateCanUndoRedo();
+
+    setTimeout(() => {
+      isUndoRedoActionRef.current = false;
+    }, 0);
+  }, [score, updateCanUndoRedo]);
+
+  const BACKEND_URL = 'http://192.168.1.4:5001';
+
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [exportingFormat, setExportingFormat] = useState<string | null>(null);
+  const [pendingPDFAction, setPendingPDFAction] = useState<'PDF' | 'ZIP' | null>(null);
+
+  const processPDFResponse = useCallback(async (pdfBase64: string) => {
+    const action = pendingPDFAction;
+    setPendingPDFAction(null);
+    
+    if (action === 'PDF') {
+      try {
+        const filename = `${score.title.text || 'transcription'}.pdf`;
+        const base64Data = pdfBase64.split(',')[1];
+        
+        if (Platform.OS === 'web') {
+          const element = document.createElement('a');
+          element.href = pdfBase64;
+          element.download = filename;
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        } else {
+          const fileUri = `${FileSystem.cacheDirectory}${filename}`;
+          await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          await Sharing.shareAsync(fileUri, { mimeType: 'application/pdf', dialogTitle: 'Share PDF Score' });
+        }
+      } catch (err) {
+        console.error('[PDF Export] Error:', err);
+        Alert.alert('Error', 'Failed to share PDF score.');
+      } finally {
+        setExportingFormat(null);
+      }
+    } else if (action === 'ZIP') {
+      try {
+        if (!initialProjectId) throw new Error('Project ID not set');
+        const url = `${BACKEND_URL}/export/zip/${initialProjectId}`;
+        const filename = `${score.title.text || 'transcription'}_bundle.zip`;
+        
+        const payload: any = { pdf_base64: pdfBase64 };
+        payload.musicxml = scoreMusicXML;
+        payload.raw_notes = initialNotes || [];
+        payload.tempo = score.tempo || 120;
+        payload.best_grid_resolution = 0.25;
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+        
+        if (!response.ok) throw new Error('Failed to compile ZIP bundle on server');
+        const blob = await response.blob();
+        
+        if (Platform.OS === 'web') {
+          const element = document.createElement('a');
+          element.href = URL.createObjectURL(blob);
+          element.download = filename;
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        } else {
+          const reader = new FileReader();
+          await new Promise<void>((resolve, reject) => {
+            reader.onloadend = async () => {
+              try {
+                const base64data = (reader.result as string).split(',')[1];
+                const fileUri = `${FileSystem.cacheDirectory}${filename}`;
+                await FileSystem.writeAsStringAsync(fileUri, base64data, {
+                  encoding: FileSystem.EncodingType.Base64,
+                });
+                await Sharing.shareAsync(fileUri, { mimeType: 'application/zip', dialogTitle: 'Share Project Bundle' });
+                resolve();
+              } catch (e) {
+                reject(e);
+              }
+            };
+            reader.onerror = (e) => reject(e);
+            reader.readAsDataURL(blob);
+          });
+        }
+      } catch (err: any) {
+        console.error('[ZIP Export] Error:', err);
+        Alert.alert('Error', err.message || 'Failed to export ZIP project bundle.');
+      } finally {
+        setExportingFormat(null);
+      }
+    }
+  }, [pendingPDFAction, score.title.text, scoreMusicXML, initialNotes, score.tempo, initialProjectId]);
+
+  const downloadFileViaPost = useCallback(async (
+    endpoint: string,
+    postData: any,
+    filename: string,
+    mimeType: string,
+    dialogTitle: string
+  ) => {
+    const url = `${BACKEND_URL}${endpoint}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server returned status ${response.status}`);
+    }
+
+    const blob = await response.blob();
+
+    if (Platform.OS === 'web') {
+      const element = document.createElement('a');
+      element.href = URL.createObjectURL(blob);
+      element.download = filename;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    } else {
+      const reader = new FileReader();
+      await new Promise<void>((resolve, reject) => {
+        reader.onloadend = async () => {
+          try {
+            const base64data = (reader.result as string).split(',')[1];
+            const fileUri = `${FileSystem.cacheDirectory}${filename}`;
+            await FileSystem.writeAsStringAsync(fileUri, base64data, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+            await Sharing.shareAsync(fileUri, { mimeType, dialogTitle });
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        };
+        reader.onerror = (e) => reject(e);
+        reader.readAsDataURL(blob);
+      });
+    }
+  }, []);
+
+  const handleDownloadPDF = useCallback(() => {
+    setExportingFormat('PDF');
+    setPendingPDFAction('PDF');
+    
+    const msg = {
+      type: 'GENERATE_PDF',
+      title: score.title.text || 'Untitled Score',
+      author: score.author.text || 'Unknown Author',
+      tempo: score.tempo || 120,
+      isDark: isDark
+    };
+    
+    if (Platform.OS === 'web') {
+      const activeId = sheetMusicId || "scratch-editor-music-sheet";
+      const iframe = document.getElementById(activeId) as HTMLIFrameElement;
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(JSON.stringify(msg), '*');
+      } else {
+        setExportingFormat(null);
+        setPendingPDFAction(null);
+        Alert.alert('Error', 'Iframe not available.');
+      }
+    } else {
+      if (webViewRef.current) {
+        webViewRef.current.postMessage(JSON.stringify(msg));
+      } else {
+        setExportingFormat(null);
+        setPendingPDFAction(null);
+        Alert.alert('Error', 'WebView not ready.');
+      }
+    }
+  }, [score.title.text, score.author.text, score.tempo, sheetMusicId]);
+
+  const handleDownloadMusicXML = useCallback(async () => {
+    if (!scoreMusicXML) return;
+    setExportingFormat('MusicXML');
+    try {
+      const filename = `${score.title.text || 'transcription'}.musicxml`;
+      if (Platform.OS === 'web') {
+        const file = new Blob([scoreMusicXML], { type: 'application/xml' });
+        const element = document.createElement('a');
+        element.href = URL.createObjectURL(file);
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      } else {
+        const fileUri = `${FileSystem.cacheDirectory}${filename}`;
+        await FileSystem.writeAsStringAsync(fileUri, scoreMusicXML, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+        await Sharing.shareAsync(fileUri, { mimeType: 'application/xml', dialogTitle: 'Share MusicXML' });
+      }
+    } catch (err) {
+      console.error('[MusicXML Export] Error:', err);
+      Alert.alert('Error', 'Failed to export MusicXML.');
+    } finally {
+      setExportingFormat(null);
+    }
+  }, [scoreMusicXML, score.title.text]);
+
+  const handleDownloadOriginalAudio = useCallback(async () => {
+    if (!recordingURI) return;
+    setExportingFormat('Original Audio');
+    try {
+      const extension = recordingURI.split('.').pop() || 'wav';
+      const uriFileName = recordingURI.split('/').pop() || 'audio';
+      const filename = score.title.text ? `${score.title.text}.${extension}` : uriFileName;
+      
+      if (Platform.OS === 'web') {
+        const response = await fetch(recordingURI);
+        const blob = await response.blob();
+        const element = document.createElement('a');
+        element.href = URL.createObjectURL(blob);
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      } else {
+        await Sharing.shareAsync(recordingURI, { dialogTitle: 'Share Original Audio' });
+      }
+    } catch (err) {
+      console.error('[Original Audio Export] Error:', err);
+      Alert.alert('Error', 'Failed to share original audio.');
+    } finally {
+      setExportingFormat(null);
+    }
+  }, [recordingURI, score.title.text]);
+
+  const handleDownloadMIDI = useCallback(async () => {
+    if (!initialProjectId) return;
+    setExportingFormat('MIDI');
+    try {
+      const filename = `${score.title.text || 'transcription'}.mid`;
+      
+      if (Platform.OS === 'web') {
+        const url = `${BACKEND_URL}/export/midi/${initialProjectId}`;
+        const response = await fetch(url, {
+          method: 'GET',
+        });
+        if (!response.ok) throw new Error('MIDI compilation failed');
+        const blob = await response.blob();
+        const element = document.createElement('a');
+        element.href = URL.createObjectURL(blob);
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      } else {
+        try {
+          const payload = {
+            musicxml: scoreMusicXML,
+            tempo: score.tempo || 120
+          };
+          await downloadFileViaPost(
+            `/export/midi/${initialProjectId}`,
+            payload,
+            filename,
+            'audio/midi',
+            'Share MIDI'
+          );
+        } catch (err) {
+          console.log('[MIDI Export] GET failed, falling back to POST:', err);
+          const url = `${BACKEND_URL}/export/midi/${initialProjectId}`;
+          const downloadResult = await FileSystem.downloadAsync(url, `${FileSystem.cacheDirectory}${filename}`);
+          if (downloadResult.status !== 200) {
+            throw new Error('Fallback download failed');
+          }
+          await Sharing.shareAsync(downloadResult.uri, { mimeType: 'audio/midi', dialogTitle: 'Share MIDI' });
+        }
+      }
+    } catch (err) {
+      console.error('[MIDI Export] Error:', err);
+      Alert.alert('Error', 'Failed to export MIDI.');
+    } finally {
+      setExportingFormat(null);
+    }
+  }, [initialProjectId, score.title.text, scoreMusicXML, score.tempo, downloadFileViaPost]);
+
+  const handleDownloadPlaybackWAV = useCallback(async () => {
+    if (!initialProjectId) return;
+    setExportingFormat('Playback Audio');
+    try {
+      const filename = `Playback_${score.title.text || 'transcription'}.wav`;
+      
+      if (Platform.OS === 'web') {
+        const url = `${BACKEND_URL}/export/wav/${initialProjectId}`;
+        const response = await fetch(url, {
+          method: 'GET',
+        });
+        if (!response.ok) throw new Error('WAV playback generation failed');
+        const blob = await response.blob();
+        const element = document.createElement('a');
+        element.href = URL.createObjectURL(blob);
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      } else {
+        try {
+          const payload = {
+            musicxml: scoreMusicXML,
+            tempo: score.tempo || 120
+          };
+          await downloadFileViaPost(
+            `/export/wav/${initialProjectId}`,
+            payload,
+            filename,
+            'audio/wav',
+            'Share Playback Audio'
+          );
+        } catch (err) {
+          console.log('[WAV Playback Export] GET failed, falling back to POST:', err);
+          const url = `${BACKEND_URL}/export/wav/${initialProjectId}`;
+          const downloadResult = await FileSystem.downloadAsync(url, `${FileSystem.cacheDirectory}${filename}`);
+          if (downloadResult.status !== 200) {
+            throw new Error('Fallback download failed');
+          }
+          await Sharing.shareAsync(downloadResult.uri, { mimeType: 'audio/wav', dialogTitle: 'Share Playback Audio' });
+        }
+      }
+    } catch (err) {
+      console.error('[WAV Playback Export] Error:', err);
+      Alert.alert('Error', 'Failed to export playback audio.');
+    } finally {
+      setExportingFormat(null);
+    }
+  }, [initialProjectId, score.title.text, scoreMusicXML, score.tempo, downloadFileViaPost]);
+
+  const handleDownloadZIP = useCallback(() => {
+    setExportingFormat('ZIP Bundle');
+    setPendingPDFAction('ZIP');
+    
+    const msg = {
+      type: 'GENERATE_PDF',
+      title: score.title.text || 'Untitled Score',
+      author: score.author.text || 'Unknown Author',
+      tempo: score.tempo || 120,
+      isDark: isDark
+    };
+    
+    if (Platform.OS === 'web') {
+      const activeId = sheetMusicId || "scratch-editor-music-sheet";
+      const iframe = document.getElementById(activeId) as HTMLIFrameElement;
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(JSON.stringify(msg), '*');
+      } else {
+        setExportingFormat(null);
+        setPendingPDFAction(null);
+        Alert.alert('Error', 'Iframe not available.');
+      }
+    } else {
+      if (webViewRef.current) {
+        webViewRef.current.postMessage(JSON.stringify(msg));
+      } else {
+        setExportingFormat(null);
+        setPendingPDFAction(null);
+        Alert.alert('Error', 'WebView not ready.');
+      }
+    }
+  }, [score.title.text, score.author.text, score.tempo, sheetMusicId]);
+
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      const handleWebMessage = async (event: MessageEvent) => {
+        try {
+          const activeId = sheetMusicId || "scratch-editor-music-sheet";
+          const iframe = document.getElementById(activeId) as HTMLIFrameElement;
+          if (!iframe || event.source !== iframe.contentWindow) return;
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+          if (data && data.type === 'PDF_GENERATED') {
+            await processPDFResponse(data.data);
+          } else if (data && data.type === 'PDF_ERROR') {
+            Alert.alert('PDF Generation Error', data.error);
+            setExportingFormat(null);
+            setPendingPDFAction(null);
+          }
+        } catch (e) {
+          // Ignore unrelated messages
+        }
+      };
+      window.addEventListener('message', handleWebMessage);
+      return () => window.removeEventListener('message', handleWebMessage);
+    }
+  }, [sheetMusicId, pendingPDFAction, processPDFResponse]);
+
   const handleZoomIn = () => postMessageToSheet({ type: 'ZOOM_IN' });
   const handleZoomOut = () => postMessageToSheet({ type: 'ZOOM_OUT' });
   const handleResetZoom = () => postMessageToSheet({ type: 'RESET_ZOOM' });
@@ -2182,6 +2826,14 @@ export default function CreateScreen(props?: CreateScreenProps) {
     if (pendingModalTimer.current) {
       clearTimeout(pendingModalTimer.current);
       pendingModalTimer.current = null;
+    }
+
+    if (player) {
+      try {
+        player.pause();
+      } catch (e) {
+        console.warn('[EXIT] Failed to pause player:', e);
+      }
     }
 
     if (onExit) {
@@ -2282,6 +2934,11 @@ export default function CreateScreen(props?: CreateScreenProps) {
   const handleExit = () => {
     console.log('[EXIT] Clicked');
     console.log('[EXIT] Unsaved changes:', hasChanges);
+    // For scanned sheets, show the "Scan another page?" modal instead
+    if (initialSourceType === 'scan' || sourceType === 'scan') {
+      setShowScanBackModal(true);
+      return;
+    }
     if (hasChanges) {
       setShowUnsavedModal(true);
     } else {
@@ -2317,7 +2974,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
         id: activeId,
         name: score.title.text || 'Untitled Score',
         date: new Date().toISOString(),
-        recordingURI: existingProject.recordingURI || '',
+        recordingURI: existingProject.recordingURI || recordingURI || '',
         convertedNotes: existingProject.convertedNotes || 
                         existingProject.notes || 
                         ((existingProject.treble_notes || existingProject.bass_notes) ? { 
@@ -2330,9 +2987,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
         timeSignature: score.timeSignature,
         detectedTempo: score.tempo,
         qualityScores: existingProject.qualityScores,
-        duration: existingProject.duration || 0,
+        duration: existingProject.duration || duration || 0,
         audioSize: existingProject.audioSize || 0,
-        sourceType: existingProject.sourceType || 'manual',
+        sourceType: existingProject.sourceType || sourceType || initialSourceType || 'manual',
         manualScoreState: score,
       };
 
@@ -2376,6 +3033,16 @@ export default function CreateScreen(props?: CreateScreenProps) {
     setShowUnsavedModal(false);
     exitEditorDirectly();
   };
+
+  // Automatically save project once after scanned MusicXML is loaded (new scans only)
+  const hasAutoSaved = useRef(false);
+  useEffect(() => {
+    if (initialSourceType === 'scan' && !initialProjectId && score && !hasAutoSaved.current) {
+      hasAutoSaved.current = true;
+      console.log('[AUTO-SAVE] Triggering automatic save for scanned score');
+      handleSaveProject();
+    }
+  }, [initialSourceType, initialProjectId, score]);
 
   // Android Back Handler
   useEffect(() => {
@@ -2434,7 +3101,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
       'EDIT_MODE_CHANGED',
       'UPDATE_MODAL_PREVIEW',
       'PREVIEW_ITEM_CLICKED',
-      'PREVIEW_DESELECT'
+      'PREVIEW_DESELECT',
+      'PDF_GENERATED',
+      'PDF_ERROR'
     ];
 
     if (!data || typeof data !== 'object' || !data.type || !EXPECTED_TYPES.includes(data.type)) {
@@ -2445,6 +3114,17 @@ export default function CreateScreen(props?: CreateScreenProps) {
     if (pendingModalTimer.current) {
       clearTimeout(pendingModalTimer.current);
       pendingModalTimer.current = null;
+    }
+
+    if (data.type === 'PDF_GENERATED') {
+      processPDFResponse(data.data);
+      return;
+    }
+    if (data.type === 'PDF_ERROR') {
+      Alert.alert('PDF Generation Error', data.error);
+      setExportingFormat(null);
+      setPendingPDFAction(null);
+      return;
     }
 
     try {
@@ -2673,8 +3353,20 @@ export default function CreateScreen(props?: CreateScreenProps) {
           break;
         case 'PLAYBACK_PROGRESS':
         case 'PLAYBACK_STATE':
+          if (playbackModeRef.current === 'original') {
+            return;
+          }
+          if (
+            isModeSwitchingRef.current &&
+            modeSwitchingTimeRef.current !== null &&
+            Date.now() - modeSwitchingTimeRef.current < 500
+          ) {
+            console.log('[CREATE WEB MSG CLAMP] Ignoring progress/state event during mode switch:', data.type);
+            return;
+          }
           if (data.currentTime !== undefined) {
             setCurrentTime(data.currentTime);
+            playerCurrentTimeRef.current = data.currentTime;
           }
           if (data.duration !== undefined) {
             setDuration(data.duration);
@@ -4683,10 +5375,10 @@ export default function CreateScreen(props?: CreateScreenProps) {
   
   if (editorMode === 'choice') {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: isDark ? '#000000' : '#FFFFFF' }]}>
         <View style={styles.choiceHeader}>
-          <Text style={styles.choiceTitle}>Create Music Sheet</Text>
-          <Text style={styles.choiceSubtitle}>Start transcribing or compose from scratch</Text>
+          <Text style={[styles.choiceTitle, { color: isDark ? '#ffffff' : '#121212' }]}>Create Music Sheet</Text>
+          <Text style={[styles.choiceSubtitle, { color: isDark ? '#8e8e93' : '#60646C' }]}>Start transcribing or compose from scratch</Text>
         </View>
 
         <View style={styles.cardContainer}>
@@ -4734,7 +5426,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
             }}
             style={({ pressed }) => [
               styles.choiceCard,
-              { opacity: pressed ? 0.9 : 1, borderColor: '#ff9500' },
+              { backgroundColor: isDark ? '#1c1c1e' : '#FFFFFF', borderColor: isDark ? '#2c2c2e' : '#E0E1E6', opacity: pressed ? 0.9 : 1 },
             ]}
           >
             <View style={[styles.iconCircle, { backgroundColor: '#fff2e0' }]}>
@@ -4742,12 +5434,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
             </View>
             <View style={styles.cardContent}>
               <View style={styles.badgeRow}>
-                <Text style={styles.cardTitle}>Create Music Sheet From Scratch</Text>
-                <View style={[styles.badge, { backgroundColor: '#fff2e0' }]}>
-                  <Text style={[styles.badgeText, { color: '#b26a00' }]}>Compose</Text>
-                </View>
+                <Text style={[styles.cardTitle, { color: isDark ? '#ffffff' : '#121212' }]}>Create Music Sheet From Scratch</Text>
               </View>
-              <Text style={styles.cardSubtitle}>
+              <Text style={[styles.cardSubtitle, { color: isDark ? '#aeaeae' : '#60646C' }]}>
                 Open a blank music sheet document and construct voices, parts, and staves manually.
               </Text>
             </View>
@@ -4759,10 +5448,10 @@ export default function CreateScreen(props?: CreateScreenProps) {
 
   console.log("editorMode =", editorMode);
   return (
-    <View style={styles.editorMainContainer}>
+    <View style={[styles.editorMainContainer, { backgroundColor: isDark ? '#000000' : '#FFFFFF' }]}>
       {/* Top Header/Navbar */}
-      <View style={styles.navbar}>
-        <View style={{ width: 70, height: 40, justifyContent: 'center', position: 'relative' }}>
+      <View style={[styles.navbar, { backgroundColor: isDark ? '#000000' : '#FFFFFF', borderBottomColor: isDark ? '#1c1c1e' : '#E0E1E6' }]}>
+        <View style={{ width: 90, height: 40, justifyContent: 'center', position: 'relative' }}>
           <Animated.View
             pointerEvents={isEditMode ? 'none' : 'auto'}
             style={{
@@ -4799,26 +5488,52 @@ export default function CreateScreen(props?: CreateScreenProps) {
             </Pressable>
           </Animated.View>
         </View>
-        <Text style={styles.navbarTitle} numberOfLines={1}>
+        <Text style={[styles.navbarTitle, { color: isDark ? '#ffffff' : '#121212' }]} numberOfLines={1}>
           {score.title.text}
         </Text>
-        {isEditMode ? (
-          <Pressable
-            onPress={handleSaveProject}
-            style={{ width: 60, alignItems: 'flex-end', justifyContent: 'center' }}
-          >
-            <Text style={{ color: '#ff9500', fontSize: 16, fontWeight: '600' }}>Save</Text>
-          </Pressable>
-        ) : (
-          <View style={{ width: 60 }} />
-        )}
+        <View style={{ width: 90, alignItems: 'flex-end', justifyContent: 'center' }}>
+          {isEditMode ? (
+            <Pressable
+              onPress={handleSaveProject}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.7 : 1,
+              })}
+            >
+              <Text style={{ color: '#ff9500', fontSize: 16, fontWeight: '600' }}>Save</Text>
+            </Pressable>
+          ) : (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+              <Pressable
+                onPress={() => setDownloadModalVisible(true)}
+                style={({ pressed }) => ({
+                  padding: 4,
+                  opacity: pressed ? 0.7 : 1,
+                })}
+              >
+                <Ionicons name="download-outline" size={22} color="#ff9500" />
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setIsEditMode(true);
+                  postMessageToSheet({ type: 'SET_EDIT_MODE', editable: true });
+                }}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.7 : 1,
+                })}
+              >
+                <Text style={{ color: '#ff9500', fontSize: 16, fontWeight: '600' }}>Edit</Text>
+              </Pressable>
+            </View>
+          )}
+        </View>
       </View>
 
       <View style={styles.editorWorkspace}>
         {/* Left Toolbar/Control Sidebar */}
         {!sidebarCollapsed && isEditMode && (
-          <View style={styles.sidebar}>
+          <View ref={(r) => WalkthroughRegistry.register('edit-sidebar', r)} style={[styles.sidebar, { backgroundColor: isDark ? '#121214' : '#FFFFFF', borderRightColor: isDark ? '#1c1c1e' : '#E0E1E6' }]}>
           <ScrollView
+            ref={(r) => WalkthroughRegistry.register('active-scrollview', r)}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.sidebarScroll}
           >
@@ -4826,8 +5541,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
             
             {/* Tempo Input */}
             <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>Tempo (BPM)</Text>
+              <Text style={[styles.fieldLabel, { color: isDark ? '#8e8e93' : '#60646C' }]}>Tempo (BPM)</Text>
               <TextInput
+                ref={(r) => WalkthroughRegistry.register('edit-tempo', r)}
                 keyboardType="numeric"
                 value={tempoInputText}
                 onChangeText={(text) => {
@@ -4848,37 +5564,91 @@ export default function CreateScreen(props?: CreateScreenProps) {
                   postMessageToSheet({ type: 'SEEK', time: 0 });
                   setHasChanges(true);
                 }}
-                style={styles.textInput}
+                style={[styles.textInput, { backgroundColor: isDark ? '#1c1c1e' : '#F0F0F3', color: isDark ? '#ffffff' : '#121212', borderColor: isDark ? '#2c2c2e' : '#E0E1E6' }]}
                 placeholder="120"
-                placeholderTextColor="#666"
+                placeholderTextColor={isDark ? '#666' : '#999'}
               />
+            </View>
+
+            {/* Undo / Redo Buttons */}
+            <View style={{ flexDirection: 'row', gap: 12, marginBottom: 16 }}>
+              <Pressable
+                ref={(r) => WalkthroughRegistry.register('edit-undo', r)}
+                disabled={!canUndo}
+                onPress={handleUndo}
+                style={({ pressed }) => [
+                  {
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                    paddingVertical: 10,
+                    borderRadius: 14,
+                    backgroundColor: canUndo 
+                      ? (isDark ? '#2c2c2e' : '#E5E7EB') 
+                      : (isDark ? '#1c1c1e' : '#F3F4F6'),
+                    borderColor: isDark ? '#3a3a3c' : '#D1D5DB',
+                    borderWidth: 1,
+                    opacity: canUndo ? (pressed ? 0.7 : 1.0) : 0.4,
+                  }
+                ]}
+              >
+                <Ionicons name="arrow-undo-outline" size={16} color={isDark ? 'white' : '#121212'} />
+                <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 13 }}>Undo</Text>
+              </Pressable>
+
+              <Pressable
+                disabled={!canRedo}
+                onPress={handleRedo}
+                style={({ pressed }) => [
+                  {
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                    paddingVertical: 10,
+                    borderRadius: 14,
+                    backgroundColor: canRedo 
+                      ? (isDark ? '#2c2c2e' : '#E5E7EB') 
+                      : (isDark ? '#1c1c1e' : '#F3F4F6'),
+                    borderColor: isDark ? '#3a3a3c' : '#D1D5DB',
+                    borderWidth: 1,
+                    opacity: canRedo ? (pressed ? 0.7 : 1.0) : 0.4,
+                  }
+                ]}
+              >
+                <Ionicons name="arrow-redo-outline" size={16} color={isDark ? 'white' : '#121212'} />
+                <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 13 }}>Redo</Text>
+              </Pressable>
             </View>
 
             {/* Key Signature Picker Trigger */}
             <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>Key Signature</Text>
+              <Text style={[styles.fieldLabel, { color: isDark ? '#8e8e93' : '#60646C' }]}>Key Signature</Text>
               <Pressable
                 onPress={() => setShowKeyPicker(true)}
-                style={styles.pickerSelector}
+                style={[styles.pickerSelector, { backgroundColor: isDark ? '#1c1c1e' : '#F0F0F3', borderColor: isDark ? '#2c2c2e' : '#E0E1E6' }]}
               >
-                <Text style={styles.pickerSelectorText}>{score.keySignature}</Text>
-                <Ionicons name="chevron-down-outline" size={16} color="#aaa" />
+                <Text style={[styles.pickerSelectorText, { color: isDark ? '#ffffff' : '#121212' }]}>{score.keySignature}</Text>
+                <Ionicons name="chevron-down-outline" size={16} color={isDark ? '#aaa' : '#666'} />
               </Pressable>
             </View>
 
             {/* Time Signature Picker Trigger */}
             <View style={styles.fieldGroup}>
-              <Text style={styles.fieldLabel}>Time Signature</Text>
+              <Text style={[styles.fieldLabel, { color: isDark ? '#8e8e93' : '#60646C' }]}>Time Signature</Text>
               <Pressable
                 onPress={() => setShowTimePicker(true)}
-                style={styles.pickerSelector}
+                style={[styles.pickerSelector, { backgroundColor: isDark ? '#1c1c1e' : '#F0F0F3', borderColor: isDark ? '#2c2c2e' : '#E0E1E6' }]}
               >
-                <Text style={styles.pickerSelectorText}>{score.timeSignature}</Text>
-                <Ionicons name="chevron-down-outline" size={16} color="#aaa" />
+                <Text style={[styles.pickerSelectorText, { color: isDark ? '#ffffff' : '#121212' }]}>{score.timeSignature}</Text>
+                <Ionicons name="chevron-down-outline" size={16} color={isDark ? '#aaa' : '#666'} />
               </Pressable>
             </View>
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: isDark ? '#1c1c1e' : '#E0E1E6' }]} />
             <Text style={styles.sidebarHeader}>Zoom Controls</Text>
             
             <Pressable onPress={handleZoomIn} style={styles.actionButton}>
@@ -4894,7 +5664,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
               <Text style={styles.actionButtonText}>Reset Zoom</Text>
             </Pressable>
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: isDark ? '#1c1c1e' : '#E0E1E6' }]} />
             <Text style={styles.sidebarHeader}>Staff Controls</Text>
 
             {/* Add/Remove Staff */}
@@ -4933,7 +5703,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
               </>
             )}
 
-            <View style={styles.divider} />
+            <View style={[styles.divider, { backgroundColor: isDark ? '#1c1c1e' : '#E0E1E6' }]} />
             <Text style={styles.sidebarHeader}>Measure Controls</Text>
             
             <Pressable onPress={() => handleAddMeasure('append')} style={styles.actionButton}>
@@ -5017,7 +5787,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
         )}
 
         {/* Main Music Sheet Rendering Area */}
-        <View style={[styles.mainSheetArea, !isEditMode && { backgroundColor: '#18181b' }]}>
+        <View style={[styles.mainSheetArea, !isEditMode && { backgroundColor: isDark ? '#18181b' : '#F4F4F5' }]}>
           <ScrollView
             ref={scrollViewRef}
             nestedScrollEnabled
@@ -5034,35 +5804,6 @@ export default function CreateScreen(props?: CreateScreenProps) {
           >
             <View style={styles.documentCard}>
               <View style={styles.documentHeader}>
-                {/* Orange Edit Button in View Mode */}
-                {!isEditMode && (
-                  <Pressable
-                    onPress={() => {
-                      setIsEditMode(true);
-                      postMessageToSheet({ type: 'SET_EDIT_MODE', editable: true });
-                    }}
-                    style={({ pressed }) => [
-                      {
-                        position: 'absolute',
-                        top: 10,
-                        right: 10,
-                        backgroundColor: '#ea580c',
-                        paddingHorizontal: 16,
-                        paddingVertical: 8,
-                        borderRadius: 8,
-                        shadowColor: '#000',
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 4,
-                        elevation: 3,
-                        zIndex: 99,
-                      },
-                      pressed && { opacity: 0.8 }
-                    ]}
-                  >
-                    <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: '700' }}>Edit</Text>
-                  </Pressable>
-                )}
                 <View
                   {...(isEditMode ? titlePanResponder.panHandlers : {})}
                   style={{
@@ -5295,78 +6036,109 @@ export default function CreateScreen(props?: CreateScreenProps) {
           </ScrollView>
 
           {/* Playback Mode Selector (Transcribed Projects Only, Read Mode Only) */}
-          {initialSourceType === 'transcribed' && !isEditMode && recordingURI !== '' && (
-            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8, backgroundColor: '#000000', paddingVertical: 4 }}>
-              <View style={{ flexDirection: 'row', backgroundColor: '#1c1c1e', borderRadius: 20, padding: 3, gap: 4 }}>
+          {sourceType === 'transcribed' && !isEditMode && (
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 8 }}>
+              <View style={{ flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 20, padding: 3, gap: 4 }}>
                 <Pressable
                   onPress={() => {
                     if (playbackMode === 'notation') return;
+                    isModeSwitchingRef.current = true;
+                    modeSwitchingTimeRef.current = Date.now();
+                    const targetTime = currentTime;
+                    const targetPlaying = isPlaying;
                     if (isPlaying) {
                       player.pause();
                     }
+                    setCurrentTime(targetTime);
+                    playerCurrentTimeRef.current = targetTime;
                     setPlaybackMode('notation');
-                    setIsPlaying(false);
-                    setCurrentTime(0);
-                    playerCurrentTimeRef.current = 0;
-                    postMessageToSheet({ type: 'SEEK', time: 0 });
+
+                    postMessageToSheet({ type: 'SEEK', time: targetTime });
+
+                    if (targetPlaying) {
+                      postMessageToSheet({ type: 'PLAY' });
+                    }
+
+                    setTimeout(() => {
+                      isModeSwitchingRef.current = false;
+                    }, 500);
                   }}
                   style={{
-                    paddingVertical: 6,
-                    paddingHorizontal: 16,
-                    borderRadius: 17,
-                    backgroundColor: playbackMode === 'notation' ? '#ff9500' : 'transparent',
+                    paddingVertical: 5,
+                    paddingHorizontal: 14,
+                    borderRadius: 15,
+                    backgroundColor: playbackMode === 'notation' ? '#FF8A00' : 'transparent',
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: 13, fontWeight: '700' }}>
-                    Sheet Synth
-                  </Text>
+                  <Text style={{ color: isDark ? 'white' : '#121212', fontSize: 11, fontWeight: '700' }}>🎼 Sheet Synth</Text>
                 </Pressable>
                 
                 <Pressable
+                  disabled={!isAudioAvailable}
                   onPress={() => {
                     if (playbackMode === 'original') return;
+                    if (!isAudioAvailable) return;
+                    isModeSwitchingRef.current = true;
+                    modeSwitchingTimeRef.current = Date.now();
+                    const targetTime = currentTime;
+                    const targetPlaying = isPlaying;
                     if (isPlaying) {
                       postMessageToSheet({ type: 'PAUSE' });
                     }
+                    setCurrentTime(targetTime);
+                    playerCurrentTimeRef.current = targetTime;
                     setPlaybackMode('original');
-                    setIsPlaying(false);
-                    setCurrentTime(0);
-                    playerCurrentTimeRef.current = 0;
-                    player.seekTo(0);
+                    player.seekTo(targetTime);
+                    player.shouldCorrectPitch = true;
+                    (player as any).pitchCorrectionQuality = 'high';
+                    player.setPlaybackRate(1.0, 'high');
                     if (player.duration) {
+                      originalDurationRef.current = player.duration;
                       setDuration(player.duration);
+                    } else if (originalDurationRef.current) {
+                      setDuration(originalDurationRef.current);
                     }
+
+                    if (targetPlaying) {
+                      player.play();
+                      setIsPlaying(true);
+                    }
+
+                    setTimeout(() => {
+                      isModeSwitchingRef.current = false;
+                    }, 500);
                   }}
                   style={{
-                    paddingVertical: 6,
-                    paddingHorizontal: 16,
-                    borderRadius: 17,
-                    backgroundColor: playbackMode === 'original' ? '#ff9500' : 'transparent',
+                    paddingVertical: 5,
+                    paddingHorizontal: 14,
+                    borderRadius: 15,
+                    backgroundColor: playbackMode === 'original' ? '#FF8A00' : 'transparent',
+                    opacity: isAudioAvailable ? 1 : 0.4,
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: 13, fontWeight: '700' }}>
-                    Original Audio
-                  </Text>
+                  <Text style={{ color: isDark ? 'white' : '#121212', fontSize: 11, fontWeight: '700' }}>🎵 Original Audio</Text>
                 </Pressable>
               </View>
+              {!isAudioAvailable && (
+                <Text style={{ color: '#ff453a', fontSize: 11, marginTop: 4, fontWeight: '500' }}>
+                  ⚠️ Original recording is unavailable
+                </Text>
+              )}
             </View>
           )}
 
           {/* Playback Controls Panel */}
-          <PlaybackController
-            isPlaying={isPlaying}
-            currentTime={currentTime}
-            duration={duration}
-            onPlayPause={playRecording}
-            onRestart={restartPlayback}
-            onSeek={handleSeek}
-            onDragStart={handleDragStart}
-            renderRightSide={() => (
-              <Text style={{ color: '#8e8e93', fontSize: 13, fontWeight: '600' }}>
-                ♩ = {score.tempo}
-              </Text>
-            )}
-          />
+          <View ref={(r) => WalkthroughRegistry.register('playback-panel', r)}>
+            <PlaybackController
+              isPlaying={isPlaying}
+              currentTime={currentTime}
+              duration={duration}
+              onPlayPause={playRecording}
+              onRestart={restartPlayback}
+              onSeek={handleSeek}
+              onDragStart={handleDragStart}
+            />
+          </View>
 
           {selectedStaffIndices.length > 0 && (
             <View style={styles.floatingActionBar}>
@@ -5413,9 +6185,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
         const notePitch = found.note.pitch || 'C4';
         
         return (
-          <View style={styles.floatingPitchContainer}>
+          <View style={[styles.floatingPitchContainer, { backgroundColor: isDark ? 'rgba(28, 28, 30, 0.95)' : 'rgba(255, 255, 255, 0.95)', borderColor: isDark ? '#3a3a3c' : '#E0E1E6' }]}>
             <View style={styles.floatingPitchHeader}>
-              <Text style={styles.floatingPitchTitle}>
+              <Text style={[styles.floatingPitchTitle, { color: isDark ? '#ffffff' : '#121212' }]}>
                 {selectedNoteIds.length === 2 ? '2 Notes Selected' : `Pitch: ${notePitch}`}
               </Text>
             </View>
@@ -5510,11 +6282,11 @@ export default function CreateScreen(props?: CreateScreenProps) {
                 }}
                 style={({ pressed }) => [
                   styles.floatingPitchButton,
-                  { backgroundColor: '#3a3a3c', width: 40, flex: 0 },
+                  { backgroundColor: isDark ? '#3a3a3c' : '#E5E7EB', width: 40, flex: 0 },
                   pressed && { opacity: 0.7 }
                 ]}
               >
-                <Ionicons name="close" size={18} color="white" />
+                <Ionicons name="close" size={18} color={isDark ? "white" : "#121212"} />
               </Pressable>
             </View>
           </View>
@@ -5765,10 +6537,16 @@ export default function CreateScreen(props?: CreateScreenProps) {
       {/* Unsaved Changes Modal */}
       <Modal visible={showUnsavedModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { padding: 24, alignItems: 'center' }]}>
+          <View style={[styles.modalContent, {
+            padding: 24,
+            alignItems: 'center',
+            backgroundColor: isDark ? '#1c1c1e' : '#ffffff',
+            borderTopWidth: 1,
+            borderTopColor: isDark ? '#2c2c2e' : '#E0E1E6',
+          }]}>
             <Ionicons name="warning-outline" size={48} color="#ff9500" style={{ marginBottom: 16 }} />
-            <Text style={[styles.modalTitle, { fontSize: 20, marginBottom: 8 }]}>Unsaved Changes</Text>
-            <Text style={{ color: '#8e8e93', fontSize: 15, textAlign: 'center', marginBottom: 24, lineHeight: 22 }}>
+            <Text style={[styles.modalTitle, { fontSize: 20, marginBottom: 8, color: isDark ? '#ffffff' : '#121212' }]}>Unsaved Changes</Text>
+            <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 15, textAlign: 'center', marginBottom: 24, lineHeight: 22 }}>
               You have unsaved changes.{"\n"}Would you like to save before exiting edit mode?
             </Text>
             <View style={{ width: '100%', gap: 12 }}>
@@ -5786,9 +6564,45 @@ export default function CreateScreen(props?: CreateScreenProps) {
               </Pressable>
               <Pressable
                 onPress={() => setShowUnsavedModal(false)}
-                style={[styles.actionButton, { width: '100%', paddingVertical: 12, backgroundColor: '#3a3a3c' }]}
+                style={[styles.actionButton, { width: '100%', paddingVertical: 12, backgroundColor: isDark ? '#3a3a3c' : '#E0E1E6' }]}
               >
-                <Text style={styles.actionButtonText}>Cancel</Text>
+                <Text style={[styles.actionButtonText, { color: isDark ? '#ffffff' : '#121212' }]}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Scan Another Page Modal */}
+      <Modal visible={showScanBackModal} transparent animationType="fade" onRequestClose={() => setShowScanBackModal(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, {
+            padding: 24,
+            alignItems: 'center',
+            backgroundColor: isDark ? '#1c1c1e' : '#ffffff',
+            borderTopWidth: 1,
+            borderTopColor: isDark ? '#2c2c2e' : '#E0E1E6',
+          }]}>
+            <Ionicons name="scan-outline" size={48} color="#ff9500" style={{ marginBottom: 16 }} />
+            <Text style={[styles.modalTitle, { fontSize: 20, marginBottom: 8, color: isDark ? '#ffffff' : '#121212' }]}>Scan Another Page?</Text>
+            <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 15, textAlign: 'center', marginBottom: 24, lineHeight: 22 }}>
+              Would you like to scan another page?
+            </Text>
+            <View style={{ width: '100%', gap: 12 }}>
+              <Pressable
+                onPress={() => {
+                  setShowScanBackModal(false);
+                  exitEditorDirectly();
+                }}
+                style={[styles.actionButton, { width: '100%', paddingVertical: 12 }]}
+              >
+                <Text style={styles.actionButtonText}>Yes</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setShowScanBackModal(false)}
+                style={[styles.actionButton, { width: '100%', paddingVertical: 12, backgroundColor: isDark ? '#3a3a3c' : '#E0E1E6' }]}
+              >
+                <Text style={[styles.actionButtonText, { color: isDark ? '#ffffff' : '#121212' }]}>No</Text>
               </Pressable>
             </View>
           </View>
@@ -5800,14 +6614,14 @@ export default function CreateScreen(props?: CreateScreenProps) {
       <Modal visible={showNoteSelectionModal} transparent animationType="fade" onRequestClose={closeNoteSelectionModal}>
         <View style={styles.popupModalOverlay}>
           <Pressable style={StyleSheet.absoluteFill} onPress={closeNoteSelectionModal} />
-          <View style={styles.popupModalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Edit Bar</Text>
+          <View style={[styles.popupModalContent, { backgroundColor: isDark ? '#1c1c1e' : '#FFFFFF' }]}>
+            <View style={[styles.modalHeader, { borderBottomColor: isDark ? '#2c2c2e' : '#E0E1E6' }]}>
+              <Text style={[styles.modalTitle, { color: isDark ? '#ffffff' : '#121212' }]}>Edit Bar</Text>
             </View>
 
             {/* Top: Selected bar preview */}
             {modalPreviewSvg ? (
-              <View style={{ height: 130, width: '100%', backgroundColor: 'white', borderBottomWidth: 1, borderBottomColor: '#2c2c2e', overflow: 'hidden' }}>
+              <View style={{ height: 130, width: '100%', backgroundColor: 'white', borderBottomWidth: 1, borderBottomColor: isDark ? '#2c2c2e' : '#E0E1E6', overflow: 'hidden' }}>
                 {Platform.OS === 'web' ? (
                   <iframe
                     srcDoc={`
@@ -6329,7 +7143,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                     {/* Editing Controls - Only visible when a note/rest is selected */}
                     {selectedEditItem && !isRest && (
                       <View style={{ marginTop: 12 }}>
-                        <Text style={{ color: '#ffffff', fontSize: 16, fontWeight: '700', marginBottom: 12 }}>
+                        <Text style={{ color: isDark ? '#ffffff' : '#121212', fontSize: 16, fontWeight: '700', marginBottom: 12 }}>
                           Editing {isRest ? 'Rest' : 'Note'}
                         </Text>
 
@@ -6344,11 +7158,11 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   onPress={() => setSelectedPitchIndex(idx)}
                                   style={[
                                     styles.pitchButton,
-                                    { flex: 0, minWidth: 60, paddingVertical: 6 },
+                                    { flex: 0, minWidth: 60, paddingVertical: 6, backgroundColor: isDark ? '#1c1c1e' : '#F9F9FA', borderColor: isDark ? '#2c2c2e' : '#E5E7EB' },
                                     selectedPitchIndex === idx && styles.pitchButtonActive
                                   ]}
                                 >
-                                  <Text style={[styles.pitchButtonText, selectedPitchIndex === idx && styles.pitchButtonTextActive]}>
+                                  <Text style={[styles.pitchButtonText, { color: isDark ? '#aeaeae' : '#4B5563' }, selectedPitchIndex === idx && styles.pitchButtonTextActive]}>
                                     {p}
                                   </Text>
                                 </Pressable>
@@ -6366,9 +7180,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                 onPress={() => handleShiftDiatonically('up')}
                                 style={({ pressed }) => [
                                   {
-                                    backgroundColor: '#2c2c2e',
+                                    backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
                                     borderWidth: 1,
-                                    borderColor: '#48484a',
+                                    borderColor: isDark ? '#48484a' : '#D1D5DB',
                                     paddingVertical: 45,
                                     borderRadius: 8,
                                     alignItems: 'center',
@@ -6379,16 +7193,16 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   pressed && { opacity: 0.7 }
                                 ]}
                               >
-                                <Ionicons name="arrow-up-outline" size={18} color="white" />
-                                <Text style={{ color: 'white', fontWeight: '700', fontSize: 14 }}>Move Up</Text>
+                                <Ionicons name="arrow-up-outline" size={18} color={isDark ? 'white' : '#121212'} />
+                                <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '700', fontSize: 14 }}>Move Up</Text>
                               </Pressable>
                               <Pressable
                                 onPress={() => handleShiftDiatonically('down')}
                                 style={({ pressed }) => [
                                   {
-                                    backgroundColor: '#2c2c2e',
+                                    backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
                                     borderWidth: 1,
-                                    borderColor: '#48484a',
+                                    borderColor: isDark ? '#48484a' : '#D1D5DB',
                                     paddingVertical: 45,
                                     borderRadius: 8,
                                     alignItems: 'center',
@@ -6399,8 +7213,8 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   pressed && { opacity: 0.7 }
                                 ]}
                               >
-                                <Ionicons name="arrow-down-outline" size={18} color="white" />
-                                <Text style={{ color: 'white', fontWeight: '700', fontSize: 14 }}>Move Down</Text>
+                                <Ionicons name="arrow-down-outline" size={18} color={isDark ? 'white' : '#121212'} />
+                                <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '700', fontSize: 14 }}>Move Down</Text>
                               </Pressable>
                             </View>
 
@@ -6413,9 +7227,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   style={({ pressed }) => [
                                     {
                                       flex: 1,
-                                      backgroundColor: parts.accidental === '#' ? '#8b5cf6' : '#2c2c2e',
+                                      backgroundColor: parts.accidental === '#' ? '#8b5cf6' : (isDark ? '#2c2c2e' : '#E5E7EB'),
                                       borderWidth: 1,
-                                      borderColor: parts.accidental === '#' ? '#8b5cf6' : '#48484a',
+                                      borderColor: parts.accidental === '#' ? '#8b5cf6' : (isDark ? '#48484a' : '#D1D5DB'),
                                       paddingVertical: 20, // Half of Move Up height (paddingVertical: 40)
                                       borderRadius: 6,
                                       alignItems: 'center',
@@ -6424,7 +7238,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                     pressed && { opacity: 0.7 }
                                   ]}
                                 >
-                                  <Text style={{ color: 'white', fontWeight: '700', fontSize: 10 }}>Sharp</Text>
+                                  <Text style={{ color: parts.accidental === '#' ? 'white' : (isDark ? 'white' : '#121212'), fontWeight: '700', fontSize: 10 }}>Sharp</Text>
                                 </Pressable>
 
                                 <Pressable
@@ -6432,9 +7246,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   style={({ pressed }) => [
                                     {
                                       flex: 1,
-                                      backgroundColor: parts.accidental === 'b' ? '#8b5cf6' : '#2c2c2e',
+                                      backgroundColor: parts.accidental === 'b' ? '#8b5cf6' : (isDark ? '#2c2c2e' : '#E5E7EB'),
                                       borderWidth: 1,
-                                      borderColor: parts.accidental === 'b' ? '#8b5cf6' : '#48484a',
+                                      borderColor: parts.accidental === 'b' ? '#8b5cf6' : (isDark ? '#48484a' : '#D1D5DB'),
                                       paddingVertical: 20, // Half height
                                       borderRadius: 6,
                                       alignItems: 'center',
@@ -6443,7 +7257,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                     pressed && { opacity: 0.7 }
                                   ]}
                                 >
-                                  <Text style={{ color: 'white', fontWeight: '700', fontSize: 10 }}>Flat</Text>
+                                  <Text style={{ color: parts.accidental === 'b' ? 'white' : (isDark ? 'white' : '#121212'), fontWeight: '700', fontSize: 10 }}>Flat</Text>
                                 </Pressable>
 
                                 <Pressable
@@ -6451,9 +7265,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   style={({ pressed }) => [
                                     {
                                       flex: 1,
-                                      backgroundColor: parts.accidental === 'n' ? '#8b5cf6' : '#2c2c2e',
+                                      backgroundColor: parts.accidental === 'n' ? '#8b5cf6' : (isDark ? '#2c2c2e' : '#E5E7EB'),
                                       borderWidth: 1,
-                                      borderColor: parts.accidental === 'n' ? '#8b5cf6' : '#48484a',
+                                      borderColor: parts.accidental === 'n' ? '#8b5cf6' : (isDark ? '#48484a' : '#D1D5DB'),
                                       paddingVertical: 20, // Half height
                                       borderRadius: 6,
                                       alignItems: 'center',
@@ -6462,7 +7276,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                     pressed && { opacity: 0.7 }
                                   ]}
                                 >
-                                  <Text style={{ color: 'white', fontWeight: '700', fontSize: 14, lineHeight: 14 }}>♮</Text>
+                                  <Text style={{ color: parts.accidental === 'n' ? 'white' : (isDark ? 'white' : '#121212'), fontWeight: '700', fontSize: 14, lineHeight: 14 }}>♮</Text>
                                 </Pressable>
 
                                 <Pressable
@@ -6470,9 +7284,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   style={({ pressed }) => [
                                     {
                                       flex: 1,
-                                      backgroundColor: note.dot ? '#8b5cf6' : '#2c2c2e',
+                                      backgroundColor: note.dot ? '#8b5cf6' : (isDark ? '#2c2c2e' : '#E5E7EB'),
                                       borderWidth: 1,
-                                      borderColor: note.dot ? '#8b5cf6' : '#48484a',
+                                      borderColor: note.dot ? '#8b5cf6' : (isDark ? '#48484a' : '#D1D5DB'),
                                       paddingVertical: 20, // Half height
                                       borderRadius: 6,
                                       alignItems: 'center',
@@ -6481,7 +7295,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                     pressed && { opacity: 0.7 }
                                   ]}
                                 >
-                                  <Text style={{ color: 'white', fontWeight: '700', fontSize: 10 }}>Dot</Text>
+                                  <Text style={{ color: note.dot ? 'white' : (isDark ? 'white' : '#121212'), fontWeight: '700', fontSize: 10 }}>Dot</Text>
                                 </Pressable>
                               </View>
 
@@ -6490,9 +7304,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                 onPress={handleAddNoteHead}
                                 style={({ pressed }) => [
                                   {
-                                    backgroundColor: '#2c2c2e',
+                                    backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
                                     borderWidth: 1,
-                                    borderColor: '#48484a',
+                                    borderColor: isDark ? '#48484a' : '#D1D5DB',
                                     paddingVertical: 15,
                                     borderRadius: 8,
                                     alignItems: 'center',
@@ -6503,8 +7317,8 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   pressed && { opacity: 0.7 }
                                 ]}
                               >
-                                <Ionicons name="add-outline" size={16} color="white" />
-                                <Text style={{ color: 'white', fontWeight: '700', fontSize: 13 }}>Add Note Head</Text>
+                                <Ionicons name="add-outline" size={16} color={isDark ? 'white' : '#121212'} />
+                                <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '700', fontSize: 13 }}>Add Note Head</Text>
                               </Pressable>
 
                               {/* Connect Notes button */}
@@ -6513,9 +7327,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                 onPress={handleConnectNotes}
                                 style={({ pressed }) => [
                                   {
-                                    backgroundColor: '#2c2c2e',
+                                    backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
                                     borderWidth: 1,
-                                    borderColor: '#48484a',
+                                    borderColor: isDark ? '#48484a' : '#D1D5DB',
                                     paddingVertical: 15,
                                     borderRadius: 8,
                                     alignItems: 'center',
@@ -6527,8 +7341,8 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   connectDisabled ? null : pressed && { opacity: 0.7 }
                                 ]}
                               >
-                                <Ionicons name="git-commit-outline" size={16} color={connectDisabled ? '#8e8e93' : 'white'} />
-                                <Text style={{ color: connectDisabled ? '#8e8e93' : 'white', fontWeight: '600', fontSize: 13 }}>Connect Notes</Text>
+                                <Ionicons name="git-commit-outline" size={16} color={connectDisabled ? '#8e8e93' : (isDark ? 'white' : '#121212')} />
+                                <Text style={{ color: connectDisabled ? '#8e8e93' : (isDark ? 'white' : '#121212'), fontWeight: '600', fontSize: 13 }}>Connect Notes</Text>
                               </Pressable>
 
                               {/* Disconnect button */}
@@ -6537,9 +7351,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                 onPress={handleDisconnectNotes}
                                 style={({ pressed }) => [
                                   {
-                                    backgroundColor: '#2c2c2e',
+                                    backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
                                     borderWidth: 1,
-                                    borderColor: '#48484a',
+                                    borderColor: isDark ? '#48484a' : '#D1D5DB',
                                     paddingVertical: 15,
                                     borderRadius: 8,
                                     alignItems: 'center',
@@ -6551,8 +7365,8 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                   disconnectDisabled ? null : pressed && { opacity: 0.7 }
                                 ]}
                               >
-                                <Ionicons name="git-branch-outline" size={16} color={disconnectDisabled ? '#8e8e93' : 'white'} />
-                                <Text style={{ color: disconnectDisabled ? '#8e8e93' : 'white', fontWeight: '600', fontSize: 13 }}>Disconnect</Text>
+                                <Ionicons name="git-branch-outline" size={16} color={disconnectDisabled ? '#8e8e93' : (isDark ? 'white' : '#121212')} />
+                                <Text style={{ color: disconnectDisabled ? '#8e8e93' : (isDark ? 'white' : '#121212'), fontWeight: '600', fontSize: 13 }}>Disconnect</Text>
                               </Pressable>
                             </View>
                           </View>
@@ -6562,9 +7376,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                             <Pressable
                               disabled={true}
                               style={{
-                                backgroundColor: '#2c2c2e',
+                                backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
                                 borderWidth: 1,
-                                borderColor: '#48484a',
+                                borderColor: isDark ? '#48484a' : '#D1D5DB',
                                 paddingVertical: 12,
                                 borderRadius: 8,
                                 alignItems: 'center',
@@ -6580,9 +7394,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                             <Pressable
                               disabled={true}
                               style={{
-                                backgroundColor: '#2c2c2e',
+                                backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
                                 borderWidth: 1,
-                                borderColor: '#48484a',
+                                borderColor: isDark ? '#48484a' : '#D1D5DB',
                                 paddingVertical: 12,
                                 borderRadius: 8,
                                 alignItems: 'center',
@@ -6603,7 +7417,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                           onPress={handleRemoveNoteHead}
                           style={({ pressed }) => [
                             {
-                              backgroundColor: '#2c2c2e',
+                              backgroundColor: isDark ? '#2c2c2e' : '#FEE2E2',
                               borderWidth: 1,
                               borderColor: '#ea580c',
                               paddingVertical: 12,
@@ -6625,7 +7439,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
 
                     {/* Duration Grid (Moved to Top) */}
                     <View style={{ marginBottom: 12 }}>
-                      <Text style={{ color: '#ffffff', fontSize: 16, fontWeight: '700', marginBottom: 12 }}>
+                      <Text style={{ color: isDark ? '#ffffff' : '#121212', fontSize: 16, fontWeight: '700', marginBottom: 12 }}>
                         {selectedEditItem ? 'Replace Duration' : 'Insert Duration'}
                       </Text>
                       {/* Row 1: 3 buttons */}
@@ -6649,19 +7463,19 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                 styles.card,
                                 {
                                   flex: 1,
-                                  backgroundColor: isRestOptionDisabled ? '#1c1c1e' : '#2c2c2e',
-                                  borderColor: '#3a3a3c',
+                                  backgroundColor: isRestOptionDisabled ? (isDark ? '#1c1c1e' : '#F9F9FA') : (isDark ? '#2c2c2e' : '#E5E7EB'),
+                                  borderColor: isDark ? '#3a3a3c' : '#D1D5DB',
                                   paddingVertical: 12,
                                   borderRadius: 8,
                                   alignItems: 'center',
                                   justifyContent: 'center',
                                   opacity: isRestOptionDisabled ? 0.3 : 1
                                 },
-                                !isRestOptionDisabled && pressed && { backgroundColor: '#3a3a3c', borderColor: '#8b5cf6' }
+                                !isRestOptionDisabled && pressed && { backgroundColor: isDark ? '#3a3a3c' : '#C7D2FE', borderColor: '#8b5cf6' }
                               ]}
                             >
-                              <Text style={styles.cardSymbol}>{option.symbol}</Text>
-                              <Text style={styles.cardLabel}>{option.label}</Text>
+                              <Text style={[styles.cardSymbol, { color: isDark ? '#ffffff' : '#121212' }]}>{option.symbol}</Text>
+                              <Text style={[styles.cardLabel, { color: isDark ? '#aeaeae' : '#4B5563' }]}>{option.label}</Text>
                             </Pressable>
                           );
                         })}
@@ -6687,19 +7501,19 @@ export default function CreateScreen(props?: CreateScreenProps) {
                                 styles.card,
                                 {
                                   flex: 1,
-                                  backgroundColor: isRestOptionDisabled ? '#1c1c1e' : '#2c2c2e',
-                                  borderColor: '#3a3a3c',
+                                  backgroundColor: isRestOptionDisabled ? (isDark ? '#1c1c1e' : '#F9F9FA') : (isDark ? '#2c2c2e' : '#E5E7EB'),
+                                  borderColor: isDark ? '#3a3a3c' : '#D1D5DB',
                                   paddingVertical: 12,
                                   borderRadius: 8,
                                   alignItems: 'center',
                                   justifyContent: 'center',
                                   opacity: isRestOptionDisabled ? 0.3 : 1
                                 },
-                                !isRestOptionDisabled && pressed && { backgroundColor: '#3a3a3c', borderColor: '#8b5cf6' }
+                                !isRestOptionDisabled && pressed && { backgroundColor: isDark ? '#3a3a3c' : '#C7D2FE', borderColor: '#8b5cf6' }
                               ]}
                             >
-                              <Text style={styles.cardSymbol}>{option.symbol}</Text>
-                              <Text style={styles.cardLabel}>{option.label}</Text>
+                              <Text style={[styles.cardSymbol, { color: isDark ? '#ffffff' : '#121212' }]}>{option.symbol}</Text>
+                              <Text style={[styles.cardLabel, { color: isDark ? '#aeaeae' : '#4B5563' }]}>{option.label}</Text>
                             </Pressable>
                           );
                         })}
@@ -6710,8 +7524,8 @@ export default function CreateScreen(props?: CreateScreenProps) {
                             styles.card,
                             {
                               flex: 1,
-                              backgroundColor: '#2c2c2e',
-                              borderColor: '#48484a',
+                              backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB',
+                              borderColor: isDark ? '#48484a' : '#D1D5DB',
                               paddingVertical: 12,
                               borderRadius: 8,
                               alignItems: 'center',
@@ -6721,8 +7535,8 @@ export default function CreateScreen(props?: CreateScreenProps) {
                             pressed && { opacity: 0.7 }
                           ]}
                         >
-                          <Ionicons name={noteModalSubMode === 'duration' ? 'ellipse-outline' : 'musical-notes-outline'} size={24} color="white" />
-                          <Text style={{ color: 'white', fontWeight: '700', fontSize: 12, marginTop: 4, textAlign: 'center' }}>
+                          <Ionicons name={noteModalSubMode === 'duration' ? 'ellipse-outline' : 'musical-notes-outline'} size={24} color={isDark ? 'white' : '#121212'} />
+                          <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '700', fontSize: 12, marginTop: 4, textAlign: 'center' }}>
                             {noteModalSubMode === 'duration' ? 'To Rests' : 'To Notes'}
                           </Text>
                         </Pressable>
@@ -6734,7 +7548,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                       onPress={handleClearMeasure}
                       style={({ pressed }) => [
                         {
-                          backgroundColor: '#2c2c2e',
+                          backgroundColor: isDark ? '#2c2c2e' : '#FEE2E2',
                           borderWidth: 1,
                           borderColor: '#ef4444',
                           paddingVertical: 12,
@@ -6757,9 +7571,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
             </ScrollView>
 
             {/* Fixed Cancel Button at Bottom */}
-            <View style={styles.modalFooter}>
-              <Pressable style={styles.cancelButton} onPress={closeNoteSelectionModal}>
-                <Text style={styles.cancelButtonText}>Cancel</Text>
+            <View style={[styles.modalFooter, { borderTopColor: isDark ? '#2c2c2e' : '#E0E1E6', backgroundColor: isDark ? '#1c1c1e' : '#FFFFFF' }]}>
+              <Pressable style={[styles.cancelButton, { backgroundColor: isDark ? '#3a3a3c' : '#F3F4F6' }]} onPress={closeNoteSelectionModal}>
+                <Text style={[styles.cancelButtonText, { color: isDark ? '#ffffff' : '#121212' }]}>Cancel</Text>
               </Pressable>
             </View>
           </View>
@@ -6769,9 +7583,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
       {/* Measure Editor Modal */}
       <Modal visible={showMeasureEditorModal} transparent animationType="fade">
         <View style={styles.popupModalOverlay}>
-          <View style={styles.popupModalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Measure Editor (Bar {selectedMeasureIndex !== null ? selectedMeasureIndex + 1 : 1})</Text>
+          <View style={[styles.popupModalContent, { backgroundColor: isDark ? '#1c1c1e' : '#FFFFFF' }]}>
+            <View style={[styles.modalHeader, { borderBottomColor: isDark ? '#2c2c2e' : '#E0E1E6' }]}>
+              <Text style={[styles.modalTitle, { color: isDark ? '#ffffff' : '#121212' }]}>Measure Editor (Bar {selectedMeasureIndex !== null ? selectedMeasureIndex + 1 : 1})</Text>
               <Pressable onPress={() => {
                 setShowMeasureEditorModal(false);
                 setSelectedMeasureIndex(null);
@@ -6783,7 +7597,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
 
             <ScrollView style={styles.modalScroll} showsVerticalScrollIndicator={false}>
               {/* Measure Staff Tabs Selector */}
-              <View style={styles.tabContainer}>
+              <View style={[styles.tabContainer, { backgroundColor: isDark ? '#1c1c1e' : '#F3F4F6' }]}>
                 {score.staves.map((staff, idx) => (
                   <Pressable
                     key={staff.id}
@@ -6798,6 +7612,7 @@ export default function CreateScreen(props?: CreateScreenProps) {
                   >
                     <Text style={[
                       styles.tabButtonText,
+                      { color: isDark ? '#aeaeae' : '#4B5563' },
                       editingStaffIndex === idx && styles.tabButtonTextActive
                     ]}>
                       {staff.clef.charAt(0).toUpperCase() + staff.clef.slice(1) + ' Clef'}
@@ -6853,13 +7668,14 @@ export default function CreateScreen(props?: CreateScreenProps) {
                           onPress={() => setSelectedNoteIndex(idx)}
                           style={[
                             styles.noteCard,
+                            { backgroundColor: isDark ? '#1c1c1e' : '#F9F9FA', borderColor: isDark ? '#2c2c2e' : '#E5E7EB' },
                             isSelected && styles.noteCardSelected
                           ]}
                         >
-                          <Text style={[styles.noteCardText, isSelected && styles.noteCardTextSelected]}>
+                          <Text style={[styles.noteCardText, { color: isDark ? '#ffffff' : '#121212' }, isSelected && styles.noteCardTextSelected]}>
                             {note.isRest ? 'Rest' : note.pitch}
                           </Text>
-                          <Text style={[styles.noteCardSubtext, isSelected && styles.noteCardSubtextSelected]}>
+                          <Text style={[styles.noteCardSubtext, { color: isDark ? '#8e8e93' : '#6B7280' }, isSelected && styles.noteCardSubtextSelected]}>
                             {note.type} {note.dot ? '•' : ''}
                           </Text>
                         </Pressable>
@@ -6894,10 +7710,10 @@ export default function CreateScreen(props?: CreateScreenProps) {
                     <Pressable
                       key={'rest_' + type}
                       onPress={() => handleInsertNote(type, true)}
-                      style={[styles.paletteButton, { backgroundColor: '#2c2c2e' }]}
+                      style={[styles.paletteButton, { backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB' }]}
                     >
-                      <Ionicons name="ellipse-outline" size={16} color="white" />
-                      <Text style={styles.paletteButtonText}>{type}</Text>
+                      <Ionicons name="ellipse-outline" size={16} color={isDark ? 'white' : '#121212'} />
+                      <Text style={[styles.paletteButtonText, { color: isDark ? 'white' : '#121212' }]}>{type}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -6912,18 +7728,18 @@ export default function CreateScreen(props?: CreateScreenProps) {
                   <View style={styles.editActionsRow}>
                     <Pressable
                       onPress={() => handleModifyNote(selectedNoteIndex!, { isRest: !selectedNote.isRest, pitch: !selectedNote.isRest ? 'rest' : (editingStaffIndex === 0 ? 'C5' : 'C3') })}
-                      style={styles.editActionButton}
+                      style={[styles.editActionButton, { backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB' }]}
                     >
-                      <Ionicons name={selectedNote.isRest ? "musical-note" : "ellipse-outline"} size={16} color="white" />
-                      <Text style={styles.editActionButtonText}>{selectedNote.isRest ? 'Make Note' : 'Make Rest'}</Text>
+                      <Ionicons name={selectedNote.isRest ? "musical-note" : "ellipse-outline"} size={16} color={isDark ? 'white' : '#121212'} />
+                      <Text style={[styles.editActionButtonText, { color: isDark ? 'white' : '#121212' }]}>{selectedNote.isRest ? 'Make Note' : 'Make Rest'}</Text>
                     </Pressable>
 
                     <Pressable
                       onPress={() => handleModifyNote(selectedNoteIndex!, { dot: !selectedNote.dot })}
-                      style={[styles.editActionButton, selectedNote.dot && { backgroundColor: '#ff9500' }]}
+                      style={[styles.editActionButton, { backgroundColor: isDark ? '#2c2c2e' : '#E5E7EB' }, selectedNote.dot && { backgroundColor: '#ff9500' }]}
                     >
-                      <Ionicons name="ellipse" size={12} color="white" />
-                      <Text style={styles.editActionButtonText}>{selectedNote.dot ? 'Remove Dot' : 'Add Dot'}</Text>
+                      <Ionicons name="ellipse" size={12} color={selectedNote.dot ? "white" : (isDark ? "white" : "#121212")} />
+                      <Text style={[styles.editActionButtonText, { color: selectedNote.dot ? "white" : (isDark ? "white" : "#121212") }]}>{selectedNote.dot ? 'Remove Dot' : 'Add Dot'}</Text>
                     </Pressable>
 
                     <Pressable
@@ -6947,9 +7763,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                           <Pressable
                             key={'step_' + s}
                             onPress={() => updateSelectedNotePitch({ step: s })}
-                            style={[styles.pitchButton, pitchParts.step === s && styles.pitchButtonActive]}
+                            style={[styles.pitchButton, { backgroundColor: isDark ? '#1c1c1e' : '#F9F9FA', borderColor: isDark ? '#2c2c2e' : '#E5E7EB' }, pitchParts.step === s && styles.pitchButtonActive]}
                           >
-                            <Text style={[styles.pitchButtonText, pitchParts.step === s && styles.pitchButtonTextActive]}>{s}</Text>
+                            <Text style={[styles.pitchButtonText, { color: isDark ? '#aeaeae' : '#4B5563' }, pitchParts.step === s && styles.pitchButtonTextActive]}>{s}</Text>
                           </Pressable>
                         ))}
                       </View>
@@ -6966,9 +7782,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                           <Pressable
                             key={'acc_' + acc.value}
                             onPress={() => updateSelectedNotePitch({ accidental: acc.value })}
-                            style={[styles.pitchButton, { flex: 1 }, pitchParts.accidental === acc.value && styles.pitchButtonActive]}
+                            style={[styles.pitchButton, { flex: 1, backgroundColor: isDark ? '#1c1c1e' : '#F9F9FA', borderColor: isDark ? '#2c2c2e' : '#E5E7EB' }, pitchParts.accidental === acc.value && styles.pitchButtonActive]}
                           >
-                            <Text style={[styles.pitchButtonText, pitchParts.accidental === acc.value && styles.pitchButtonTextActive]}>{acc.label}</Text>
+                            <Text style={[styles.pitchButtonText, { color: isDark ? '#aeaeae' : '#4B5563' }, pitchParts.accidental === acc.value && styles.pitchButtonTextActive]}>{acc.label}</Text>
                           </Pressable>
                         ))}
                       </View>
@@ -6980,9 +7796,9 @@ export default function CreateScreen(props?: CreateScreenProps) {
                           <Pressable
                             key={'oct_' + oct}
                             onPress={() => updateSelectedNotePitch({ octave: oct })}
-                            style={[styles.pitchButton, pitchParts.octave === oct && styles.pitchButtonActive]}
+                            style={[styles.pitchButton, { backgroundColor: isDark ? '#1c1c1e' : '#F9F9FA', borderColor: isDark ? '#2c2c2e' : '#E5E7EB' }, pitchParts.octave === oct && styles.pitchButtonActive]}
                           >
-                            <Text style={[styles.pitchButtonText, pitchParts.octave === oct && styles.pitchButtonTextActive]}>{oct}</Text>
+                            <Text style={[styles.pitchButtonText, { color: isDark ? '#aeaeae' : '#4B5563' }, pitchParts.octave === oct && styles.pitchButtonTextActive]}>{oct}</Text>
                           </Pressable>
                         ))}
                       </View>
@@ -6994,6 +7810,202 @@ export default function CreateScreen(props?: CreateScreenProps) {
           </View>
         </View>
       </Modal>
+
+      {/* Export Options Modal */}
+      <Modal
+        visible={downloadModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setDownloadModalVisible(false)}
+      >
+        <Pressable 
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={() => setDownloadModalVisible(false)}
+        >
+          <Pressable
+            onPress={(e) => e.stopPropagation()}
+            style={{
+              width: '90%',
+              maxWidth: 420,
+            }}
+          >
+            <GlassCard
+              style={{
+                gap: 16,
+              }}
+            >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View>
+                <Text style={{ color: isDark ? 'white' : '#121212', fontSize: 20, fontWeight: '800' }}>Export Workspace</Text>
+                <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 12, marginTop: 4 }}>Select a format to save or share</Text>
+              </View>
+              <Pressable
+                onPress={() => setDownloadModalVisible(false)}
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 16,
+                  backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Ionicons name="close" size={18} color={isDark ? 'white' : 'black'} />
+              </Pressable>
+            </View>
+
+            <ScrollView style={{ maxHeight: 360 }} showsVerticalScrollIndicator={false}>
+              {/* Sheet Music Section */}
+              <View style={{ gap: 8, marginBottom: 16 }}>
+                <Text style={{ color: '#FF8A00', fontSize: 11, fontWeight: '800', letterSpacing: 1, textTransform: 'uppercase' }}>
+                  Sheet Music Formats
+                </Text>
+                
+                <Pressable
+                  onPress={() => { setDownloadModalVisible(false); handleDownloadPDF(); }}
+                  style={({ pressed }) => [styles.exportOptionRow, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)', borderColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.08)' }, pressed && { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }]}
+                >
+                  <Ionicons name="document-text-outline" size={22} color="#3b82f6" />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 14 }}>PDF Document (.pdf)</Text>
+                    <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 11 }}>Print-ready paginated sheet music</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={14} color="#48484a" />
+                </Pressable>
+
+                <Pressable
+                  onPress={() => { setDownloadModalVisible(false); handleDownloadMusicXML(); }}
+                  style={({ pressed }) => [styles.exportOptionRow, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)', borderColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.08)' }, pressed && { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }]}
+                >
+                  <Ionicons name="code-working" size={22} color="#10b981" />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 14 }}>MusicXML (.musicxml)</Text>
+                    <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 11 }}>Industry standard notation format</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={14} color="#48484a" />
+                </Pressable>
+
+                <Pressable
+                  disabled={!initialProjectId}
+                  onPress={() => { setDownloadModalVisible(false); handleDownloadMIDI(); }}
+                  style={({ pressed }) => [
+                    styles.exportOptionRow,
+                    { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)', borderColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.08)' },
+                    !initialProjectId && { opacity: 0.3 },
+                    initialProjectId && pressed && { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }
+                  ]}
+                >
+                  <Ionicons name="musical-notes-outline" size={22} color="#8b5cf6" />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 14 }}>MIDI (.mid)</Text>
+                    <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 11 }}>Digital notes for DAWs & editors</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={14} color="#48484a" />
+                </Pressable>
+              </View>
+
+              {/* Audio Section */}
+              <View style={{ gap: 8, marginBottom: 16 }}>
+                <Text style={{ color: '#FF8A00', fontSize: 11, fontWeight: '800', letterSpacing: 1, textTransform: 'uppercase' }}>
+                  Audio Formats
+                </Text>
+
+                <Pressable
+                  disabled={!recordingURI}
+                  onPress={() => { setDownloadModalVisible(false); handleDownloadOriginalAudio(); }}
+                  style={({ pressed }) => [
+                    styles.exportOptionRow,
+                    { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)', borderColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.08)' },
+                    !recordingURI && { opacity: 0.3 },
+                    recordingURI && pressed && { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }
+                  ]}
+                >
+                  <Ionicons name="mic-outline" size={22} color="#ff3b30" />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 14 }}>Original Audio</Text>
+                    <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 11 }}>Your original recorded/uploaded audio</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={14} color="#48484a" />
+                </Pressable>
+
+                <Pressable
+                  disabled={!initialProjectId}
+                  onPress={() => { setDownloadModalVisible(false); handleDownloadPlaybackWAV(); }}
+                  style={({ pressed }) => [
+                    styles.exportOptionRow,
+                    { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)', borderColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.08)' },
+                    !initialProjectId && { opacity: 0.3 },
+                    initialProjectId && pressed && { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }
+                  ]}
+                >
+                  <Ionicons name="volume-medium-outline" size={22} color="#ec4899" />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 14 }}>Playback Audio (.wav)</Text>
+                    <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 11 }}>Synthesized piano playback audio</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={14} color="#48484a" />
+                </Pressable>
+              </View>
+
+              {/* Export Bundle Section */}
+              <View style={{ gap: 8 }}>
+                <Text style={{ color: '#FF8A00', fontSize: 11, fontWeight: '800', letterSpacing: 1, textTransform: 'uppercase' }}>
+                  Export Bundle
+                </Text>
+
+                <Pressable
+                  disabled={!initialProjectId}
+                  onPress={() => { setDownloadModalVisible(false); handleDownloadZIP(); }}
+                  style={({ pressed }) => [
+                    styles.exportOptionRow,
+                    { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)', borderColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.08)' },
+                    !initialProjectId && { opacity: 0.3 },
+                    initialProjectId && pressed && { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }
+                  ]}
+                >
+                  <Ionicons name="archive-outline" size={22} color="#f59e0b" />
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: isDark ? 'white' : '#121212', fontWeight: '600', fontSize: 14 }}>Project Archive (.zip)</Text>
+                    <Text style={{ color: isDark ? '#8e8e93' : '#60646C', fontSize: 11 }}>Includes XML, PDF, MIDI, original & playback audio</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={14} color="#48484a" />
+                </Pressable>
+              </View>
+            </ScrollView>
+          </GlassCard>
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      {/* Global Exporting Overlay */}
+      {exportingFormat !== null && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'rgba(0,0,0,0.85)',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <ActivityIndicator size="large" color="#FF4FA3" />
+          <Text style={{ color: 'white', fontSize: 18, fontWeight: '700', marginTop: 20 }}>
+            Exporting {exportingFormat}...
+          </Text>
+          <Text style={{ color: '#8e8e93', fontSize: 13, marginTop: 8 }}>
+            Please wait while we prepare your file
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -7907,5 +8919,13 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  exportOptionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 14,
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 12,
   },
 });

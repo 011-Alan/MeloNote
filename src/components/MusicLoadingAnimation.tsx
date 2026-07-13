@@ -22,6 +22,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import { useSettings } from '@/context/SettingsContext';
 import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
 import Animated, {
   useSharedValue,
@@ -144,24 +145,27 @@ interface AnimatedClefProps {
 }
 
 const AnimatedClef: React.FC<AnimatedClefProps> = ({ wavePhase, colorPhase }) => {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+
   const clefStyle = useAnimatedStyle(() => {
     const dy = -Math.sin(wavePhase.value) * WAVE_BASE * LINE_AMP[2];
     
     // Shift color based on colorPhase, matching the ribbon gradient colors
     const t   = (Math.sin(-colorPhase.value) + 1) * 0.5;
-    const color = interpolateColor(t, [0, 0.5, 1], [PINK, VIOLET, WHITE]);
+    const color = interpolateColor(t, [0, 0.5, 1], [PINK, VIOLET, isDark ? WHITE : '#7B61FF']);
     const shadowColor = interpolateColor(t, [0, 0.5, 1], [VIOLET, PINK, VIOLET]);
 
     return {
       transform: [{ translateY: dy }],
       color,
-      shadowColor,
+      shadowColor: isDark ? shadowColor : 'transparent',
     };
   });
 
   return (
     <Animated.View style={[styles.clefContainer, clefStyle]}>
-      <Animated.Text style={[styles.trebleClef, clefStyle]}>{'𝄞'}</Animated.Text>
+      <Animated.Text style={[styles.trebleClef, clefStyle, !isDark && { textShadowRadius: 0 }]}>{'𝄞'}</Animated.Text>
     </Animated.View>
   );
 };
@@ -175,6 +179,8 @@ const NoteParticle: React.FC<{
   lineIndex: number;
   wavePhase: SharedValue<number>;
 }> = ({ symbol, delayMs, lineIndex, wavePhase }) => {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -219,12 +225,13 @@ const NoteParticle: React.FC<{
       top:              y,
       opacity,
       transform:        [{ scale }],
-      textShadowRadius: glowR,
+      textShadowRadius: isDark ? glowR : 0,
+      color: isDark ? LAVENDER : '#7B61FF',
     };
   });
 
   return (
-    <Animated.Text style={[styles.noteGlyph, noteStyle]}>
+    <Animated.Text style={[styles.noteGlyph, noteStyle]} pointerEvents="none">
       {symbol}
     </Animated.Text>
   );
@@ -238,6 +245,8 @@ const Sparkle: React.FC<{
   delayMs:   number;
   wavePhase: SharedValue<number>;
 }> = ({ angle, delayMs, wavePhase }) => {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   const anim = useSharedValue(0);
 
   useEffect(() => {
@@ -272,16 +281,20 @@ const Sparkle: React.FC<{
       top:       originY + wave + dy * p - 2.5,
       opacity:   p,
       transform: [{ scale: interpolate(p, [0, 1], [0.1, 1]) }],
+      backgroundColor: isDark ? WHITE : '#7B61FF',
+      shadowColor: isDark ? WHITE : 'transparent',
     };
   });
 
-  return <Animated.View style={[styles.sparkle, style]} />;
+  return <Animated.View style={[styles.sparkle, style]} pointerEvents="none" />;
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // StatusMessage
 // ═══════════════════════════════════════════════════════════════════════════════
 const StatusMessage: React.FC = () => {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   const [msgIndex, setMsgIndex] = useState(0);
   const opacity = useSharedValue(1);
 
@@ -312,7 +325,7 @@ const StatusMessage: React.FC = () => {
   const textStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
 
   return (
-    <Animated.Text style={[styles.statusMessage, textStyle]}>
+    <Animated.Text style={[styles.statusMessage, textStyle, { color: isDark ? '#94a3b8' : '#4B5563' }]}>
       {MESSAGES[msgIndex]}
     </Animated.Text>
   );
@@ -348,9 +361,12 @@ const PulsingDot: React.FC<{ delay: number }> = ({ delay }) => {
 // ═══════════════════════════════════════════════════════════════════════════════
 interface Props {
   subtitle?: string;
+  showText?: boolean;
 }
 
-export default function MusicLoadingAnimation({ subtitle: _subtitle }: Props) {
+export default function MusicLoadingAnimation({ subtitle: _subtitle, showText = true }: Props) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   const wavePhase  = useSharedValue(0);
   const colorPhase = useSharedValue(0);
 
@@ -388,7 +404,7 @@ export default function MusicLoadingAnimation({ subtitle: _subtitle }: Props) {
   const sparkleDelay  = Math.round(LOOP_MS * 0.82);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: 'transparent' }]}>
 
       {/* ── Continuous SVG Curves Staff ───────────────────────────────────────── */}
       <View style={StyleSheet.absoluteFill} pointerEvents="none">
@@ -403,7 +419,7 @@ export default function MusicLoadingAnimation({ subtitle: _subtitle }: Props) {
             >
               <Stop offset="0%" stopColor={VIOLET} />
               <Stop offset="40%" stopColor={PINK} />
-              <Stop offset="70%" stopColor={WHITE} />
+              <Stop offset="70%" stopColor={isDark ? WHITE : '#7B61FF'} />
               <Stop offset="100%" stopColor={VIOLET} />
             </AnimatedLinearGradient>
           </Defs>
@@ -443,15 +459,17 @@ export default function MusicLoadingAnimation({ subtitle: _subtitle }: Props) {
       ))}
 
       {/* ── Text block: title + cycling message + pulsing dots ───────────────── */}
-      <View style={styles.textBlock}>
-        <Text style={styles.title}>Analyzing Audio</Text>
-        <StatusMessage />
-        <View style={styles.dotsRow}>
-          <PulsingDot delay={0} />
-          <PulsingDot delay={200} />
-          <PulsingDot delay={400} />
+      {showText && (
+        <View style={styles.textBlock}>
+          <Text style={[styles.title, { color: isDark ? WHITE : '#121212' }]}>Analyzing Audio</Text>
+          <StatusMessage />
+          <View style={styles.dotsRow}>
+            <PulsingDot delay={0} />
+            <PulsingDot delay={200} />
+            <PulsingDot delay={400} />
+          </View>
         </View>
-      </View>
+      )}
 
     </View>
   );

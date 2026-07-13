@@ -1,9 +1,10 @@
 console.log("=== SHEETMUSIC.WEB.TSX LOADED ===");
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   View,
 } from 'react-native';
+import { useSettings } from '@/context/SettingsContext';
 
 import {
   buildSheetMusicHtml,
@@ -97,6 +98,17 @@ export default function SheetMusic({
   }, []);
 
   const [isReady, setIsReady] = React.useState(false);
+  const { inAppVolumeEnabled, inAppVolume } = useSettings();
+
+  React.useEffect(() => {
+    if (isReady && webViewRef && webViewRef.current && webViewRef.current.contentWindow) {
+      const currentVolume = inAppVolumeEnabled ? inAppVolume : 0.0;
+      webViewRef.current.contentWindow.postMessage(JSON.stringify({
+        type: 'SET_VOLUME',
+        volume: currentVolume
+      }), '*');
+    }
+  }, [inAppVolume, inAppVolumeEnabled, isReady, webViewRef]);
 
   React.useEffect(() => {
     if (isReady && webViewRef && webViewRef.current) {

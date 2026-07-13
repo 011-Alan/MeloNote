@@ -9,9 +9,20 @@ import Animated, {
   withSequence,
   Easing,
 } from 'react-native-reanimated';
-import Svg, { Path, Circle, G, Defs, LinearGradient as SvgGradient, Stop } from 'react-native-svg';
+import Svg, { Path, Circle, G, Defs, LinearGradient as SvgGradient, Stop, Text as SvgText } from 'react-native-svg';
+import { useSettings } from '@/context/SettingsContext';
 
 export function MobileHero() {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+  const bgColors = isDark ? ['#0F0F12', '#0A0A0C'] : ['#FFFFFF', '#F5F5F7'];
+  const titleColor = isDark ? '#FFFFFF' : '#121212';
+  const subtitleColor = isDark ? '#B0B4BA' : '#555555';
+  const canvasBg = isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)';
+  const canvasBorder = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.08)';
+  const noteColor = isDark ? '#FFFFFF' : '#121212';
+  const particleColor = isDark ? '#FFFFFF' : '#888888';
+
   const floatAnim = useSharedValue(0);
   const waveProgress = useSharedValue(0);
   const glowOpacity = useSharedValue(0.4);
@@ -51,8 +62,6 @@ export function MobileHero() {
   });
 
   const generateWavePath = (offset: number) => {
-    // Generates a smooth wavy path that looks like a musical staff line
-    // We will draw it across 320px width
     const baseHeight = 90;
     const spacing = 12;
     const y = baseHeight + offset * spacing;
@@ -60,29 +69,31 @@ export function MobileHero() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { borderBottomColor: isDark ? 'transparent' : '#E0E1E6', borderBottomWidth: isDark ? 0 : 1 }]}>
       {/* Soft animated gradient background */}
       <LinearGradient
-        colors={['#0F0F12', '#0A0A0C']}
+        colors={bgColors as any}
         style={StyleSheet.absoluteFill}
       />
       
       {/* Animated gradient blob in background */}
-      <View style={styles.blurBlob}>
-        <LinearGradient
-          colors={['rgba(255, 138, 0, 0.12)', 'rgba(255, 79, 163, 0.12)', 'rgba(123, 97, 255, 0.12)']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.blobFill}
-        />
-      </View>
+      {isDark && (
+        <View style={styles.blurBlob}>
+          <LinearGradient
+            colors={['rgba(255, 138, 0, 0.12)', 'rgba(255, 79, 163, 0.12)', 'rgba(123, 97, 255, 0.12)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.blobFill}
+          />
+        </View>
+      )}
 
       <View style={styles.content}>
-        <Text style={styles.title}>MeloNote</Text>
-        <Text style={styles.subtitle}>Create • Transcribe • Scan • Learn</Text>
+        <Text style={[styles.title, { color: titleColor }]}>MeloNote</Text>
+        <Text style={[styles.subtitle, { color: subtitleColor }]}>Create • Transcribe • Scan • Learn</Text>
 
         {/* Floating Waving Musical Staff Graphic */}
-        <Animated.View style={[styles.canvasContainer, animatedStaffStyle]}>
+        <Animated.View style={[styles.canvasContainer, animatedStaffStyle, { backgroundColor: canvasBg, borderColor: canvasBorder }]}>
           <Svg width="100%" height="100%" viewBox="0 0 320 180">
             <Defs>
               <SvgGradient id="staffLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -92,7 +103,7 @@ export function MobileHero() {
               </SvgGradient>
               <SvgGradient id="sheetGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <Stop offset="0%" stopColor="rgba(255,255,255,0.01)" />
-                <Stop offset="100%" stopColor="rgba(255,255,255,0.15)" />
+                <Stop offset="100%" stopColor={isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.05)"} />
               </SvgGradient>
             </Defs>
 
@@ -108,23 +119,8 @@ export function MobileHero() {
               />
             ))}
 
-            {/* Digital Sheet Music Preview container on the right */}
-            <G opacity={0.8} translate="220, 45}">
-              {/* Semi-transparent glass sheet card preview */}
-              <Path
-                d="M 5 10 h 75 v 90 h -75 z"
-                fill="url(#sheetGrad)"
-                stroke="rgba(255, 255, 255, 0.12)"
-                strokeWidth={1}
-              />
-              {/* Little notes inside */}
-              <Circle cx={20} cy={35} r={3} fill="#FFFFFF" />
-              <Path d="M 23 35 L 23 20" stroke="#FFFFFF" strokeWidth={1} />
-              <Circle cx={40} cy={45} r={3} fill="#FFFFFF" />
-              <Path d="M 43 45 L 43 30" stroke="#FFFFFF" strokeWidth={1} />
-              <Circle cx={60} cy={28} r={3} fill="#FFFFFF" />
-              <Path d="M 63 28 L 63 13" stroke="#FFFFFF" strokeWidth={1} />
-            </G>
+            {/* Orange Treble Clef in place of the sheet card preview */}
+            <SvgText x="255" y="132" fill="#FF8A00" fontSize="72" textAnchor="middle">𝄞</SvgText>
 
             {/* Traveling Notes on Left to Center */}
             <G opacity={0.95}>
@@ -139,8 +135,8 @@ export function MobileHero() {
             </G>
 
             {/* Floating Sparkles & Particles */}
-            <Circle cx={45} cy={60} r={2.5} fill="#FFFFFF" opacity={0.6} />
-            <Circle cx={100} cy={130} r={1.5} fill="#FFFFFF" opacity={0.4} />
+            <Circle cx={45} cy={60} r={2.5} fill={particleColor} opacity={0.6} />
+            <Circle cx={100} cy={130} r={1.5} fill={particleColor} opacity={0.4} />
             <Circle cx={160} cy={55} r={2} fill="#FF4FA3" opacity={0.8} />
             <Circle cx={210} cy={135} r={2.5} fill="#FF8A00" opacity={0.6} />
           </Svg>
@@ -183,7 +179,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   title: {
-    color: '#FFFFFF',
     fontSize: 34,
     fontWeight: '900',
     letterSpacing: -0.5,
@@ -191,7 +186,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   subtitle: {
-    color: '#B0B4BA',
     fontSize: 13,
     fontWeight: '600',
     letterSpacing: 1.5,
@@ -203,9 +197,7 @@ const styles = StyleSheet.create({
     maxWidth: 360,
     height: 185,
     borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.02)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
     overflow: 'hidden',
     ...Platform.select({
       web: {

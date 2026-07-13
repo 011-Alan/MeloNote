@@ -10,6 +10,7 @@ import Animated, {
   Easing,
   FadeInUp,
 } from 'react-native-reanimated';
+import { useSettings } from '@/context/SettingsContext';
 
 interface ComingSoonItem {
   icon: string;
@@ -46,6 +47,9 @@ const items: ComingSoonItem[] = [
 ];
 
 export function FutureLearning() {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+
   const pulseAnim = useSharedValue(0.4);
 
   useEffect(() => {
@@ -65,7 +69,7 @@ export function FutureLearning() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Future Learning (Coming Soon)</Text>
+      <Text style={[styles.sectionTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>Future Learning (Coming Soon)</Text>
       
       <View style={styles.grid}>
         {items.map((item, idx) => (
@@ -85,13 +89,13 @@ export function FutureLearning() {
             </Animated.View>
 
             {/* Main Glass Card */}
-            <View style={styles.cardContent}>
+            <View style={[styles.cardContent, { backgroundColor: isDark ? '#0F0F12' : '#FFFFFF' }]}>
               <View style={styles.cardHeader}>
                 <Text style={styles.icon}>{item.icon}</Text>
                 <Text style={styles.comingSoonTag}>COMING SOON</Text>
               </View>
-              <Text style={styles.cardTitle}>{item.title}</Text>
-              <Text style={styles.cardDesc}>{item.desc}</Text>
+              <Text style={[styles.cardTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>{item.title}</Text>
+              <Text style={[styles.cardDesc, { color: isDark ? '#B0B4BA' : '#60646C' }]}>{item.desc}</Text>
             </View>
           </Animated.View>
         ))}

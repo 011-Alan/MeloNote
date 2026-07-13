@@ -138,6 +138,178 @@ def home():
         "Backend works"
     })
 
+def run_transcription_background(task_id, temp_file, filename, content_type, monophonic, mode, melody_priority, use_spleeter, use_pitch_refinement, use_ensemble, speed_preset, duration):
+    try:
+        import traceback
+        from preprocess import preprocess_audio
+        from analyze import analyze_audio
+        from piano_transcription_inference import sample_rate as PT_SR
+
+        # Stage 2: Preprocessing
+        print(f"[server-task {task_id}] preprocessing started...")
+        tasks[task_id]["stage"] = "preprocessing"
+        audio, sr, complexity_info = preprocess_audio(
+            temp_file,
+            target_sr=PT_SR,
+            use_spleeter=use_spleeter,
+            speed_preset=speed_preset
+        )
+
+        # Stage 3: Transcribing
+        print(f"[server-task {task_id}] transcription started...")
+        tasks[task_id]["stage"] = "transcribing"
+        result = analyze_audio(
+            temp_file,
+            monophonic=monophonic,
+            mode=mode,
+            melody_priority=melody_priority,
+            use_spleeter=use_spleeter,
+            use_pitch_refinement=use_pitch_refinement,
+            use_ensemble=use_ensemble,
+            speed_preset=speed_preset
+        )
+
+        # Stage 4: Generating XML
+        print(f"[server-task {task_id}] generating MusicXML...")
+        tasks[task_id]["stage"] = "generating_xml"
+
+        # Clean up spectrogram file
+        spec_file = f"{os.path.splitext(temp_file)[0]}_spectrogram.npy"
+        if os.path.exists(spec_file):
+            os.remove(spec_file)
+
+        # Build project data
+        project_id = os.path.basename(os.path.dirname(temp_file))
+
+        project_data = {
+            "project_id": project_id,
+            "original_filename": filename,
+            "time_signature": result["time_signature"],
+            "notes": result["notes"],
+            "treble_notes": result.get("treble_notes", []),
+            "bass_notes": result.get("bass_notes", []),
+            "detected_tempo": result.get("detected_tempo", 120.0),
+            "tempo": result.get("tempo", 120.0),
+            "tempo_confidence": result.get("tempo_confidence", "HIGH"),
+            "duration_preserved": result.get("duration_preserved", False),
+            "musicxml": result.get("musicxml", ""),
+            "quality_scores": result.get("quality_scores", {}),
+            "raw_notes": result.get("raw_note_events", []),
+            "best_grid_resolution": result.get("quality_scores", {}).get("best_grid_resolution", 0.25),
+            "activated_modules": result.get("activated_modules", {}),
+            "activation_reasons": result.get("activation_reasons", {}),
+        }
+        project_data = make_json_serializable(project_data)
+
+        project_dir = os.path.dirname(temp_file)
+        with open(os.path.join(project_dir, "data.json"), "w", encoding="utf-8") as f:
+            json.dump(project_data, f, indent=2)
+
+        # Stage 5: Finalizing
+        print(f"[server-task {task_id}] finalizing results...")
+        tasks[task_id]["stage"] = "finalizing"
+
+        response_payload = {
+            "success": True,
+            "project_id": project_id,
+            "raw_note_events": result.get("raw_note_events", []),
+            "notes": result["notes"],
+            "treble_notes": result.get("treble_notes", []),
+            "bass_notes": result.get("bass_notes", []),
+            "time_signature": result["time_signature"],
+            "detected_tempo": result.get("detected_tempo", 120.0),
+            "tempo": result.get("tempo", 120.0),
+            "tempo_confidence": result.get("tempo_confidence", "HIGH"),
+            "duration_preserved": result.get("duration_preserved", False),
+            "musicxml": result.get("musicxml", ""),
+            "quality_scores": result.get("quality_scores", {}),
+            "qualityScores": result.get("quality_scores", {}),
+            "ab_metrics": result.get("ab_metrics", {}),
+            "abMetrics": result.get("ab_metrics", {}),
+            "activated_modules": result.get("activated_modules", {}),
+            "activatedModules": result.get("activated_modules", {}),
+            "activation_reasons": result.get("activation_reasons", {}),
+            "activationReasons": result.get("activation_reasons", {}),
+        }
+
+        tasks[task_id]["result"] = make_json_serializable(response_payload)
+        tasks[task_id]["status"] = "completed"
+        tasks[task_id]["stage"] = "completed"
+        print(f"[server-task {task_id}] finished successfully.")
+    except Exception as e:
+        print(f"[server-task {task_id}] pipeline execution failed:")
+        traceback.print_exc()
+        tasks[task_id]["status"] = "failed"
+        tasks[task_id]["error"] = str(e)
+        tasks[task_id]["stage"] = "failed"
+
+
+@app.route("/analyze/start", methods=["POST"])
+def analyze_audio_start():
+    if "audio" not in request.files:
+        return jsonify({"success": False, "error": "No audio file provided."}), 400
+
+    file = request.files["audio"]
+    if file.filename == "":
+        return jsonify({"success": False, "error": "Upload file name is empty."}), 400
+
+    extension = _resolve_extension(file.filename, file.content_type)
+    task_id = "transcription_" + str(uuid.uuid4())
+    project_id = str(uuid.uuid4())
+    project_dir = os.path.join(PROJECTS_DIR, project_id)
+    os.makedirs(project_dir, exist_ok=True)
+    temp_file = os.path.join(project_dir, f"original{extension}")
+    file.save(temp_file)
+
+    monophonic = request.form.get("monophonic", "false").lower() == "true"
+    mode = request.form.get("mode", "advanced")
+    melody_priority = request.form.get("melody_priority", "false").lower() == "true"
+    use_spleeter = request.form.get("use_spleeter", "auto")
+    use_pitch_refinement = request.form.get("use_pitch_refinement", "auto")
+    use_ensemble = request.form.get("use_ensemble", "auto")
+    speed_preset = request.form.get("speed_preset", "accurate")
+    duration = float(request.form.get("duration", "0"))
+
+    print(f"[server] Initiate transcription request: task_id={task_id}, file={file.filename} -> saving to {temp_file}")
+
+    tasks[task_id] = {
+        "status": "processing",
+        "stage": "receiving",
+        "result": None,
+        "error": None
+    }
+
+    import threading
+    t = threading.Thread(
+        target=run_transcription_background,
+        args=(
+            task_id, temp_file, file.filename, file.content_type,
+            monophonic, mode, melody_priority, use_spleeter,
+            use_pitch_refinement, use_ensemble, speed_preset, duration
+        )
+    )
+    t.daemon = True
+    t.start()
+
+    return jsonify({
+        "success": True,
+        "task_id": task_id
+    })
+
+
+@app.route("/analyze/status/<task_id>", methods=["GET"])
+def analyze_audio_status(task_id):
+    task = tasks.get(task_id)
+    if not task:
+        return jsonify({"success": False, "error": "Transcription task not found."}), 404
+    return jsonify({
+        "success": True,
+        "status": task["status"],
+        "stage": task["stage"],
+        "error": task["error"],
+        "result": task["result"]
+    })
+
 
 @app.route(
     "/analyze",
@@ -242,6 +414,7 @@ def analyze():
         # ── STAGE 5: Transcription ─────────────────────────────
         print("[STAGE 5] Running full analyze_audio pipeline ...")
         try:
+            from analyze import analyze_audio
             result = analyze_audio(
                 temp_file,
                 monophonic=monophonic,
@@ -636,12 +809,12 @@ def scan_sheet_start():
                 tasks[task_id]["stage"] = stage
                 print(f"[server-task {task_id}] Stage updated: {stage}")
                 
-            xml_content, low_res = scanner_service.scan_sheet(upload_path, on_stage_change=update_stage)
+            xml_content, warning = scanner_service.scan_sheet(upload_path, on_stage_change=update_stage)
             
             tasks[task_id]["status"] = "completed"
             tasks[task_id]["musicxml"] = xml_content
-            if low_res:
-                tasks[task_id]["warning"] = "Recognition accuracy may be reduced for low-resolution images."
+            if warning:
+                tasks[task_id]["warning"] = warning
             tasks[task_id]["stage"] = "completed"
             print(f"[server-task {task_id}] Finished successfully.")
             
@@ -695,7 +868,7 @@ if __name__ == "__main__":
 
     app.run(
         host="0.0.0.0",
-        port=5000,
+        port=5001,
         debug=False,
         use_reloader=False,
         threaded=True

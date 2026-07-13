@@ -3,17 +3,22 @@ import { StyleSheet, View, Text, Pressable, ViewStyle, TextStyle, ActivityIndica
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import { useSettings } from '@/context/SettingsContext';
 
 // 1. GradientBackground
 export function GradientBackground({ children, style }: { children: React.ReactNode; style?: ViewStyle }) {
+  const { theme } = useSettings();
+  const bgColors = theme === 'dark' ? ['#0F0F12', '#050507'] : ['#F9F9FA', '#F0F0F3'];
+  const circleOpacity = theme === 'dark' ? 0.05 : 0.03;
+
   return (
     <View style={[styles.bgContainer, style]}>
       <LinearGradient
-        colors={['#0F0F12', '#050507']}
+        colors={bgColors as any}
         style={StyleSheet.absoluteFill}
       />
-      <View style={styles.floatingCircle1} />
-      <View style={styles.floatingCircle2} />
+      <View style={[styles.floatingCircle1, { backgroundColor: `rgba(255, 138, 0, ${circleOpacity})` }]} />
+      <View style={[styles.floatingCircle2, { backgroundColor: `rgba(123, 97, 255, ${circleOpacity})` }]} />
       {children}
     </View>
   );
@@ -21,9 +26,14 @@ export function GradientBackground({ children, style }: { children: React.ReactN
 
 // 2. GlassCard
 export function GlassCard({ children, style }: { children: React.ReactNode; style?: ViewStyle }) {
+  const { theme } = useSettings();
+  const cardBg = theme === 'dark' ? 'rgba(45, 45, 45, 0.25)' : 'rgba(255, 255, 255, 0.75)';
+  const cardBorder = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
+  const cardShadow = theme === 'dark' ? '#000000' : '#8E929A';
+
   return (
-    <View style={[styles.glassCard, style]}>
-      <View style={styles.glassBorderOverlay} />
+    <View style={[styles.glassCard, { backgroundColor: cardBg, borderColor: cardBorder, shadowColor: cardShadow }, style]}>
+      <View style={[styles.glassBorderOverlay, { borderColor: cardBorder }]} />
       {children}
     </View>
   );
@@ -53,90 +63,105 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export function PrimaryButton({ title, onPress, icon, style, textStyle, disabled }: ButtonProps) {
-  const scale = useSharedValue(1);
+export const PrimaryButton = React.forwardRef<any, ButtonProps>(
+  ({ title, onPress, icon, style, textStyle, disabled }, ref) => {
+    const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
 
-  const handlePressIn = () => {
-    scale.value = withSpring(0.96);
-  };
+    const handlePressIn = () => {
+      scale.value = withSpring(0.96);
+    };
 
-  const handlePressOut = () => {
-    scale.value = withSpring(1);
-  };
+    const handlePressOut = () => {
+      scale.value = withSpring(1);
+    };
 
-  return (
-    <Pressable
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      disabled={disabled}
-      style={({ pressed }) => [
-        styles.btnContainer,
-        disabled && styles.btnDisabled,
-        style
-      ]}
-    >
-      <Animated.View style={[StyleSheet.absoluteFill, animatedStyle]}>
-        <LinearGradient
-          colors={['#FF8A00', '#FF4FA3']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.gradientButton}
-        />
-      </Animated.View>
-      <View style={styles.btnContent}>
-        {icon && <Ionicons name={icon as any} size={18} color="#FFFFFF" style={styles.btnIcon} />}
-        <Text style={[styles.btnText, textStyle]}>{title}</Text>
-      </View>
-    </Pressable>
-  );
-}
+    return (
+      <Pressable
+        ref={ref}
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled}
+        style={({ pressed }) => [
+          styles.btnContainer,
+          disabled && styles.btnDisabled,
+          style
+        ]}
+      >
+        <Animated.View style={[StyleSheet.absoluteFill, animatedStyle]}>
+          <LinearGradient
+            colors={['#FF8A00', '#FF4FA3']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradientButton}
+          />
+        </Animated.View>
+        <View style={styles.btnContent}>
+          {icon && <Ionicons name={icon as any} size={18} color="#FFFFFF" style={styles.btnIcon} />}
+          <Text style={[styles.btnText, textStyle]}>{title}</Text>
+        </View>
+      </Pressable>
+    );
+  }
+);
 
 // 5. SecondaryButton
-export function SecondaryButton({ title, onPress, icon, style, textStyle, disabled }: ButtonProps) {
-  const scale = useSharedValue(1);
+export const SecondaryButton = React.forwardRef<any, ButtonProps>(
+  ({ title, onPress, icon, style, textStyle, disabled }, ref) => {
+    const { theme } = useSettings();
+    const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
 
-  return (
-    <Pressable
-      onPress={onPress}
-      onPressIn={() => (scale.value = withSpring(0.96))}
-      onPressOut={() => (scale.value = withSpring(1))}
-      disabled={disabled}
-      style={[styles.btnContainer, disabled && styles.btnDisabled, style]}
-    >
-      <Animated.View style={[styles.secondaryButtonWrapper, animatedStyle]}>
-        {icon && <Ionicons name={icon as any} size={18} color="#FF4FA3" style={styles.btnIcon} />}
-        <Text style={[styles.secondaryBtnText, textStyle]}>{title}</Text>
-      </Animated.View>
-    </Pressable>
-  );
-}
+    const wrapperBorderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+    const wrapperBg = theme === 'dark' ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)';
+    const textColor = theme === 'dark' ? '#FFFFFF' : '#121212';
+
+    return (
+      <Pressable
+        ref={ref}
+        onPress={onPress}
+        onPressIn={() => (scale.value = withSpring(0.96))}
+        onPressOut={() => (scale.value = withSpring(1))}
+        disabled={disabled}
+        style={[styles.btnContainer, disabled && styles.btnDisabled, style]}
+      >
+        <Animated.View style={[styles.secondaryButtonWrapper, { borderColor: wrapperBorderColor, backgroundColor: wrapperBg }, animatedStyle]}>
+          {icon && <Ionicons name={icon as any} size={18} color="#FF4FA3" style={styles.btnIcon} />}
+          <Text style={[styles.secondaryBtnText, { color: textColor }, textStyle]}>{title}</Text>
+        </Animated.View>
+      </Pressable>
+    );
+  }
+);
 
 // 6. SectionHeader
 export function SectionHeader({ title, subtitle }: { title: string; subtitle?: string }) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   return (
     <View style={styles.sectionHeaderContainer}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      {subtitle && <Text style={styles.sectionSubtitle}>{subtitle}</Text>}
+      <Text style={[styles.sectionTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>{title}</Text>
+      {subtitle && <Text style={[styles.sectionSubtitle, { color: isDark ? '#8E929A' : '#60646C' }]}>{subtitle}</Text>}
     </View>
   );
 }
 
 // 7. PageHeader
 export function PageHeader({ title, subtitle, rightElement }: { title: string; subtitle?: string; rightElement?: React.ReactNode }) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   return (
     <View style={styles.pageHeaderContainer}>
       <View style={styles.headerTextWrapper}>
-        <Text style={styles.pageTitle}>{title}</Text>
-        {subtitle && <Text style={styles.pageSubtitle}>{subtitle}</Text>}
+        <Text style={[styles.pageTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>{title}</Text>
+        {subtitle && <Text style={[styles.pageSubtitle, { color: isDark ? '#8E929A' : '#60646C' }]}>{subtitle}</Text>}
       </View>
       {rightElement && <View>{rightElement}</View>}
     </View>
@@ -145,6 +170,8 @@ export function PageHeader({ title, subtitle, rightElement }: { title: string; s
 
 // 8. MusicIconButton
 export function MusicIconButton({ icon, onPress, style }: { icon: string; onPress: () => void; style?: ViewStyle }) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   const scale = useSharedValue(1);
   return (
     <Pressable
@@ -153,8 +180,15 @@ export function MusicIconButton({ icon, onPress, style }: { icon: string; onPres
       onPressOut={() => (scale.value = withSpring(1))}
       style={style}
     >
-      <Animated.View style={[styles.musicIconBtn, { transform: [{ scale: scale.value }] }]}>
-        <Ionicons name={icon as any} size={22} color="#FFFFFF" />
+      <Animated.View style={[
+        styles.musicIconBtn,
+        {
+          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
+          transform: [{ scale: scale.value }]
+        }
+      ]}>
+        <Ionicons name={icon as any} size={22} color={isDark ? '#FFFFFF' : '#121212'} />
       </Animated.View>
     </Pressable>
   );
@@ -162,19 +196,22 @@ export function MusicIconButton({ icon, onPress, style }: { icon: string; onPres
 
 // 9. EmptyState
 export function EmptyState({ title, description, icon = 'musical-notes-outline' }: { title: string; description: string; icon?: string }) {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
   return (
     <GlassCard style={styles.emptyStateContainer}>
       <View style={styles.emptyIconCircle}>
         <Ionicons name={icon as any} size={36} color="#FF4FA3" />
       </View>
-      <Text style={styles.emptyTitle}>{title}</Text>
-      <Text style={styles.emptyDesc}>{description}</Text>
+      <Text style={[styles.emptyTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>{title}</Text>
+      <Text style={[styles.emptyDesc, { color: isDark ? '#8E929A' : '#60646C' }]}>{description}</Text>
     </GlassCard>
   );
 }
 
 // 10. LoadingAnimation
 export function LoadingAnimation({ message = 'Loading scores...' }: { message?: string }) {
+  const { theme } = useSettings();
   const rotation = useSharedValue(0);
 
   React.useEffect(() => {
@@ -189,6 +226,8 @@ export function LoadingAnimation({ message = 'Loading scores...' }: { message?: 
     transform: [{ rotate: `${rotation.value}deg` }],
   }));
 
+  const maskBg = theme === 'dark' ? '#050507' : '#FFFFFF';
+
   return (
     <View style={styles.loadingContainer}>
       <Animated.View style={[styles.loadingCircle, animatedStyle]}>
@@ -196,7 +235,7 @@ export function LoadingAnimation({ message = 'Loading scores...' }: { message?: 
           colors={['#FF8A00', '#FF4FA3', '#7B61FF']}
           style={StyleSheet.absoluteFill}
         />
-        <View style={styles.loadingInnerMask} />
+        <View style={[styles.loadingInnerMask, { backgroundColor: maskBg }]} />
       </Animated.View>
       <Text style={styles.loadingMessage}>{message}</Text>
     </View>

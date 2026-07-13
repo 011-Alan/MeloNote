@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, Pressable, ScrollView, ActivityIndicator, Alert, Platform, StyleSheet, TextInput } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Paths, Directory, File } from 'expo-file-system';
 import Svg, { Line, Path, Rect } from 'react-native-svg';
@@ -10,6 +10,9 @@ import CreateScreen from './create';
 
 // Import design system
 import { GradientBackground, GlassCard, EmptyState, PrimaryButton } from '@/components/ui/DesignSystem';
+import { useSettings } from '@/context/SettingsContext';
+
+import { WalkthroughRegistry } from '@/components/onboarding/WalkthroughRegistry';
 
 type Project = {
   id: string;
@@ -23,29 +26,41 @@ type Project = {
   qualityScores?: any;
   duration: number;
   audioSize: number;
-  sourceType?: 'manual' | 'transcribed';
+  sourceType?: 'manual' | 'transcribed' | 'scan';
   manualScoreState?: any;
 };
 
 let lastActiveProjectState: any = null;
 
-const MiniStaffThumbnail = () => (
-  <View style={styles.thumbnailContainer}>
-    <Svg viewBox="0 0 50 50" width={44} height={44}>
-      <Line x1="5" y1="12" x2="45" y2="12" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      <Line x1="5" y1="18" x2="45" y2="18" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      <Line x1="5" y1="24" x2="45" y2="24" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      <Line x1="5" y1="30" x2="45" y2="30" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      <Line x1="5" y1="36" x2="45" y2="36" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      <Path d="M12,8 Q18,22 12,38" fill="none" stroke="#FF4FA3" strokeWidth="1.5" />
-      <Rect x="24" y="16" width="10" height="8" rx="2" fill="#7B61FF" />
-      <Line x1="34" y1="20" x2="34" y2="10" stroke="#7B61FF" strokeWidth="1.5" />
-    </Svg>
-  </View>
-);
+const MiniStaffThumbnail = () => {
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+  const strokeColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)';
+  return (
+    <View style={[styles.thumbnailContainer, {
+      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
+      borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+    }]}>
+      <Svg viewBox="0 0 50 50" width={44} height={44}>
+        <Line x1="5" y1="12" x2="45" y2="12" stroke={strokeColor} strokeWidth="1" />
+        <Line x1="5" y1="18" x2="45" y2="18" stroke={strokeColor} strokeWidth="1" />
+        <Line x1="5" y1="24" x2="45" y2="24" stroke={strokeColor} strokeWidth="1" />
+        <Line x1="5" y1="30" x2="45" y2="30" stroke={strokeColor} strokeWidth="1" />
+        <Line x1="5" y1="36" x2="45" y2="36" stroke={strokeColor} strokeWidth="1" />
+        <Path d="M12,8 Q18,22 12,38" fill="none" stroke="#FF4FA3" strokeWidth="1.5" />
+        <Rect x="24" y="16" width="10" height="8" rx="2" fill="#7B61FF" />
+        <Line x1="34" y1="20" x2="34" y2="10" stroke="#7B61FF" strokeWidth="1.5" />
+      </Svg>
+    </View>
+  );
+};
 
 export default function ProjectsScreen() {
   const router = useRouter();
+  const { openProjectId } = useLocalSearchParams<{ openProjectId?: string }>();
+  const { theme } = useSettings();
+  const isDark = theme === 'dark';
+  
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
@@ -53,13 +68,23 @@ export default function ProjectsScreen() {
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'name'>('date');
-  const [filterType, setFilterType] = useState<'all' | 'transcribed' | 'manual'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'transcribed' | 'manual' | 'scan'>('all');
 
   useEffect(() => {
     if (lastActiveProjectState) {
       setActiveProject(lastActiveProjectState.activeProject);
     }
   }, []);
+
+  useEffect(() => {
+    if (openProjectId && projects.length > 0) {
+      const proj = projects.find(p => p.id === openProjectId);
+      if (proj) {
+        console.log('[projects] Auto-opening project from parameter:', openProjectId);
+        setActiveProject(proj);
+      }
+    }
+  }, [openProjectId, projects]);
 
   useEffect(() => {
     if (activeProject) {
@@ -205,6 +230,7 @@ export default function ProjectsScreen() {
     setFilterType(prev => {
       if (prev === 'all') return 'transcribed';
       if (prev === 'transcribed') return 'manual';
+      if (prev === 'manual') return 'scan';
       return 'all';
     });
   };
@@ -229,14 +255,14 @@ export default function ProjectsScreen() {
 
   return (
     <GradientBackground>
-      <View style={styles.container}>
+      <View ref={(r) => WalkthroughRegistry.register('projects-container', r)} style={styles.container}>
         
         {/* Search bar & filter controls */}
         <View style={styles.controlsRow}>
           <GlassCard style={styles.searchBarWrapper}>
             <Ionicons name="search-outline" size={18} color="#8E929A" style={styles.searchIcon} />
             <TextInput
-              style={styles.searchInput}
+              style={[styles.searchInput, { color: isDark ? '#FFFFFF' : '#121212' }]}
               placeholder="Search workspaces..."
               placeholderTextColor="#8E929A"
               value={searchQuery}
@@ -249,19 +275,31 @@ export default function ProjectsScreen() {
             )}
           </GlassCard>
 
-          <Pressable onPress={toggleFilter} style={styles.iconBtn}>
+          <Pressable 
+            onPress={toggleFilter} 
+            style={[styles.iconBtn, { 
+              backgroundColor: isDark ? 'rgba(45, 45, 45, 0.25)' : 'rgba(255, 255, 255, 0.75)', 
+              borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' 
+            }]}
+          >
             <Ionicons 
               name={filterType === 'all' ? 'funnel-outline' : 'funnel'} 
               size={18} 
-              color={filterType === 'all' ? '#FFFFFF' : '#FF4FA3'} 
+              color={filterType === 'all' ? (isDark ? '#FFFFFF' : '#121212') : '#FF4FA3'} 
             />
           </Pressable>
 
-          <Pressable onPress={toggleSort} style={styles.iconBtn}>
+          <Pressable 
+            onPress={toggleSort} 
+            style={[styles.iconBtn, { 
+              backgroundColor: isDark ? 'rgba(45, 45, 45, 0.25)' : 'rgba(255, 255, 255, 0.75)', 
+              borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' 
+            }]}
+          >
             <Ionicons 
               name={sortBy === 'date' ? 'calendar-outline' : 'text-outline'} 
               size={18} 
-              color="#FFFFFF" 
+              color={isDark ? '#FFFFFF' : '#121212'} 
             />
           </Pressable>
         </View>
@@ -270,7 +308,13 @@ export default function ProjectsScreen() {
         {filterType !== 'all' && (
           <View style={styles.activeFilterBadge}>
             <Text style={styles.activeFilterText}>
-              Filtering: {filterType === 'transcribed' ? '🎤 Transcribed' : '✏️ Manual'}
+              Filtering: {
+                filterType === 'transcribed'
+                  ? '🎤 Transcribed'
+                  : filterType === 'manual'
+                  ? '✏️ Manual'
+                  : '📷 Scan'
+              }
             </Text>
             <Pressable onPress={() => setFilterType('all')}>
               <Ionicons name="close-circle-sharp" size={14} color="#FF4FA3" />
@@ -284,8 +328,13 @@ export default function ProjectsScreen() {
             <ActivityIndicator size="large" color="#FF4FA3" />
           </View>
         ) : processedProjects.length === 0 ? (
-          <ScrollView contentContainerStyle={styles.emptyScroll} showsVerticalScrollIndicator={false}>
-            <EmptyState
+          <ScrollView
+            ref={(r) => WalkthroughRegistry.register('active-scrollview', r)}
+            contentContainerStyle={styles.emptyScroll}
+            showsVerticalScrollIndicator={false}
+          >
+            <View ref={(r) => WalkthroughRegistry.register('projects-list', r)}>
+              <EmptyState
               title={searchQuery ? 'No matching workspaces' : 'No sheet music workspace yet'}
               description={
                 searchQuery
@@ -302,12 +351,16 @@ export default function ProjectsScreen() {
                 style={styles.emptyActionBtn}
               />
             )}
+            </View>
           </ScrollView>
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollList}>
-            <View style={styles.cardsGrid}>
+          <ScrollView
+            ref={(r) => WalkthroughRegistry.register('active-scrollview', r)}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollList}
+          >
+            <View ref={(r) => WalkthroughRegistry.register('projects-list', r)} style={styles.cardsGrid}>
               {processedProjects.map((project) => {
-                const overallScore = project.qualityScores?.overall_score;
                 return (
                   <Pressable key={project.id} onPress={() => handleOpenProject(project)}>
                     <GlassCard style={styles.projectCard}>
@@ -316,36 +369,38 @@ export default function ProjectsScreen() {
 
                       {/* Center: Details */}
                       <View style={styles.projectInfo}>
-                        <Text numberOfLines={1} style={styles.projectTitle}>
+                        <Text numberOfLines={1} style={[styles.projectTitle, { color: isDark ? '#FFFFFF' : '#121212' }]}>
                           {project.name}
                         </Text>
                         <View style={styles.projectRowMeta}>
                           <Text style={[
                             styles.projectSourceType, 
-                            { color: project.sourceType === 'manual' ? '#FF8A00' : '#00E676' }
+                            { 
+                              color: project.sourceType === 'manual' 
+                                ? '#FF8A00' 
+                                : project.sourceType === 'scan'
+                                ? '#7B61FF' 
+                                : '#00E676' 
+                            }
                           ]}>
-                            {project.sourceType === 'manual' ? '✏️ Compose' : '🎤 Transcribed'}
+                            {project.sourceType === 'manual' 
+                              ? '✏️ Compose' 
+                              : project.sourceType === 'scan'
+                              ? '📷 Scan'
+                              : '🎤 Transcribed'}
                           </Text>
-                          <Text style={styles.projectDot}>•</Text>
-                          <Text style={styles.projectDate}>{formatDate(project.date)}</Text>
+                          <Text style={[styles.projectDot, { color: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)' }]}>•</Text>
+                          <Text style={[styles.projectDate, { color: isDark ? '#8E929A' : '#60646C' }]}>{formatDate(project.date)}</Text>
                         </View>
 
                         {/* Technical tags */}
                         <View style={styles.tagsContainer}>
-                          <View style={styles.metaBadge}>
-                            <Text style={styles.metaBadgeText}>{formatDuration(project.duration || 0)}</Text>
+                          <View style={[styles.metaBadge, { 
+                            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)', 
+                            borderColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)' 
+                          }]}>
+                            <Text style={[styles.metaBadgeText, { color: isDark ? '#B0B4BA' : '#60646C' }]}>{formatDuration(project.duration || 0)}</Text>
                           </View>
-                          <View style={styles.metaBadge}>
-                            <Text style={styles.metaBadgeText}>{Math.round(project.detectedTempo || 120)} BPM</Text>
-                          </View>
-                          <View style={styles.metaBadge}>
-                            <Text style={styles.metaBadgeText}>{project.timeSignature || '4/4'}</Text>
-                          </View>
-                          {overallScore !== undefined && (
-                            <View style={styles.qualityBadge}>
-                              <Text style={styles.qualityBadgeText}>{overallScore.toFixed(0)}% OMR</Text>
-                            </View>
-                          )}
                         </View>
                       </View>
 
@@ -360,7 +415,7 @@ export default function ProjectsScreen() {
                         >
                           <Ionicons name="trash-outline" size={18} color="#FF3B30" />
                         </Pressable>
-                        <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.2)" />
+                        <Ionicons name="chevron-forward" size={18} color={isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'} />
                       </View>
                     </GlassCard>
                   </Pressable>
